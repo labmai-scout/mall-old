@@ -1,0 +1,14 @@
+<?php
+$class = 'status_'.Transfer_Statement_Model::$status_label[$statement->status];
+?>
+<div style="padding:.3em 0">
+<span class="status_tag <?php echo $class?>">
+	<?php
+	if ($statement->is_failed()) {
+		echo HT('支付失败');
+	}
+	else {
+		echo Transfer_Statement_Model::$status[$statement->status];
+	}
+	?></span>
+</div>

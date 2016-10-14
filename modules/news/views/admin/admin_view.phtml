@@ -1,0 +1,22 @@
+<?php
+$me = L('ME');
+if ($me->is_allowed_to('添加', 'news')) :
+?>
+<div class="panel padding_1 clearfix">
+	<a class="button button_add" href="<?= URI::url('!admin/admin/news_add')?>"><?php echo T('添加公告')?></a>
+</div>
+<?php 
+endif;
+?>
+<div class="padding_2" style="width: 600px;margin: 0px auto">
+<div class="clearfix">
+   <h1 class="center"><?php echo H($news->title); ?></h1>
+   <div style="padding: 20px; min-height:50px; overflow: auto;" class="form break-word">
+	<?php echo new Markup(stripslashes($news->content), TRUE); ?>
+  </div>
+</div>
+<div class="hr_1">&#160;</div>
+<?php if (Module::is_installed('nfs')) : ?>
+    <?php echo V('news:admin/attachments', array('news'=> $news))?>
+<?php endif;?>
+</div>

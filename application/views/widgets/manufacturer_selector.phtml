@@ -1,0 +1,11 @@
+<?php
+$uniqid = $this->uniqid ?: 'manufacturer_'.uniqid();
+
+$autocomplete = $this->autocomplete ?: URI::url('autocomplete/manufacturer');
+
+$size = $this->size ?: 40;
+
+?>
+<input id="<?php echo $uniqid?>_manufacturer_id" name="<?php echo $this->name?>" type="hidden" value="<?php echo $manufacturer_name;?>" />
+<input name="manufacturer_name" id="<?php echo $uniqid?>_manufacturer_name" class="text middle select_on_focus autocomplete:<?php echo H($autocomplete) ?> autocomplete_alt:#<?php echo
+$uniqid?>_manufacturer_id" size="<?php echo $size?>" value="<?php echo $manufacturer_name;?>" />

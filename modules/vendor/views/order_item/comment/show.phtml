@@ -1,0 +1,18 @@
+<div class="form padding_2">
+	<?php
+		echo Widget::factory('order_item_comment', array(
+			'comment' => $comment,
+		));
+	?>
+
+	<?php if ($comment->can_reply() && L('ME')->is_allowed_to('回复', $comment)): ?>
+		<div class="form padding_2">
+		<form method="post" q-object="reply_comment" q-static="id=<?php echo intval($comment->id) ?>">
+			<?php echo V('form_error', array('form'=>$form));?>
+			<textarea name="content" class="text autogrow" q-hint="<?php echo HT('对买方评价的回复(发布后不可修改)'); ?>" cols="60" rows="5"></textarea>
+			<div class="hr_1">&#160;</div>
+			<input class="button button_edit" type="submit" name="submit" value="<?php echo HT('回复'); ?>" />
+		</form>
+		</div>
+	<?php endif; ?>
+</div>

@@ -1,0 +1,163 @@
+<?php
+$uniqid = uniqid();
+$select_all_id = 'select_all_' . $uniqid;
+$batch_form_id = 'batch_form_' . $uniqid;
+$form_token = 'form_token_' . $uniqid;
+
+$is_pending_approval = !!(Order_Model::$status_label[Order_Model::STATUS_PENDING_APPROVAL] == $status_tabs->selected);
+
+?>
+<div class="hr_1">&#160;</div>
+<?php echo $status_tabs; ?>
+<div class="hr_1">&#160;</div>
+<div class="panel clearfix padding_1">
+    <div class="float_right">
+        <form method="post" action="<?php echo URI::url(''); ?>">
+           <input type="text" name="keyword" class="text middle" q-hint="<?php echo HT('输入订单编号搜索'); ?>" size="40" value="<?php echo H($form['keyword']); ?>" />
+           <input type="submit" class="button button_search middle" name="submit" value="<?php echo HT('搜索'); ?>" />
+        </form>
+    </div>
+	<?php if ($is_pending_approval): ?>
+<?php /* ?>
+		<form method="post" action="<?php echo URI::url('!admin/order/index/batch_approve') ?>" id="<?php echo $batch_form_id ?>">
+<?php */ ?>
+<div class="float_left">
+<form
+    id="<?php echo $batch_form_id ?>"
+    q-object="batch_approve"
+    q-event="submit"
+    q-src="<?php echo URI::url('!admin/order/index')?>"
+    autocomplete="off"
+    method="post">
+
+                <?php echo Form::checkbox('', FALSE, T('全选'), 'id="'.$select_all_id.'"') ?>
+                &#160;
+                <input name="approve" type="submit" class="button button_tick" value="<?php echo T('批量审批'); ?>"/>
+        </form>
+</div>
+	<?php endif; ?>
+	<?php /* <a class="button button_print" href="<?php echo URI::url(); ?>"><?php echo HT('打印'); ?></a> */ ?>
+    <div class="float_left stat_list">
+        <?php if (count($panel_buttons)) :?>
+            <?php echo Widget::factory('application:links', array('links'=>$panel_buttons, 'separator'=>'&#160;'));?>
+        <?php endif;?>&#160;
+        <div class="inline_block">
+            <?php
+                if ($total_count) {
+                    echo I18N::T('billing', '订单总数: %total_count个',
+                    array('%total_count' => '<span>'.$total_count.'</span>'));
+                }
+           ?>
+           &#160;
+            <?php
+                if ($amount) {
+                echo I18N::T('billing', '订单总金额: %total_count ',
+                    array('%total_count' => '<span>'.H(Number::currency($amount)).'</span>'));
+                }
+           ?>
+       </div>
+    </div>
+</div>
+<?php
+
+echo $pagination;
+
+$me = L('ME');
+$table = Widget::factory('table');
+
+$table->name = 'admin_orders';
+$table->form = $form;
+
+$columns = array();
+
+if ($is_pending_approval) {
+	$columns['select'] = array(
+		'align' => 'center',
+		'extra_class' => 'tight',
+		);
+}
+
+$columns += array(
+    '@'=>array(
+        'title'=>T('订单编号'),
+        'nowrap'=>TRUE,
+        'extra_class'=>'tight',
+    ),
+    'ctime'=> array(
+        'title'=>T('时间'),
+        'align'=>'left',
+        'nowrap'=>TRUE,
+		'extra_class'=>'tight',
+    ),
+    'items'=>array(
+        'title'=>T('订单商品'),
+        //'extra_class'=>'tight',
+    ),
+    'customer_owner'=>array(
+        'weight'=>30,
+        'title'=>T('买方负责人'),
+        'invisible'=>TRUE,
+        'filter'=>array(
+            'form' => V('admin:order_table/filters/customer_owner', array(
+                    'name'=>'customer_owner', 'value'=>$form['customer_owner']
+                    )),
+            'value'=> $form['customer_owner'] ? H($form['customer_owner']) : NULL
+        )
+    ),
+	'customer'=>array(
+		'title'=>T('买方'),
+        'nowrap'=>TRUE,
+        'extra_class'=>'tight',
+        'filter' => array(
+            'form' => V('admin:order_table/filters/customer', array(
+                'name'=>'customer', 'value'=>$form['customer'],
+            )),
+            'value' => $form['customer'] ? H($form['customer']) : NULL,
+            'field' => 'customer'
+        )
+    ),
+	'vendor'=>array(
+		'title'=>T('供应商'),
+        'nowrap'=>TRUE,
+        'extra_class'=>'tight',
+    ),
+    'price'=> array(
+        'title'=>T('金额'),
+        'align'=>'right',
+        'nowrap'=>TRUE,
+        'extra_class'=>'tight',
+    ),
+    'status'=> array(
+        'title'=>T('状态'),
+        'align'=>'left',
+		'nowrap'=>TRUE,
+    ),
+    'rest'=>array(
+   		'align'=>'right',
+    	'nowrap'=>TRUE,
+    )
+);
+
+
+$table->add_columns($columns);
+
+$table->empty_message = T('没有相关条件的订单信息!');
+foreach ($orders as $order) {
+	$links = $order->links('admin_index');
+
+	$table->add_row(array(
+		'select'=>V('admin:common/table/data/select', array('object'=>$order, 'select_all_id'=>$select_all_id)),
+		// 'flag' => V('application:common/flag', array('flag' => $order->has_news_to($me))),
+        '@'=> V('admin:orders/table/data/ref_no', array('order'=>$order)),
+        'items'=> V('admin:orders/table/data/items', array('order'=>$order)),
+        'customer'=> V('admin:orders/table/data/customer', array('order'=>$order)),
+        'vendor'=> V('admin:orders/table/data/vendor', array('order'=>$order)),
+        'status'=> V('admin:orders/table/data/status', array('order'=>$order)),
+        'price'=> V('application:order/price', array('order'=>$order)),
+        'ctime'=> Date::format($order->ctime, 'Y/m/d H:i:s'),
+		'rest' => Widget::factory('application:links', array('links'=>$links))
+	));
+}
+echo $table;
+
+echo JS::load('admin:batch_select', array('select_all_id'=>$select_all_id, 'batch_form_id' => $batch_form_id));

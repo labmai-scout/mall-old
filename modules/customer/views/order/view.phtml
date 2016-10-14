@@ -1,0 +1,204 @@
+<?php
+$customer = $order->customer;
+$vendor = $order->vendor;
+?>
+<div class="hr_1">&#160;</div>
+<div id="order_view" class="clearfix">
+<h1><?php echo HT('订单 #%order', array('%order'=>$order->order_no)); ?></h1>
+<div>
+	<?php echo V('customer:order/status', array('order'=>$order)); ?>
+</div>
+<div class="hr_2">&#160;</div>
+<div class="step_form">
+	<h4><?php echo HT('买方'); ?></h4>
+	<div class="step_form_content">
+		<a href="<?php echo H($customer->url()); ?>"><?php echo H($customer->name); ?>&#160;(<?php echo H($customer->owner->name) ?>)</a>
+	</div>
+</div>
+<div class="step_form">
+	<h4><?php echo HT('运送地址'); ?></h4>
+	<div class="step_form_content">
+	<table class="form">
+		<tr>
+			<th class="label nowrap right"><?php echo HT('地址'); ?>:</th>
+			<td><?php echo H($order->address) ?></td>
+		</tr>
+		<tr>
+			<th class="label nowrap right"><?php echo HT('邮政编码'); ?>:</th>
+			<td><?php echo H($order->postcode); ?></td>
+		</tr>
+		<tr>
+			<th class="label nowrap right"><?php echo HT('电话'); ?>:</th>
+			<td><?php echo H($order->phone); ?></td>
+		</tr>
+		<tr>
+			<th class="label nowrap right"><?php echo HT('电子邮箱'); ?>:</th>
+			<td><?php echo H($order->email); ?></td>
+		</tr>
+	</table>
+	</div>
+</div>
+
+<div class="step_form">
+	<?php echo V('application:order/view/vendor', array('vendor' => $vendor, 'title' => '供应商')); ?>
+</div>
+<div class="step_form">
+	<h4><?php echo HT('商品清单'); ?></h4>
+	<div class="step_form_content cart_content">
+<?php
+
+$table = Widget::factory('table');
+
+$table->name = 'order_items';
+
+$table->add_columns(
+	array(
+		'icon' => array(
+			'extra_class'=>'tight'
+			),
+		'product' => array(
+			'title' => T('商品'),
+			'nowrap' => TRUE,
+			'align' => 'left',
+			),
+        'manufacturer'=> array(
+            'title'=> T('生产商'),
+            'nowrap'=> TRUE,
+            'align'=> 'left'
+        ),
+        'catalog_no'=> array(
+            'title'=> T('目录号'),
+            'nowrap'=> TRUE,
+            'align'=> 'left'
+        ),
+        'package'=> array(
+            'title'=> T('包装'),
+            'nowrap'=> TRUE,
+            'align'=> 'left'
+        ),
+		'unit_price' => array(
+			'title' => T('单价'),
+			'nowrap' => TRUE,
+			'align' => 'right',
+			),
+		'quantity' => array(
+			'title' => T('数量'),
+			'nowrap' => TRUE,
+			'align' => 'center',
+			),
+		'price' => array(
+			'title' => T('金额'),
+			'nowrap' => TRUE,
+			'align' => 'right',
+			),
+		'rest'=>array(
+			'align'=>'right',
+			'nowrap'=>TRUE,
+			)
+		));
+
+$last_vendor_id=0;
+
+foreach (Q("order_item[order=$order]") as $item) {
+
+	$product = $item->product();
+
+    $rest = '';
+
+    //已收货仅提示
+    if ($item->deliver_status == Order_Item_Model::DELIVER_STATUS_RECEIVED) {
+        $rest = T('已收货');
+    }
+    else {
+        if ($item->deliver_status == Order_Item_Model::DELIVER_STATUS_DELIVERED) {
+            $rest = T('已发货');
+        }
+    }
+	$rest = $rest. '&#160;'. Widget::factory('application:links', array('links'=>$item->links('customer_view')));
+	$table->add_row(array(
+		 'icon' => array(
+			 'view' => $product->icon(48, 'style="display:block"'),
+			 'extra' => 'style="padding:.3em;"',
+			 ),
+		 'product' => V('customer:order/table/data/product', array(
+		 		'product' => $product,
+		 		'item' => $item,
+		 	)),
+         'manufacturer'=> V('admin:order/table/data/manufacturer', array('product'=> $product)),
+         'catalog_no'=> V('admin:order/table/data/catalog_no', array('product'=> $product)),
+         'package'=> V('admin:order/table/data/package', array('product'=> $product)),
+		 'unit_price' => V('application:order/item_price', array('order_item' => $item)),
+		 'quantity' => V('application:order/item_quantity', array('order_item' => $item)),
+		 'price' => V('application:order/item_auto_price', array('order_item' => $item)),
+		 'rest' => $rest,
+	));
+    unset($rest);
+}
+
+echo $table;
+?>
+	</div>
+</div>
+
+<?php if ($order->extra_info) {?>
+<div class="step_form">
+	<h4><?php echo HT('附加信息'); ?></h4>
+	<div class="extra_info">
+		<div style="position:absolute;">
+			<pre><?= $order->extra_info;?></pre>
+		</div>
+	</div>
+	<div class="extra_link">
+		<?php
+			$gapper_app_product = O('gapper_app_product', ['product'=>$product]);
+			$login_token = Gapper::get_login_token($gapper_app_product->client_id);
+			$params = $login_token ? ['gapper-token'=>$login_token, 'gapper-group'=>$order->customer->gapper_group] : [];
+		?>
+		<a target="_blank" href="<?= URI::url($product->template_link.$order->id, $params)?>"><?= HT('查看订单详情')?></a>
+	</div>
+</div>
+<?php }?>
+
+<div class="step_form">
+	<h4><?php echo HT('付款信息'); ?></h4>
+	<div class="step_form_content checkout_information">
+	<?php echo HT('商品金额:');?>&#160;<?php echo V('application:order/price', array('order' => $order, 'long' => TRUE)) ?></span>
+	</div>
+	<?php if ($order->description): ?>
+	<div class="message message_normal description">
+		<?php echo H($order->description, TRUE); ?>
+	</div>
+	<?php endif; ?>
+</div>
+
+<div class="step_form">
+	<h4><?php echo HT('订单备注信息'); ?>&#160;<span class="description small"><?php echo T('* 此处备注为个人私密信息'); ?></h4>
+	<div class="form padding_1">
+		<table class="form">
+			<tr>
+				<td><h2><?php echo H($order->customer_note); ?></h2><td>
+				<td><a class="button button_edit nowrap" href="#" q-static="<?php echo H(array('order_id' => $order->id));?>" q-event="click" q-object="customer_note"><?php echo T('编辑');?></a></td>
+			</tr>
+
+
+			</table>
+		</form>
+	</div>
+</div>
+<?php
+$links = $order->links('customer_view');
+if (count($links) > 0):
+?>
+<div class="step_form">
+<?php echo Widget::factory('application:links', array('links'=>$links, 'separator'=>' ')); ?>
+</div>
+<?php
+endif;
+?>
+<div class="step_form">
+	<h4><?php echo HT('留言'); ?></h4>
+	<div class="step_form_content">
+	<?php echo Widget::factory('application:comments', array('object'=>$order)) ?>
+	</div>
+</div>
+</div>

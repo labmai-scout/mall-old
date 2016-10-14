@@ -1,0 +1,15 @@
+<span class="price"><?php echo Number::currency($order->price); ?></span>
+<?php
+$has_inquiry = !!Q("order_item[order={$order}][price<0]")->total_count();
+if ($has_inquiry):
+	if ($long):
+		?>
+		<span class="price_inquiry"><?php echo HT('(待询价商品未计入)'); ?></span>
+		<?php
+	else:
+?>	
+	<span class="price_inquiry"><?php echo HT('(待询价)'); ?></span>
+<?php
+	endif;
+endif;
+

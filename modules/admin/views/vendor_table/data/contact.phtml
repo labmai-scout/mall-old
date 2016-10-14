@@ -1,0 +1,8 @@
+<div class="quote clearfix ">
+	<?php if ($vendor->email) :?>
+	    <p><span class="email"><a href="mailto:<?php echo H($vendor->email)?>" class="description"><?php echo H($vendor->email) ?></a></span></p>
+	<?php endif;?>
+	<?php if ($vendor->phone) :?>
+	    <p><span class="phone description"><?php echo H($vendor->phone)?></span></p>
+	<?php endif;?>
+</div>

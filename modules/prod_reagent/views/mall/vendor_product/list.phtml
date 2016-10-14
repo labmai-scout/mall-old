@@ -1,0 +1,154 @@
+<?php echo $sub_header; ?>
+<div class="hr_3">&#160;</div>
+<?php
+	$me = L('ME');
+?>
+<div class="product_profile clearfix">
+	<?php echo V('mall:search/crumb', array('category' => $product->category, 'form' => $form, 'product'=>$product, 'tab'=>$product->type));?>
+	<div class="hr_2">&#160;</div>
+	<div class="profile_list">
+		<table class="profile_header flexible">
+			<tr>
+				<td class="top icon">
+					<?php echo $product->icon(128);?>
+				</td>
+				<td class="top">
+					<div class="profile_title"><?php echo H($product->name);?></div>
+					<div class="hr_2">&#160;</div>
+					<table class="flexible profile_content">
+						<?php
+						$product_view_fileds = Product_Model::get_options($product->type, 'product_view_fields');
+						if ($product_view_fileds) {
+
+							$is_first = TRUE;
+
+							foreach ($product_view_fileds as $field => $title) {
+								if ($is_first) {
+									echo '<tr>';
+								}
+
+								echo '<th class="top nowrap">';
+								echo HT($title);
+								echo '</th>';
+
+								echo '<td class="top' . ($is_first ? ' rpadding_1' : '') . '">';
+								// 对于应特殊输出的 field, 暂使用 switch 处理;
+								// 但我认为以后应通过 model 的 get_field_view($field) 方法,
+								// 统一获得特殊的 view 来输出 (xiaopei.li@2012-08-27)
+								switch ($field) {
+								case 'keywords':
+								case 'rgt_aliases':
+									echo H(join(', ', (array)json_decode($product->{$field}, TRUE)));
+									break;
+								case 'rgt_danger_class':
+									echo Widget::factory('prod_reagent:rgt_danger_class',
+															 array('class' => $product->rgt_danger_class));
+									break;
+								default:
+									echo H($product->{$field});
+								}
+								echo '</td>';
+
+								if (!$is_first) {
+									echo '</tr>';
+								}
+
+								$is_first = !$is_first;
+							}
+
+							if (!$is_first) {
+								echo '<th class="top nowrap">';
+								echo '</th>';
+								echo '<td class="top">';
+								echo '</td>';
+								echo '</tr>';
+							}
+						}
+						?>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td class="top left" colspan="2">
+					<div class="hr_3">&#160;</div>
+					<div class="hr_2">&#160;</div>
+					<h4><?php echo T('说明')?></h4>
+					<div class="description">
+						<?php echo $product->description ? new Markup($product->description, TRUE) : '暂无说明'; ?>
+					</div>
+					<div class="hr_3">&#160;</div>
+					<div class="hr_2">&#160;</div>
+				</td>
+			</tr>
+		</table>
+        <?php echo $pagination;?>
+		<table class="vendor_list flexible">
+			<tbody>
+				<?php
+				$product_list_fileds = Vendor_Product_Model::get_options($product->type, 'product_view_supply_list_fields');
+				?>
+				<tr>
+					<th class="nav center">&#160;</th>
+					<?php
+					foreach ($product_list_fileds as $field => $title) {
+						echo '<th class="nav nowrap center">';
+						echo HT($title);
+                        echo '</th>';
+					}
+					?>
+					<th class="nav nowrap center"><?php echo T('单价')?></th>
+					<th class="nav center flexible"><?php echo T('供应商名称')?></th>
+					<th class="nowrap nav center"><?php echo T('买家评价')?></th>
+					<th class="nav nowrap center"><?php echo T('是否现货')?></th>
+					<th class="nav nowrap right middle">&#160;</th>
+				</tr>
+				<?php
+					if(count($products)):
+						$num = 1;
+						foreach ($products as $product):
+							if ($num % 2) $class = 'color_row';
+							else $class = "";
+							$num ++;
+				?>
+				<tr class="<?php echo $class?>">
+					<td class="nav center" style="padding:4px 6px;">
+						<?php echo $product->icon('32', 'style="display:block"')?>
+					</td>
+					<?php
+					foreach ($product_list_fileds as $field => $title) {
+						echo '<td class="nav center">';
+						echo H($product->{$field});
+                        echo '</td>';
+					}
+					?>
+					<td class="nav nowrap center"><?php echo V('mall:vendor_product/table/data/unit_price', array('product'=>$product, 'show_price' => !!$me->is_allowed_to('查看价格', $product))); ?></td>
+					<td class="nav center flexible">
+						<?php echo V('mall:vendor_product/table/data/vendor', array('product' => $product)); ?>
+					</td>
+					<td class="nav nowrap center">
+						<?php echo Widget::factory('product_rating_summary', array(
+						'product' => $product,
+						))
+						?>
+					</td>
+					<td class="nav nowrap center">
+					<?php
+						$options = Product_Model::$stock_status;
+						echo HT($options[$product->stock_status]);
+					?>
+					</td>
+					<td class="nav nowrap right middle">
+						<?php echo Widget::factory('application:links', array('links'=>$product->links('mall_index'))); ?>
+					</td>
+				</tr>
+				<?php endforeach; else: ?>
+					<tr class="color_row">
+						<td class="nav center" colspan="11">
+							<h4 class="middle center description"><?php echo T('暂无供应商供应!')?></h4>
+						</td>
+					</tr>
+				<?php endif;?>
+			</tbody>
+		</table>
+	</div>
+</div>

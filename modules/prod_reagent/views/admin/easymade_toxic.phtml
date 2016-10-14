@@ -1,0 +1,28 @@
+<?php /*?>
+<div class="message message_normal">
+<?php 
+	//echo HT('暂不提供易制毒的购买和设置功能')
+?>
+</div>
+<?php */?>
+<div class="form padding_2">
+	<form method="post" action="<?php echo URI::url() ?>" autocomplete="off">
+		<?php
+		
+		echo HT('开放购买易制毒:');
+		echo '&#160;&#160;&#160;&#160;&#160;'.Form::radio('allow_buy_easymade_toxic',
+				'true',
+				!!$form['allow_buy_easymade_toxic'],
+				HT('是')
+			);
+		echo '&#160;&#160;&#160;&#160;&#160;'.Form::radio('allow_buy_easymade_toxic',
+				'false',
+				!$form['allow_buy_easymade_toxic'],
+				HT('否')
+
+			);
+		?>
+		<div class="hr_1"></div>
+		<input type="submit" name="submit" class="button button_save" style="margin-left:5px;" value="<?php echo T('保存')?>" />
+	</form>
+</div>

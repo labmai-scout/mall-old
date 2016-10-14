@@ -1,0 +1,18 @@
+<?php $uniqid = 'tag_'.uniqid(); ?>
+<?php if (!$disable_add_panel): ?>
+	<div class="panel padding_1">
+		<a class="button button_add middle view event:click object:tag_edit static:<?php echo H(array('uniqid'=>$uniqid, 'parent'=>$root->id, 'is_root'=>TRUE)); ?> src:<?php echo URI::url('tags')?>"><?php echo T('添加');?></a>
+	</div>
+<?php else: ?>
+	<div class="hr_1"></div>
+<?php endif; ?>
+<div id="<?php echo $uniqid; ?>">
+	<div class="tag_container tag_root_container">
+		<?php echo V('application:admin/tags/tag_list', array('tags'=>$tags, 'parent_uniqid'=>$uniqid)) ?>
+	</div>
+</div>
+<script type="text/javascript">
+jQuery(function($) {
+	Q.tag_sortable("<?php echo (int)$root->id?>", "<?php echo $uniqid?>", "<?php echo JS::escape(URI::url('tags')) ?>");
+});
+</script>

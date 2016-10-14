@@ -1,0 +1,7 @@
+<?php if ($old_quantity != $current_quantity): ?>
+	<span class="red" style="font-weight:bold"><?php echo $current_quantity; ?></span>
+	<br/>
+	<span class="description" style="font-weight:bold"><del>(<?php echo $old_quantity; ?>)</del></span>
+<?php else:?>
+	<?php echo $current_quantity; ?>
+<?php endif;

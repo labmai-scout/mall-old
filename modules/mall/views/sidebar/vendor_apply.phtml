@@ -1,0 +1,11 @@
+<?php 
+$me = L('ME');
+if (!$me->id || !$me->vendor->id):
+?>
+<div class="sidebar_item sidebar_vendor_apply">
+	<div class="right">
+		<a class="blue" href="<?php echo URI::url('!vendor/signup'); ?>"><?php echo HT('我想成为供应商'); ?> &#187;</a>
+	</div>
+</div>
+<?php
+endif;

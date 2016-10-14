@@ -1,0 +1,13 @@
+<?php
+$bucket = Transfer_Bucket_Model::customer_bucket($customer);
+$bucket_num = $bucket->item_count();
+$me = L('ME');
+?>
+<div id="bucket_button" class="inline_block" style="position:relative; padding-right: 5px">
+	<?php if ( $me->is_allowed_to('修改', $bucket) ) : ?>
+	<a class="button button_bucket" href="<?php echo URI::url('!customer/transfer/bucket.' . $customer->id); ?>"><?php echo HT('付款夹'); ?></a>
+	<?php endif; ?>
+	<?php if ($bucket_num > 0): ?>
+	<span class="num_notif"><?php echo H($bucket_num); ?></span>
+	<?php endif; ?>
+</div>  

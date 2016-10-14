@@ -1,0 +1,156 @@
+<script>
+jQuery(function($){
+       var $center = $('#center');
+       $center.css('vertical-align', 'middle');
+       $center.find('.center_content').css({width: '600px', margin: 'auto', paddingBottom: '2em'});
+
+		var height = $('.signup_body').offset().top - $center.offset().top ;
+		$center.css('vertical-align', 'baseline');
+		$center.css('padding-top', height +'px');
+});
+</script>
+<div class="form padding_2 signup_body">
+<table class="form">
+	<tbody>
+	<tr>
+		<td class="top icon">
+			<img src="images/icons/signup_big.png" />
+		</td>
+		<td class="top">
+			<form method="post" autocomplete="off" action="<?php echo URI::url();?>">
+			<?php echo V('form_error', array('form'=>$form));?>
+			<?php $require = (string) V('form_require'); ?>
+			<?php $optional = (string) V('form_optional'); ?>
+	 		<table class="form">
+				<tbody>
+					<tr>
+					  <th colspan="2" class="legend"><?php echo I18N::T('labs', '1. 登录信息')?></td>
+					</tr>
+					<?php
+                    list($token, $backend) = explode('|', $user->token, 2);
+                    $backends = (array) Config::get('auth.backends');
+                    $backend_title = $backends[$backend]['title']?:$backend;
+
+					//根据绑定lims的uuid显示backend
+					list(, $lims_uuid) = explode('%', $backend, 2);
+					$customers = Q("{$user}<member customer");
+					if($lims_uuid && $customers->total_count()) {
+						foreach ($customers as $customer) {
+							if($lims_uuid == $customer->uuid) {
+								$lims_data = $customer->lims_data;
+								$backend_title = $lims_data['site_name'];
+								break;
+							}
+						}
+					}
+
+                    $auth = new Auth($user->token);
+					?>
+					<tr>
+						<td class="label right nowrap middle"><?php echo I18N::T('labs', '登录帐号') ?></td>
+						<td class="middle">
+							<div class="text_like">
+							<?php echo H($token); ?>
+							<span class="separator">@</span>
+							<?php echo H($backend_title) ?>
+							</div>
+							<?php echo Form::hidden('token', $user->token); ?>
+						</td>
+					</tr>
+					<?php if (!$auth->is_readonly()):?>
+					<tr>
+						<td class="label right nowrap"><?php echo I18N::T('labs', '当前密码')?></td>
+						<td class="middle"><input name="original_password" type="password" class="text" size="40" value="" /></td>
+					</tr>
+					<tr>
+						<td class="label right nowrap"><?php echo I18N::T('labs', '密　　码')?></td>
+						<td class="middle"><input name="passwd" type="password" class="text" size="40" value="" /></td>
+					</tr>
+					<tr>
+						<td class="label right nowrap"><?php echo I18N::T('labs', '确认密码')?></td>
+						<td class="middle"><input name="confirm_passwd" type="password" class="text" size="40" value="" /></td>
+					</tr>
+					<?php endif; ?>
+					<tr><td colspan="2" class="hr_2">&#160;</td></tr>
+					<tr>
+					  <th colspan="2" class="legend"><?php echo I18N::T('labs', '2. 个人信息')?></td>
+					</tr>
+					<tr>
+						<td class="label right nowrap"><?php echo I18N::T('labs', '姓　　名')?></td>
+						<td class="middle"><input name="name" class="text" size="40" value="<?php echo H($user->name) ?>" /></td>
+					</tr>
+					<tr>
+						<td class="label right nowrap"><?php echo I18N::T('labs', '性　　别')?></td>
+						<td class="middle">
+                            <?php echo Form::dropdown('gender', I18N::T('labs', User_Model::$genders), $user->gender, 'class="middle dropdown"'); ?>
+                        </td>
+					</tr>
+						<?php /*
+					<tr>
+						<td class="label middle right nowrap"><?php echo I18N::T('labs', '人员类型')?></td>
+						<?php
+						$members_type = array();
+						foreach(User_Model::$members as $key => $value){
+							$members_type[I18N::T('labs', $key)] = $value;
+						}
+						?>
+						<td class="middle"><?php echo Form::dropdown('member_type', array(''=>'--') + I18N::T('labs', $members_type), $user->member_type, 'class="dropdown"'); ?></td>
+					</tr>
+					<tr>
+						<td class="label middle right nowrap"><?php echo I18N::T('labs', '学号/工号')?></td>
+						<td class="middle"><input name="ref_no" class="text" size="40" value="<?php echo H($user->ref_no)?>" /></td>
+					</tr>
+					<tr>
+						<td class="label right nowrap"><?php echo I18N::T('labs', '专　　业')?></td>
+						<td class="middle"><input name="major" class="text" size="40" value="<?php echo H($user->major) ?>" /></td>
+					</tr>
+					<tr>
+						<td class="label right nowrap"><?php echo I18N::T('labs', '单位名称')?></td>
+						<td class="middle"><input name="organization" class="text" size="40" value="<?php echo H($user->organization)?>" /></td>
+					</tr>
+					<tr>
+						<td class="right nowrap"><?php echo I18N::T('labs', '实验室')?></td>
+						<td class="top">
+							<?php echo Widget::factory('labs:lab_selector', array(
+								'name' => 'lab_id',
+								'selected_lab' => $user->lab,
+								)); ?>
+						</td>
+					</tr>
+							  */ ?>
+					<tr><td colspan="2" class="hr_2">&#160;</td></tr>
+					<tr>
+					<th colspan="2" class="legend"><?php echo I18N::T('labs', '3. 联系方式')?></td>
+					</tr>
+					<tr>
+						<td class="label right nowrap"><?php echo I18N::T('labs', '电子邮箱')?></td>
+						<td class="middle"><input name="email" class="text" size="40" value="<?php echo H($user->email) ?>" /></td>
+					</tr>
+					<tr>
+						<td class="label right nowrap middle"><?php echo I18N::T('labs', '联系电话')?></td>
+						<td class="middle"><input name="phone" class="text" size="40" value="<?php echo H($user->phone)?>" /></td>
+					</tr>
+					<tr>
+						<td class="label right nowrap middle"><?php echo I18N::T('labs', '地　　址')?></td>
+						<td class="middle"><input name="address" class="text" size="40" value="<?php echo H($user->address)?>" /><?php echo $optional; ?></td>
+					</tr>
+					<tr>
+						<td colspan="2" class="hr_1">&#160;</td>
+					</tr>
+					<tr>
+						<td colspan="2" class="hr_1">&#160;</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<input type="submit" name="submit" class="button button_save" value="<?php echo I18N::T('labs', '保存')?>" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			</form>
+		</td>
+	</tr>
+	</tbody>
+</table>
+</div>

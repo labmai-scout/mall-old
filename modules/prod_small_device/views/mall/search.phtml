@@ -1,0 +1,28 @@
+<?php echo $sub_header; ?> 
+
+<?php /*echo V('prod_reagent:mall/crumb', array('category' => $category, 'form' => $form));*/ ?>
+
+<div class="hr_3">&#160;</div>
+
+<div class="content">
+	<div class="content_sidebar">
+		<?php echo V("prod_reagent:mall/sidebar/categories", array('category'=>$category)); ?>
+
+		<?php /* 首页优化视图的时候暂时此界面不需要供应商的列表
+			echo V("prod_reagent:mall/sidebar/vendors", array('vendor'=>$vendor)); 
+		*/ ?>
+	</div>
+	<div class="crumb">
+	<?php echo V('prod_reagent:mall/crumb', array('category' => $category, 'form' => $form));?>
+	</div>
+	<div class="content_body">
+		<?php 
+			// echo V('prod_reagent:mall/advanced_search', array('form'=>$form)); 	
+			echo $pagination;
+			echo V("prod_reagent:mall/results", array('products' => $products,  'form' => $form, 'category' => $category));
+			echo $pagination;
+		?>
+	</div>
+</div>
+
+

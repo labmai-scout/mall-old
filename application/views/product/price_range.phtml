@@ -1,0 +1,7 @@
+<?php
+if (is_numeric($product->unit_price)) {
+	echo V('application:common/price', array('price'=>$product->unit_price)); 
+}
+else {
+	echo HT('暂无报价');
+}

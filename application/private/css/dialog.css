@@ -1,0 +1,93 @@
+.dialog_block {
+	background-color: #000;
+	bottom:0;
+	display:none;
+	left: 0;
+	position: absolute;
+	right:0;
+	top: 0;
+	z-index: 600;
+	float:left;
+	opacity:0.8;
+}
+
+.dialog_wrapper{
+	position: absolute;
+	left:0;
+	right:0;
+	margin-left:auto;
+	margin-right:auto;
+	top:0;
+	bottom:0;
+	margin-top:60px;
+	z-index: 1000;
+	width: 0;
+}
+
+.dialog_border {
+	position: static;
+	display: inline-block;
+	line-height: 1;
+
+	padding: 5px;
+	background-color: #ccc;
+	/* border-radius: 5px;*/
+
+}
+
+.dialog_content {
+	background:#f4f4f4;
+	line-height: 1.5;
+}
+
+.dialog_content:disabled, 
+.dialog_content, .dialog_content form, .dialog_content div.form {
+	display:block;
+}
+
+.dialog_content div.form div.form {
+	background-color: #e7e7e7;
+}
+
+.dialog_content div.bottom_form {
+	border-top: 1px solid #CCC;
+	background-color: #e7e7e7;
+}
+
+
+.dialog_shadow{
+	box-shadow:rgba(0,0,0,0.8) 0 2px 6px;
+	filter: progid:DXImageTransform.Microsoft.Shadow (Color=#000000, Direction=135, Strength=2);
+}
+
+.dialog_close_border {
+	background-color: #CCCCCC;
+	display: block;
+	position: relative;
+}
+
+.dialog_title {
+	float: left;
+	padding-left: 5px;
+	display: block;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 24px;
+	white-space: nowrap;
+}
+
+a.dialog_close {
+	float: right;
+	cursor:pointer;
+	display: inline-block;
+	padding:0;
+	z-index:5000;
+	height:24px;
+	width: 24px;
+	text-decoration:none;
+	background: url(images/buttons/close.png) no-repeat 4px 0px;
+}
+
+a.dialog_close:hover {
+	text-decoration:none;
+}

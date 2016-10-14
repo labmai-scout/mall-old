@@ -1,0 +1,63 @@
+<div class="tag_title check_hover form padding_1 clearfix">
+	<div class="tag_drag_handle middle tag_id:<?php echo $tag->id?>" >&#160;</div>
+	<div class="hidden">
+		<div class="tag_drag_helper center"><?php echo HT($tag->name); ?></div>
+	</div>
+	<?php if (!$collapsed || ($tag->id && Q("tag[parent=$tag]")->length()>0)): ?>
+	<span class="toggle_button <?php echo $collapsed ?' toggle_collapse':'toggle_expand'?> middle view event:click object:tag_view static:<?php echo H(array('collapse'=>!$collapsed, 'tag'=>$tag->id, 'uniqid'=>$uniqid, 'parent_uniqid'=>$parent_uniqid)); ?> src:<?php echo URI::url('tags') ?> "></span>
+	<?php else: ?>
+	<span class="toggle_button middle"></span>
+	<?php endif; ?>
+	<span class="middle tag_name">
+		<?php echo HT($tag->name); ?>
+		&#160;&#160;&#160;&#160;
+		<span class="show_on_hover">
+			<?php if (!$tag->readonly): ?>
+			<?php
+			if (Config::get('tag.group_limit')):
+			#if (tag.group_limit >= 1)
+				$root = $tag->root;
+				$current_levels = $root->current_levels($tag);
+				if ($current_levels <= Config::get('tag.group_limit')):
+			?>
+			<a class="button button_edit middle view event:click object:tag_edit src:<?php echo URI::url('tags') ?> static:<?php echo H(array('id'=>$tag->id, 'uniqid'=>$uniqid, 'parent_uniqid'=>$parent_uniqid, 'collapsed'=>$collapsed)); ?>"><?php echo T('编辑'); ?></a>
+			<?php
+				endif;
+			#endif
+			else:
+			#ifndef (tag.group_limit)
+			?>
+			<a class="button button_edit middle view event:click object:tag_edit src:<?php echo URI::url('tags') ?> static:<?php echo H(array('id'=>$tag->id, 'uniqid'=>$uniqid, 'parent_uniqid'=>$parent_uniqid, 'collapsed'=>$collapsed)); ?>"><?php echo T('编辑'); ?></a>
+			<?php
+			#endif
+			endif;
+			?>
+
+			<a class="button button_delete middle view event:click object:tag_delete src:<?php echo URI::url('tags') ?> static:<?php echo H(array('id'=>$tag->id, 'uniqid'=>$uniqid, 'parent_uniqid'=>$parent_uniqid)); ?>"><?php echo T('删除'); ?></a>
+			<?php endif; ?>
+			<?php
+			/*
+			guoping.zhang@2011.01.17
+			组织机构最大层数（上限）
+				默认为3层
+			*/
+			if (Config::get('tag.group_limit')):
+			#if (tag.group_limit >= 1)
+				if ($current_levels < Config::get('tag.group_limit')):
+			?>
+			<a class="button button_add middle view event:click object:tag_edit src:<?php echo URI::url('tags') ?> static:<?php echo H(array('parent'=>$tag->id, 'uniqid'=>$uniqid, 'parent_uniqid'=>$parent_uniqid)); ?>"><?php echo T('添加'); ?></a>
+			<?php
+				endif;
+			#endif
+			else:
+			#ifndef (tag.group_limit)
+			?>
+			<a class="button button_add middle view event:click object:tag_edit src:<?php echo URI::url('tags') ?> static:<?php echo H(array('parent'=>$tag->id, 'uniqid'=>$uniqid, 'parent_uniqid'=>$parent_uniqid)); ?>"><?php echo T('添加'); ?></a>
+			<?php
+			#endif
+			 endif;?>
+		</span>
+	</span>
+</div>
+
+

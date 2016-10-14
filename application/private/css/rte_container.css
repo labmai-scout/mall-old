@@ -1,0 +1,76 @@
+.rte_container h1,
+.rte_container h2,
+.rte_container h3,
+.rte_container h4,
+.rte_container h5,
+.rte_container h6,
+.rte_container p,
+.rte_container pre,
+.rte_container ul,
+.rte_container table {
+	margin-bottom: 6px;
+}
+
+.rte_container ul li {
+	list-style: square;
+	margin-left:2em;
+}
+
+.rte_container ul li li{
+	list-style: disc;
+}
+
+.rte_container ol li {
+	margin-left:2em;
+	list-style-type: decimal;
+}
+
+.rte_container ol li li {
+	list-style-type: lower-alpha;
+}
+
+.rte_container h1 {
+	font-size: 180%;
+	border-bottom: 2px solid #999;
+}
+
+.rte_container h2 {
+	font-size: 160%;
+	border-bottom: 1px dotted #ccc;
+}
+
+.rte_container h3 {
+	font-size: 140%;
+	border-bottom: 1px dotted #eee;
+}
+
+.rte_container h4 {
+	font-size: 120%;
+}
+
+.rte_container pre {
+	border: 1px solid #EEEECC;
+	background-color: #FFFFEB;
+	padding: .8em 1em;
+}
+
+.rte_container div.level {padding-left:1em;}
+.rte_container div.level1 {padding-left:0;}
+
+.rte_container table {
+	border-collapse: collapse;
+	border-top: 2px solid #666;
+	border-bottom: 2px solid #666;
+}
+
+.rte_container tr td {
+	border: 1px solid #ccc;
+	padding: 6px 6px 0 6px;
+}
+
+.rte_container td.header { 
+	font-weight: bold; 
+	background-color: #eee; 
+}
+.rte_container .right { text-align: right }
+.rte_container .center { text-align: center }

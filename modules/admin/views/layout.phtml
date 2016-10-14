@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<title>
+	<?php echo H($title ? T(Config::get('page.title_pattern'), array('%title'=>$title)) : Config::get('page.title_default'));
+ ?>
+</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<base href="<?php echo Config::get('system.base_url') ?>" />
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<?php echo $this->controller->load_css(); ?>
+<?php echo $this->controller->load_js(TRUE); ?>
+<script>
+(function($){
+	Q['24hour'] = <?php echo JS::quote(!!Config::get('system.24hour')); ?>;
+})(jQuery);
+</script>
+</head>
+<body>
+	<table width="100%" height="100%">
+	<tr>
+	<td class="top" colspan="2" height="32">
+		<div id="header"><div class="header_content">
+			<div id="top_menu" class="float_right">
+				<?php echo V('top_menu') ?>
+			</div>
+            <?php
+	            if ($new_url = Config::get('mall.new_url')) {
+					$url = URI::url($new_url);
+	            }
+	            else {
+	            	$url = URI::url('/');
+	            }
+            ?>
+			<a href="<?php echo $url?>"><img class="float_left" src="<?php echo _C('images/logo.png')?>" usemap="#logo_map"/></a>
+		</div></div>
+	</td>
+	</tr>
+	<tr>
+		<td id="sidebar" class="top" width="194">
+			<div class="sidebar_wrapper">
+				<div class="sidebar_content">
+					<?php echo $this->sidebar ?>
+				</div>
+			</div>
+		</td>
+		<td id="center" class="top" width="100%">
+			<div class="center_content">
+				<?php echo V('message'); ?>
+				<div style="padding-top:3px">
+				<?php echo $this->body ?>
+				</div>
+			</div>
+		</td>
+	</tr>
+	<tr>
+	<td class="bottom" colspan="2" height="28">
+	<div id="footer"><div class="footer_content">
+		<?php echo $this->footer ?>
+	</div></div>
+	</td>
+	</tr>
+	</table>
+	<?php echo $this->controller->load_js(FALSE); ?>
+</body>
+</html>

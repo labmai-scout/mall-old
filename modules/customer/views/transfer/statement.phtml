@@ -1,0 +1,93 @@
+<?php
+$customer = $statement->customer;
+?>
+<div class="hr_1">&#160;</div>
+<div id="statement_view" class="clearfix">
+<h1><?php echo HT('付款单 #%ref_no', array('%ref_no'=>$statement->voucher ?: Number::fill($statement->id, 6))); ?></h1>
+<div><?php echo V('customer:transfer/statements/status', array('statement'=>$statement)); ?></div>
+<div class="hr_2">&#160;</div>
+<div class="step_form">
+    <h4><?php echo HT('付款人'); ?></h4>
+    <div class="step_form_content">
+        <strong><big><?php echo H($customer->name); ?></big></strong>
+    </div>
+</div>
+<div class="step_form">
+	<h4><?php echo HT('付款金额'); ?></h4>
+	<div class="step_form_content">
+		<strong><big><?php echo Number::currency($statement->balance); ?></big></strong>
+	</div>
+</div>
+<div class="step_form">
+	<h4><?php echo HT('订单列表'); ?></h4>
+	<div class="step_form_content orders_content">
+<?php
+
+$table = Widget::factory('table');
+$table->name = 'customer_transfer_statement';
+
+$table->add_columns(array(
+
+    'ref_no'=>array(
+        'title'=>T('订单编号'),
+        'nowrap'=>TRUE
+    ),
+    'items'=>array(
+        'title'=>T('订单商品'),
+        'nowrap'=>TRUE
+    ),
+	'vendor'=>array(
+		'title'=>T('供应商'),
+        'nowrap' => TRUE,
+        'extra_class'=>'tight',
+    ),
+   'description'=>array(
+    	'title'=>T('备注'),
+        'extra_class'=>'flexible'
+    ),
+    'price'=> array(
+        'title'=>T('金额'),
+        'align' => 'right',
+        'nowrap' => TRUE,
+    ),
+));
+
+foreach(Q("$statement order") as $order) {
+	$table->add_row(array(
+        'ref_no'=> V('customer:transfer/statement/ref_no', array('order'=>$order)),
+        'items'=> V('customer:transfer/statement/items', array('order'=>$order)),
+		'vendor'=>V('customer:transfer/statement/vendor', array('order'=>$order)),
+        'price'=> V('customer:transfer/statement/price', array('order'=>$order)),
+		'description' => V('customer:transfer/statement/description', array('order'=>$order)),
+	));
+}
+
+echo $table;
+?>
+	</div>
+</div>
+<?php
+$links = $statement->links('customer_view');
+if (count($links) > 0):
+?>
+<div class="no_print padding_1">
+	<?php echo Widget::factory('application:links', array('links'=>$links, 'separator'=>' ')); ?>
+	<script>
+		jQuery(function($){
+			$link = $('a.payment_approve');
+			$link.bind('click', function(e){
+				Q.trigger({
+					object: 'approve_transfer',
+					event: 'click',
+					data: {
+						id: '<?php echo $statement->id; ?>'
+					}
+				});
+			});
+		});
+	</script>
+</div>
+<?php
+endif;
+?>
+</div>

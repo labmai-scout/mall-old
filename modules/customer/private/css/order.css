@@ -1,0 +1,22 @@
+.status_pending_approval {
+   	background-color: #F93;
+} 
+.status_approved {
+    background-color: #6C9;
+}
+.status_canceled {
+    background-color: #888;
+}
+
+.light_panel .status_tag {
+    border: 1px solid #eee;
+}
+
+span.delete_price {
+	text-decoration: line-through;
+}
+
+span.price {
+	font-weight: bold;
+	text-shadow: 0 0 1px #cda6a6;
+}

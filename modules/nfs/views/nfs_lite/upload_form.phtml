@@ -1,0 +1,51 @@
+<?php 
+$object_name = $object->name();
+$object_id = $object->id;
+$upload_form_uniqid = 'upload_form_'.uniqid();
+
+?>
+<div class="form padding_1" class="prevent_default">
+	<form id="<?php echo $upload_form_uniqid?>" method="post" action="<?php echo URI::url('!nfs/nfs_lite/upload.'.$object_name.'.'.$object_id.'.'.$path_type,['path'=>$path, 'form_token'=>$form_token])?>" class="nowrap" style="padding:1px">
+		<input name="Filedata" type="file" class="middle" />
+		<input name="single" type="hidden" value="1" />
+		<a name="upload" href="#" class="button button_import middle prevent_default"><?php echo I18N::HT('nfs', '上传')?></a>
+	</form>
+</div>
+<script>
+jQuery(function($){
+	var $form = $('#<?php echo $upload_form_uniqid?>:eq(0)');
+	$form
+	.find('a[name=upload]')
+	.bind('click', function(e){
+		e.preventDefault();
+
+		var $this = $(this);
+		var $file_input = $this.siblings('input:file');
+		if (!$file_input.val()) {
+			return false;
+		}
+
+		var str = "<?php echo I18N::T('nfs', '正在上传'); ?>" + '"' + $file_input.val() + '"';
+		var $uploading = $('<span class="uploading">' + str + '</span>');
+		$file_input.before($uploading);
+
+		$this.hide();
+		$file_input.hide();
+
+		$form.ajaxSubmit({
+			dataType: 'json',
+			success : function(data) {
+				var $tbody = $('#<?php echo $form_id?>').find('tbody:eq(0)');
+				$tbody.prepend(data);
+				$("#<?php echo $no_file_uniqid?>").remove();
+				$('.description.center.nodata').remove();
+				$uploading.remove();
+				$this.show();
+				$file_input.show();
+				$form[0].reset();
+			}
+		});
+		return false;
+	});
+});
+</script>

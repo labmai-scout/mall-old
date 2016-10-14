@@ -1,0 +1,8 @@
+<?php
+$me = L('ME');
+$count = Q("message[receiver={$me}][!is_read]")->total_count();
+if ($count > 0):
+	$len = strlen($count);
+?>
+	<span class="num_notif num_notif_<?php echo $len;?> middle"><?php echo $count; ?></span>
+<?php endif;

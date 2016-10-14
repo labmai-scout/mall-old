@@ -1,0 +1,6 @@
+<?php
+
+foreach (Q("$statement order") as $order) {
+	$links[] = URI::anchor($order->url(), HT('#%ref_no', array('%ref_no'=>$order->order_no)), 'class="blue"');
+}
+echo implode(', ', $links);

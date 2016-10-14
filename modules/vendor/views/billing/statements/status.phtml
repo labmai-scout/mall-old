@@ -1,0 +1,6 @@
+<?php
+$class = 'status_'.Billing_Statement_Model::$status_label[$statement->status];
+?>
+<div style="padding:.3em 0">
+<span class="status_tag <?php echo $class?>"><?php echo Billing_Statement_Model::$status[$statement->status]?></span>
+</div>

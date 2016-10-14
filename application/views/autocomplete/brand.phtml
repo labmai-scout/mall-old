@@ -1,0 +1,13 @@
+<table class="mini_form">
+	<tr>
+		<td class="middle">
+			<div class="name nowrap">
+            <?php if($brand['company']) {?>
+				<span><?php echo H($brand['name']);?> (<?php echo H($brand['company']); ?>)</span>
+            <?php }else{?>
+				<span><?php echo H($brand['name']); ?></span>
+            <?php }?>
+			</div>
+		</td>
+	</tr>
+</table>

@@ -1,0 +1,124 @@
+input.token {
+	display:none;
+}
+
+div.token_box {
+	cursor:text;
+	/*position:relative; */
+	margin:0;
+	padding:1px 0 0 1px;
+	*padding:1px 0 1px 1px;
+	border:1px solid #ccc;
+	background-color: #fff;
+	display: inline-block;
+	font-size: 13px;
+
+	input {
+		/*
+			NO. BUG#183 (Cheng.Liu@2010.11.23)
+			去掉display属性，避免在input无法触发keydown事件
+		*/
+		position:absolute;
+		font-size:12px;
+		left:-10000px;
+		top:-10000px;
+		width:0;
+		height:0;
+		border:none;
+		*border-color:white;
+		outline-color:-moz-use-text-color;
+		outline-style:none;
+		outline-width:0;
+		-webkit-appearance: none;	/* 为了隐藏iPad input样子*/
+	}
+	
+	input.visible {
+		position:relative;
+		display:block;
+		float:left;
+		left:auto;
+		top:auto;
+		height:auto;
+		/*
+			NO. BUG#183 (Cheng.Liu@2010.11.23)
+			添加padding样式，和其中的div.token保持一致，文本高度才一致
+		*/
+		padding:2px 0px 1px 0px;
+		margin:2px 1px;
+		*margin-top: 0;
+		width:5px;
+	}
+	
+	div.token {
+		/* position:relative; */
+		display:block;
+		float:left;
+		margin:0 1px 1px 0;
+		padding:0 0 0 2px;
+		height: 17px;
+		*height: 18px;
+		/* background:url(images/token/normal.gif) no-repeat; */
+		background-color: #eff2f7;
+		border: 1px solid #ccd5e4;
+		white-space: nowrap;
+		cursor: default;
+
+		.remove_button {
+			display: inline-block;
+			background-image:url(images/token/x.gif) !important;
+			background-position: center center;
+			background-repeat:no-repeat;
+			cursor:pointer;
+			width: 16px;
+			height: 16px;
+			line-height: 16px;
+			padding: 0;
+		}
+
+		strong {
+			display: inline-block;
+			font-weight:normal;
+			line-height: 16px;
+			height: 16px;
+			padding: 0;
+		}
+
+	}
+
+	/* , div.token:hover span */	
+	div.token:hover
+	{
+		/* background-image:url(images/token/hover.gif); */
+		background-color: #d8dfea;
+		border-color: #ccd5e4;
+	}
+	
+	div.token_em, div.token_selected {
+		color:#fff;
+		background-color: #5670a6;
+		border-color: #3b5998;
+	}
+
+	div.token_em, 
+	div.token_em:hover, 
+	div.token_selected, 
+	div.token_selected:hover {
+		color:#fff;
+		background-color: #5670a6;
+		border-color: #3b5998;
+	}
+	
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	div.token_box {
+		div.token {
+			height: 18px;
+		}
+
+		input.visible {
+			margin-top: 2px;
+			margin-bottom: 1px;
+		}
+	}
+}

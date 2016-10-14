@@ -1,0 +1,84 @@
+<?php
+echo CSS::load_async('nfs:common');
+
+$uniqid = uniqid();
+//form表单ID
+$files_form = 'su_files_form_'.$uniqid;
+$no_file_uniqid = 'no_file'.$uniqid;
+
+$user = L('ME');
+$can_download = NFS::user_access($user, '下载文件', $object, ['path'=>$path.'/foo', 'type'=>$path_type]);
+$can_upload = NFS::user_access($user, '上传文件', $object, ['path'=>$path.'/foo', 'type'=>$path_type,'extra'=>$extra]);
+$can_edit = NFS::user_access($user, '修改文件', $object,  ['path'=>$path.'/foo', 'type'=>$path_type,'extra'=>$extra]);
+?>
+<div class="prevent_default" width="100%" id="<?php echo $files_form?>">
+<table id="nfs_sticky" width="100%">
+<thead>
+	<tr>
+		<th class="left nowrap"><span class="header"><?php echo I18N::T('nfs', '文件名称'); ?></span></th>
+		<th class="right nowrap"><span class="header"><?php echo I18N::T('nfs', '更新时间'); ?></span></th>
+		<th class="right nowrap"><span class="header"><?php echo I18N::T('nfs', '占用空间'); ?></span></th>
+		<th class="tight last">&#160;</th>
+	</tr>
+</thead>
+<tbody>
+<?php
+//显示文件列表
+
+echo V('nfs_lite/return', ['object'=>$object,
+							  'path'=>$path,
+							  'form_token'=>$form_token,
+							  'path_type'=>$path_type,
+		   ]);
+
+$row_odd = TRUE;
+if (count($files) > 0) {
+	foreach ((array) $files as $file) {
+		echo V('nfs_lite/file', ['object'=>$object,
+								'path'=>$path,
+								'file'=>$file,
+								'form_token'=>$form_token,
+								'path_type'=>$path_type,
+								'can_edit'=>$can_edit,
+								'can_download'=>$can_download,
+								'row_odd' => $row_odd,
+								'extra'=>$extra
+							]);
+		$row_odd = !$row_odd;
+	}
+}
+?>
+
+<tr id="<?php echo $no_file_uniqid; ?>" class="hidden">
+    <td colspan="4">&#160;</td>
+</tr>
+
+<?php if (!count($files)) : ?>
+    <tr>
+		<td colspan="4" class="description center nodata">
+		<?php echo I18N::T('nfs', '暂无附件'); ?>
+		</td>
+	</tr>
+<?php endif;?>
+</tbody>
+</table>
+</div>
+
+<?php
+if ($can_upload) {
+	echo V('nfs:nfs_lite/upload_form', ['object'=>$object, 'path_type'=>$path_type, 'path'=>$path, 'form_id'=>$files_form, 'no_file_uniqid'=>$no_file_uniqid, 'form_token'=>$form_token]);
+}
+
+$object_name = $object->name();
+$object_id = $object->id;
+echo JS::load('nfs:nfs_lite', [
+	'url' => URI::url('!nfs/nfs_lite/' . $object_name . '.' . $object_id . '.' . $path_type, ['form_token'=>$form_token]),
+	'submit_text' => T('保存'),
+	'cancel_text'=>T('取消'),
+	'object_name' => $object_name,
+	'object_id' => $object_id,
+	'table_id' => 'nfs_sticky',
+	'path_type' => $path_type,
+
+]);
+?>

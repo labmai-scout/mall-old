@@ -1,0 +1,60 @@
+<div class="hr_1">&#160;</div>
+<div class="panel padding_1">
+<?php echo $status_tabs; ?>
+</div>
+<?php
+
+echo $pagination; 
+
+$me = L('ME');
+$table = Widget::factory('table');
+
+$table->name = 'vendor_statements';
+$table->form = $form;
+
+$table->add_columns(array(
+
+    'ref_no'=>array(
+        'title'=>T('付款单号'),
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE
+    ),    
+    'items'=>array(
+        'title'=>T('订单列表'),
+    ),    
+    'date'=>array(
+        'title'=>T('生成时间'),
+        'align'=>'right',
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE,
+    ),  
+    'balance'=>array(
+        'title'=>T('金额'),
+        'align'=>'right',
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE,
+    ),  
+    'status'=>array(
+        'title'=>T('状态'),
+        'align'=>'center',
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE,
+    ),  
+));
+
+$table->empty_message = T('无符合条件的付款单!');
+
+foreach ($statements as $statement) {
+	
+    $links = array();
+	
+	$table->add_row(array(
+        'ref_no'=> V('customer:transfer/statements/ref_no', array('statement'=>$statement)),
+        'items'=> V('customer:transfer/statements/items', array('statement'=>$statement)),
+        'date'=> V('customer:transfer/statements/date', array('statement'=>$statement)),
+        'status'=> V('customer:transfer/statements/status', array('statement'=>$statement)),
+        'balance'=> V('customer:transfer/statements/balance', array('statement'=>$statement)),
+	));
+}
+
+echo $table;

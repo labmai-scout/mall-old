@@ -1,0 +1,77 @@
+<?php
+$uniqid = uniqid();
+$select_all_id = 'select_all_' . $uniqid;
+$batch_form_id = 'batch_form_' . $uniqid;
+$delete_selected = 'delete_selected_' . $uniqid;
+$form_token = 'form_token_' . $uniqid;
+?>
+<div class="panel padding_1 clearfix">
+	<form method="post" action="<?php echo URI::url('!messages/message/batch_action') ?>" id="<?php echo $batch_form_id ?>">
+		<div class="float_left lpadding_1">
+			<?php echo Form::checkbox('', FALSE, T('全选'), 'id="'.$select_all_id.'"') ?>
+			<?php foreach ($messages as $message) echo Form::checkbox('select['.$message->id.']', FALSE, NULL, 'class="hidden" value="'.$message->id.'"'); ?>
+			&#160;&#160;
+			<?php echo T('标记为')?>
+			<input name="mark_read" type="submit" class="button button_mark_read middle" value="<?php echo T('已读'); ?>" />&#160;
+			<input name="mark_unread" type="submit" class="button button_mark_unread middle" value="<?php echo T('未读'); ?>" />&#160;
+			<input name="mark_add" type="submit" class="button button_add middle" value="<?php echo T('添加新消息'); ?>" />
+		</div>
+		<div class="float_right">
+			<a class="button button_delete middle" id="<?php echo $delete_selected; ?>">
+				<?php echo T('删除选中'); ?>
+			</a>&#160;<a class="button button_delete middle" confirm="<?php echo T('您确定要删除所有已读信息?'); ?>" href="<?php echo URI::url('!messages/message/delete_read') ?>"><?php echo T('删除所有已读消息'); ?></a>
+		</div>
+	</form>
+</div>
+
+<?php
+echo JS::load('messages:delete', array(
+		'form_token' => $form_token,
+        'delete_selected' => $delete_selected,
+        'no_checked' => T('请选择要删除的消息!')
+	));
+?>
+
+<?php echo $pagination; ?>
+<?php
+/*
+	NO. TASK#259 (Cheng.Liu@2010.11.19)
+	message转换成 table widget
+*/
+$table = Widget::factory('table');
+$table->name = "messages";
+$table->add_columns(array(
+	'@'=>array(
+		'align' => 'center',
+	),
+	'name'=>array(
+		'title'=>T('标题'),
+		'nowrap'=>FALSE,
+		'extra_class'=>'flexible'
+	),
+	'sender'=>array(
+		'title'=>T('发件人'),
+        'nowrap'=>TRUE,
+        'align'=>'center',
+		'extra_class'=>'tight'
+	),
+	'ctime'=>array(
+		'title'=>T('发件时间'),
+		'nowrap'=>TRUE,
+		'extra_class'=>'tight'
+	),
+	'rest'=>array(
+		'nowrap'=>TRUE,
+		'align'=>'right',
+		'extra_class'=>'tight'
+	)
+));
+
+if($form['query']) {
+	$table->empty_message = T('没有符合条件的消息');
+}
+else {
+	$table->empty_message = T('暂无新消息');
+}
+
+echo $table;

@@ -1,0 +1,161 @@
+<?php
+$me = L('ME');
+
+$is_pending_transfer = !!('pending_transfer' == $secondary_tabs->selected);
+?>
+<div class="panel clearfix padding_1">
+<?php
+if ($is_pending_transfer) :
+    $uniqid = uniqid();
+    $select_all_id = 'select_all_' . $uniqid;
+    $batch_form_id = 'batch_form_' . $uniqid;
+    echo V('admin:transfer/statements/export', array(
+        'select_all_id'=>$select_all_id,
+        'batch_form_id'=>$batch_form_id
+        ))
+?>
+<?php endif;?>
+    <div class="float_right stat_list">
+        <div class="inline_block">
+            <?php
+                if ($total_count) {
+                    echo I18N::T('billing', '订单总数: %total_count个',
+                    array('%total_count' => '<span>'.$total_count.'</span>'));
+                }
+           ?>
+           &#160;
+            <?php
+                if ($amount) {
+                echo I18N::T('billing', '订单总金额: %total_count ',
+                    array('%total_count' => '<span>'.H(Number::currency($amount)).'</span>'));
+                }
+           ?>
+       </div>
+    </div>
+</div>
+<?php
+
+echo $pagination;
+
+$me = L('ME');
+$table = Widget::factory('table');
+
+$table->name = 'vendor_statements';
+$table->form = $form;
+
+
+$columns = array();
+
+if ($is_pending_transfer) {
+    $columns['select'] = array(
+        'align' => 'center',
+        'extra_class' => 'tight',
+        );
+}
+
+$columns += array(
+    '@'=>NULL,
+    'ref_no'=>array(
+        'title'=>T('付款单号'),
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE,
+        'invisible'=>TRUE,
+        'filter' => array(
+            'form' => V('admin:statement_table/filters/ref_no', array(
+                'name'=>'ref_no', 'value'=>$form['ref_no'],
+            )),
+            'value' => $form['ref_no'] ? H($form['ref_no']) : NULL,
+            'field' => 'ref_no'
+        )
+    ),
+    'items'=>array(
+        'title'=>T('订单列表'),
+    ),
+    'customer' => array(
+    	'title' => T('买方'),
+    	'align' => 'left',
+    	'nowrap' => TRUE,
+        'filter' => array(
+            'form' => V('admin:statement_table/filters/customer', array(
+                'name'=>'customer', 'value'=>$form['customer'],
+            )),
+            'value' => $form['customer'] ? H($form['customer']) : NULL,
+            'field' => 'customer'
+        )
+    ),
+    'customer_owner'=>array(
+        'weight'=>30,
+        'title'=>T('买方负责人'),
+        'invisible'=>TRUE,
+        'filter'=>array(
+            'form' => V('admin:statement_table/filters/customer_owner', array(
+                    'name'=>'customer_owner', 'value'=>$form['customer_owner']
+                    )),
+            'value'=> $form['customer_owner'] ? H($form['customer_owner']) : NULL
+        )
+    ),
+    'date'=>array(
+        'title'=>T('生成时间'),
+        'align'=>'right',
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE,
+    ),
+    'balance'=>array(
+        'title'=>T('金额'),
+        'align'=>'right',
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE,
+    ),
+    'status'=>array(
+        'title'=>T('状态'),
+        'align'=>'center',
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE,
+    ),
+    'rest'=>array(
+        'extra_class'=>'tight',
+        'align'=>'right',
+        'nowrap'=>TRUE
+    )
+);
+$table->add_columns($columns);
+
+$table->empty_message = T('无符合条件的付款单!');
+
+foreach ($statements as $statement) {
+
+    $links = $statement->links('admin_transafer');
+
+	$table->add_row(array(
+        'select'=>$statement->can_print_pdf() ? V('admin:common/table/data/select', array('object'=>$statement, 'select_all_id'=>$select_all_id)) : null,
+        '@'=> V('admin:transfer/statements/ref_no', array('statement'=>$statement)),
+        'items'=> V('admin:transfer/statements/items', array('statement'=>$statement)),
+        'customer' => V('admin:transfer/statements/customer', array('statement'=>$statement)),
+        'date'=> V('admin:transfer/statements/date', array('statement'=>$statement)),
+        'status'=> V('admin:transfer/statements/status', array('statement'=>$statement)),
+        'balance'=> V('admin:transfer/statements/balance', array('statement'=>$statement)),
+        'rest'=>Widget::factory('application:links', array('links'=>$links))
+	));
+}
+
+echo $table;
+
+echo JS::load('admin:batch_select', array('select_all_id'=>$select_all_id, 'batch_form_id' => $batch_form_id));
+?>
+<script>
+    jQuery(function($){
+        var message = "<?php echo T('请选择要打印的付款单')?>";
+        var batch_form_id = "<?php echo $batch_form_id?>";
+        $('#batch_print').click(function(){
+            var $select = $(':checked');
+            if($select.length >= 1){
+                 var $form = $('#' + batch_form_id);
+                $form.submit();
+            }
+            else{
+                alert(message);
+                return;
+            }
+        });
+    });
+</script>

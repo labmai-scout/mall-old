@@ -1,0 +1,41 @@
+<?php
+	$auth_backends = Config::get('auth.backends');
+	$is_hide = FALSE;
+	if (count($auth_backends) > 1) {
+		$hidden = array();
+		foreach ($auth_backends as $key => $backend) {
+			if ($backend['readonly']) {
+				$hidden[] = $key;
+			}
+		}
+		if (count($hidden)) $class = "toggle:".$this->name.' hide_on:'.join(' hide_on:', $hidden);
+	}
+	else {
+		$default_backend = $this->default_backend ?: Config::get('auth.default_backend');
+		if ($auth_backends[$default_backend]['readonly']) {
+			$is_hide = TRUE;
+		}
+	}
+?>
+<?php if (!$is_hide): ?>
+<tr class="<?php echo $class?>">
+	<td class="label right nowrap"><?php echo T('密码')?></td>
+	<td class="middle">
+		<input type="password" style="display:none" />
+		<input name="password" type="password" class="text" /><?php echo $require; ?>
+	</td>
+</tr>
+<tr class="<?php echo $class?>">
+	<td class="label right nowrap"><?php echo T('确认密码')?></td>
+	<td class="middle">
+		<input name="confirm_password" type="password" class="text" /><?php echo $require; ?>
+	</td>
+</tr>
+<tr class="<?php echo $class?>">
+	<td></td>
+	<td><?php echo Form::checkbox('must_change_password', $form['must_change_password'], T('第一次登录时修改密码'),'class="middle"','class="middle"'); ?></td>
+</tr>
+<tr class="<?php echo $class?>">
+	<td colspan="2" class="hr_1">&#160;</td>
+</tr>
+<?php endif; ?>

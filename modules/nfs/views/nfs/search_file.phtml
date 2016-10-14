@@ -1,0 +1,65 @@
+<?php
+
+$root = Config::get('nfs.root');
+$user = L('ME');
+$full_path = $root.$file->path_prefix.$file->path;
+$path = NFS::get_link_path($user,$file->path_prefix, $file->path, $path_type);
+list($name, $dir_path) = explode("/", strrev($path), 2);
+$name = strrev($name);
+$dir_path = strrev($dir_path);
+$class = $row_odd ? ' row_odd':' row_even';
+$file = NFS::file_info($full_path);
+if ($file['type']) {
+	$file_class = 'file_'.$file['type'];
+}
+?>
+<tr>
+<td class="left nowrap <?php echo $class?>">
+	<input name="select[]" type="checkbox" value="<?php echo H($path); ?>" />
+</td>
+<td class="left nowrap <?php echo $class?>">
+		<span class="file <?php echo $file_class?>">
+			<?php
+			 if($file['dir']): ?>
+				<a href="<?php echo URI::url('', ['path'=>$file['path'], 'form_token'=>$form_token])?>">
+			<?php endif;?>
+			<?php if($file['file']):?>
+			<a href="<?php echo URI::url('!nfs/nfs/index.'.$object->name().'.'.$object->id.'.'.$path_type, ['path'=>$path, 'form_token'=>$form_token])?>" class='prevent_default'>
+				<?php echo H($name); ?>	
+			</a>
+			<?php endif;?>
+		</span>
+</td>
+<td class="right nowrap <?php echo $class?>">
+	<?php echo Date::relative($file['mtime']); ?>
+</td>
+<td class="right nowrap <?php echo $class?>"><?php echo $file['file'] ? File::bytes($file['size']) : '&#160;'; ?></td>
+<td class="right nowrap <?php echo $class?>"><a href="<?php echo URI::url('', ['path'=>$dir_path, 'form_token'=>$form_token]) ?>"><?php echo $dir_path ? : '&#160;'; ?></a></td>
+<td class="flexible right nowrap <?php echo $class?>">	
+	<?php 
+		$links = [];
+		if ($file['file'] && NFS::user_access($user, '下载文件', $object, ['path'=>$path, 'type'=>$path_type])) {
+			$links['download'] = [
+				'text' => I18N::HT('nfs', '下载'),
+				'url' => URI::url('!nfs/nfs/index.'.$object->name().'.'.$object->id.'.'.$path_type, ['path'=>$path, 'form_token'=>$form_token]),
+				'extra' => 'class="blue middle prevent_default"',
+			];
+		}
+
+		if (NFS::user_access($user, '修改文件', $object, ['path'=>$path, 'type'=>$path_type])) {
+			$links['rename'] = [
+				'text' => I18N::HT('nfs', '更名'),
+				'url' => '#',
+				'extra' => 'class="blue middle view" q-src="'.URI::url().'" q-event="click" q-object="rename" q-static="'.H(['path'=>$dir_path,'form_token'=>$form_token, 'old_name'=>rawurlencode($name)]).'"',
+			];
+
+			$links['delete'] = [
+				'text' => I18N::HT('nfs', '删除'),
+				'url' => '#',
+				'extra' => 'class="blue middle view " q-src="'.URI::url().'" q-event="click" q-object="delete" q-static="'.H(['form_token'=>$form_token, 'delete_path'=>rawurlencode($path)]).'"',
+			];
+		}
+		echo V('application:widgets/links', ['links'=>$links]);
+	?>
+</td>
+</tr>

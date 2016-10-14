@@ -1,0 +1,4 @@
+<?php echo Form::checkbox('cdtstart_check', $this->dtstart_check, '', 'class="middle monitor"'); ?>&#160;<input name="cdtstart" class="text date middle toggle_status:cdtstart_check enable_on:on" value="<?php echo $this->dtstart ?>" q-date_format="<?php echo HT('$year年$month月$day日')?>"/>
+&#160;<span class="middle description">~</span>&#160;
+<?php echo Form::checkbox('cdtend_check', $this->dtend_check, '', 'class="middle monitor"'); ?>&#160;<input name="cdtend" class="text date middle toggle_status:cdtend_check enable_on:on" value="<?php echo $this->dtend ?>" q-date_format="<?php echo HT('$year年$month月$day日')?>"/>
+<input class="hidden" name="date_filter" value="1" />

@@ -1,0 +1,9 @@
+<div class="form padding_2">
+<form method="post" q-object="return_order">
+	<?php echo V('form_error', array('form'=>$form));?>
+	<label><?php echo HT('理由') ?></label>
+	<textarea name="reason" class="text autogrow" cols="60" rows="5"></textarea>
+	<div class="hr_1">&#160;</div>
+	<input class="button button_edit" type="submit" name="return" value="<?php echo HT('同意退货'); ?>" />
+</form>
+</div>

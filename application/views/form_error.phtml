@@ -1,0 +1,21 @@
+<?php if(is_object($form) && $form->no_error === FALSE): ?>
+<div id="form_error_box" class="message message_error"><ul>
+	<?php
+	$inputs = array();
+	$errors = array();
+
+	foreach($form->errors as $input=>$errs){
+		foreach($errs as $err){
+			if(strpos($err, '@')===0) continue;
+			$errors[] = $err;
+		}
+		$inputs[] = $input;
+	}
+	echo '<li class="nowrap">'.implode('</li><li class="nowrap">', $errors).'</li>';
+	?>
+</ul></div>
+<?php echo JS::load('form_error', array(
+	'input_errors'=>$inputs,
+	'errors'=>$errors
+));?>
+<?php endif; 

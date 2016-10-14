@@ -1,0 +1,57 @@
+<div class="hr_3">&#160;</div>
+<div class="form clearfix">
+<h3 class="section_title"><?php echo T('重置您的登录密码')?></h3>
+<div class="hr_1">&#160;</div>
+<table class="form">
+	<tbody>
+	<tr>
+		<td class="top icon">
+			<img src="<?php echo O('user')->icon_url('64')?>" />
+		</td>
+		<td class="top">
+			<form method="post" autocomplete="off" action="<?php echo URI::url('recovery')?>">
+			<?php echo V('form_error', array('form'=>$form));?>
+			<table class="form">
+				<tbody>
+					<tr>
+						<td class="label left nowrap"><label><?php echo HT('请输入您需要重置的帐号')?></label></td>
+					</tr>
+					<tr>
+						<td class="middle">
+							<input class="text" name="token" size="30" value="<?php echo H($form['token'])?>" />
+							<?php 
+								$backends = Config::get('auth.backends');
+								if (count($backends)) {
+									$backend_titles = array();
+									foreach ($backends as $key=>$values) {
+										$backend_titles[$key] = $values['title'];
+									}
+									$default_backend = Config::get('auth.default_backend');
+									echo '&#160;@&#160;';
+									echo Form::dropdown('token_backend', $backend_titles, $default_backend, 'class="dropdown middle"');
+								}
+							?>
+						</td>
+					</tr>
+					<tr>
+						<td class="label left nowrap"><label><?php echo HT('或者帐号对应的邮箱地址')?></label></td>
+					</tr>
+					<tr>
+						<td class="middle">
+							<input class="text" name="email" size="30" value="<?php echo H($form['email'])?>" />
+						</td>
+					</tr>
+					<tr>	
+						<td>
+							<div class="hr_1">&#160;</div>
+							<input type="submit" name="submit" class="button button_login middle" value="<?php echo T('重置密码')?>" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			</form>
+		</td>
+	</tr>
+	</tbody>
+</table>
+</div>

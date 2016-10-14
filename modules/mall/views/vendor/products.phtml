@@ -1,0 +1,111 @@
+<div class="panel clearfix">
+    <div class="float_right padding_1">
+        <form method="post" action="<?php echo URI::url(''); ?>">
+           <input type="text" name="phrase" class="text" q-hint="<?php echo HT('输入关键字搜索'); ?>" size="40" value="<?php echo H($form['phrase']); ?>" />
+           <input type="submit" class="hidden_submit button button_search" name="submit" value="<?php echo HT('搜索'); ?>" />
+        </form>
+    </div>
+</div>
+<?php
+$me = L('ME');
+$table = Widget::factory('table');
+$table->name = 'mall_vendor_view_products';
+$table->extra_class = 'break-word';
+
+$columns = array(
+	/*
+	'@' =>  array(
+        'nowrap'=>TRUE,
+		),
+	*/
+	'icon' => array(
+        'nowrap'=>TRUE,
+		'extra_class' => 'tight',
+		),
+	'name' => array(
+		'title' => T('名称'),
+		'align' => 'left',
+		'extra_class' => 'flexible',
+		),
+	'manufacturer' => array(
+		'title' => T('生产商'),
+		'align' => 'left',
+        'extra_class' => 'product_list'
+		),
+	'package' => array(
+		'title' => T('包装'),
+		'align' => 'left',
+        'extra_class' => 'product_list'
+		),
+	'unit_price' => array(
+		'title' => T('单价'),
+		'align' => 'right',
+        'nowrap'=>TRUE,
+		'extra_class' => 'tight product_list',
+		),
+	/*
+	'sale_volume' => array(
+		'title' => T('销量'),
+		'nowrap' => TRUE,
+		'align' => 'right',
+		'extra_class' => 'nav product_list',
+		'sortable' => TRUE,
+		),
+	*/
+	'rating' => array(
+		'title' => T('买家评价'),
+		'nowrap' => TRUE,
+		'align' => 'center',
+		),
+	'stock_status' => array(
+		'title' => T('库存状态'),
+		'nowrap' => TRUE,
+		'align' => 'center',
+		),
+	'rest' => array(
+		'align' => 'right',
+		'nowrap' => TRUE,
+		),
+);
+
+$table->add_columns( $columns );
+
+$table->empty_message = T('此供应商暂无商品出售');
+
+foreach ($products as $product) {
+
+	$links = $product->links('mall_index');
+
+	$rows = array();
+	$rows['icon'] = array(
+		'view' => $product->icon('32', 'style="display:block"'),
+		// 'extra'=>'style="padding:4px" align="right"'
+		);
+	$rows['name'] = V('mall:vendor_product/table/data/name', array('product'=>$product));
+	$rows['unit_price'] = V('mall:vendor_product/table/data/unit_price', array('product'=>$product, 'show_price' => !!$me->is_allowed_to('查看价格', $product)));
+	$rows['sale_volume'] = V('mall:vendor_product/table/data/sale_volume', array('product'=>$product));
+	$rows['rating'] = Widget::factory('product_rating_summary', array(
+						'product' => $product,
+					));
+	$options = Product_Model::$stock_status;
+	$rows['stock_status'] =  HT($options[$product->stock_status]);
+
+	if ($product->can_buy($avoid_reason) && $me->is_allowed_to('购买', $product)) {
+		$rows['rest'] = Widget::factory('application:links', array('links'=>$links));
+	}
+	elseif (is_string($avoid_reason)) {
+		$rows['rest'] = $avoid_reason;
+	}
+	elseif (is_array($avoid_reason)) {
+		$rows['reset'] = implode(', ', $avoid_reason);
+	}
+
+	$rows['manufacturer'] = H($product->manufacturer);
+	$rows['package'] = H($product->package);
+
+	$table->add_row($rows);
+
+}
+
+echo $pagination;
+echo $table;

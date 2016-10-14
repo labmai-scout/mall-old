@@ -1,0 +1,168 @@
+<?php
+$selected= $secondary_tabs->selected;
+$uniqid = uniqid();
+$select_all_id = 'select_all_' . $uniqid;
+$batch_form_id = 'batch_form_' . $uniqid;
+?>
+<div class="hr_1">&#160;</div>
+<?php echo $secondary_tabs; ?>
+<?php echo $secondary_tabs->content; ?>
+<div class="hr_1">&#160;</div>
+<div class="panel padding_1 clearfix">
+    <div class="float_right">
+        <form method="post" action="<?php echo URI::url(''); ?>">
+           <input type="text" name="phrase" class="text" q-hint="<?php echo HT('输入关键字搜索'); ?>" size="40" value="<?php echo H($form['phrase']); ?>" />
+           <input type="submit" class="hidden_submit button button_search" name="submit" value="<?php echo HT('搜索'); ?>" />
+        </form>
+    </div>
+    <div class="float_left" style="padding-right:3px">
+    <?php if ($selected == 'approved'): ?>
+        <form
+            id="<?php echo $batch_form_id ?>"
+            q-object="batch_unpublish"
+            q-event="submit"
+            q-src="<?php echo URI::url('!vendor/product/index')?>"
+            autocomplete="off"
+            method="post">
+            <?php echo Form::checkbox('', FALSE, T('全选'), 'id="'.$select_all_id.'"') ?>&#160;
+            <input name="approve" type="submit" class="button button_delete" value="<?php echo T('批量下架'); ?>" style="position:relative;top:-1px"/>
+            <a class="button button_delete" q-static="vid=<?php echo $vendor->id?>" q-event="click" q-object="unpublish_all" q-src="<?php echo URI::url('!vendor/product/index')?>"><?php echo HT('下架所有')?></a>
+        </form>
+    <?php elseif ($selected == 'unapproved') : ?>
+        <form
+            id="<?php echo $batch_form_id ?>"
+            q-object="batch_cancel"
+            q-event="submit"
+            q-src="<?php echo URI::url('!vendor/product/index')?>"
+            autocomplete="off"
+            method="post">
+            <?php echo Form::checkbox('', FALSE, T('全选'), 'id="'.$select_all_id.'"') ?>&#160;
+            <input name="cancel" type="submit" class="button button_cancel" value="<?php echo T('批量取消'); ?>" style="position:relative;top:-1px"/>
+            <a class="button button_cancel" q-static="vid=<?php echo $vendor->id?>" q-event="click" q-object="cancel_all" q-src="<?php echo URI::url('!vendor/product/index')?>"><?php echo HT('取消所有')?></a>
+        </form>    
+    <?php elseif ($selected == 'unpublished') :?>
+        <form
+            id="<?php echo $batch_form_id ?>"
+            q-object="batch_publish"
+            q-event="submit"
+            q-src="<?php echo URI::url('!vendor/product/index')?>"
+            autocomplete="off"
+            method="post">
+            <?php echo Form::checkbox('', FALSE, T('全选'), 'id="'.$select_all_id.'"') ?>&#160;
+            <input name="approve" type="submit" class="button button_tick" value="<?php echo T('批量发布'); ?>" style="position:relative;top:-1px"/>
+            <a class="button button_tick" q-static="vid=<?php echo $vendor->id?> " q-event="click" q-object="publish_all" q-src="<?php echo URI::url('!vendor/product/index')?>"><?php echo HT('发布所有')?></a>
+        </form>
+        
+    <?php endif; ?>
+    </div>
+
+	<?php echo Widget::factory('application:links', array('links'=>$panel_buttons, 'separator'=>'&#160;'));?>
+</div>
+<?php echo $pagination; ?>
+<?php
+
+$me = L('ME');
+$table = Widget::factory('table');
+
+$table->name = 'products';
+$table->form = $form;
+
+$columns = array();
+
+$columns['select'] = array(
+    'align' => 'center',
+    'extra_class' => 'tight',
+);
+
+$columns += array(
+	/*
+	'@' =>  array(
+        'nowrap'=>TRUE,
+		),
+	*/
+	'icon' => array(
+        'nowrap'=>TRUE,
+		'extra_class' => 'tight',
+		),
+	'name'=>array(
+		'title'=>T('商品名称'),
+		'align'=>'left',
+		// 'nowrap'=>TRUE
+    ),
+    'manufacturer'=>array(
+        'title'=>T('生产商'),
+        'align'=>'left',
+        'nowrap'=>TRUE
+    ),
+    'brand'=>array(
+        'title'=>T('品牌'),
+        'align'=>'left',
+        'nowrap'=>TRUE
+    ),
+    'catalog_no'=>array(
+        'title'=>T('目录号'),
+        'align'=>'left',
+        'nowrap'=>TRUE
+    ),
+    'model'=>array(
+        'title'=>T('型号'),
+        'align'=>'left',
+        'nowrap'=>TRUE
+    ),
+    'spec'=>array(
+        'title'=>T('规格'),
+        'align'=>'left',
+        'nowrap'=>TRUE
+    ),
+    'unit_price' => array(
+    	'title'=>T('价格'),
+    	'align'=>'center',
+    	'nowrap'=>TRUE
+    ),
+    'vendor_note'=>array(
+        'title'=>T('备注'),
+        'align'=>'left',
+    ));
+
+
+if ('unpublished' == $secondary_tabs->selected) {
+	$columns['unpublish_note'] = array(
+        'title'=>T('发布备注'),
+        'align'=>'left',
+		);
+}
+
+
+
+$columns['rest'] = array('nowrap'=>TRUE, 'align'=>'right');
+
+$table->add_columns($columns);
+
+$table->empty_message = T('没有相关条件的商品信息!');
+
+if ($products->total_count()) foreach ($products as $product) {
+	$links = $product->links('vendor_index');
+
+	$table->add_row(array(
+        'select'=>V('vendor:common/table/data/select', array('object'=>$product, 'select_all_id'=>$select_all_id)),
+        'icon'=>array(
+            'view'=>$product->icon('32', 'style="display:block"'),
+            'extra'=>'style="padding:4px" align="right"'
+        ),
+		'name' => V('vendor:vendor_product/data/name', array('product'=>$product)),
+		'catalog_no' => H($product->catalog_no),
+        'brand' => H($product->brand),
+		'model' => H($product->model),
+		'spec' => H($product->spec),
+		'manufacturer' => H($product->manufacturer),
+		'unit_price' => V('application:common/price', array('price'=>$product->unit_price, 'market_price'=>$product->market_price)),
+		'vendor_note' => H($product->vendor_note, TRUE),
+		'unpublish_note' => V('vendor:vendor_product/data/unpublish_note', array('product'=>$product)),
+		'rest'=>Widget::factory('application:links', array('links'=>$links))
+	));
+
+}
+
+echo $table;
+
+echo JS::load('vendor:batch_select', array('select_all_id'=>$select_all_id, 'batch_form_id' => $batch_form_id));

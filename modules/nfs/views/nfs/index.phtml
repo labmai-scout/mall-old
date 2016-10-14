@@ -1,0 +1,221 @@
+<?php
+echo CSS::load_async('nfs:common');
+echo JS::load_async('nfs:swfupload nfs:swfupload.queue nfs:swfupload.file');
+$uniqid = uniqid();
+
+//下载相关
+//文件全选checkbox的ID
+$select_all_id = 'su_select_all_'.$uniqid;
+
+//批量下载按钮的ID
+$download_id = 'su_download_'.$uniqid;
+//form表单ID
+$files_form = 'su_files_form_'.$uniqid;
+
+//批量删除按钮ID
+$delete_all_id = 'su_delete_all_'.$uniqid;
+
+
+// 上传相关
+$upload_placeholder = 'su_placeholder_'.$uniqid;
+//取消flash上传按钮的ID
+$upload_cancel_button = 'su_cancel_'.$uniqid;
+//flash上传按钮的ID
+$upload_multiple_file = 'su_mupload_'.$uniqid;
+
+$upload_list = 'su_upload_list_'.$uniqid;
+//flash上传显示模板的ID
+$upload_file_template = 'su_template_'.$uniqid;
+//上传按钮的ID
+$upload_one_file = 'su_upload_'.$uniqid;
+//提示下载flash插件
+$flash_plugin_message = 'su_download_flash_'.$uniqid;
+
+$user = L('ME');
+
+$can_download = NFS::user_access($user, '下载文件', $object, ['path'=>$path.'/foo', 'type'=>$path_type]);
+$can_upload = NFS::user_access($user, '上传文件', $object, ['path'=>$path.'/foo', 'type'=>$path_type]);
+$can_edit = NFS::user_access($user, '修改文件', $object,  ['path'=>$path.'/foo', 'type'=>$path_type]);
+
+?>
+<div id="<?php echo $uniqid ?>">
+<?php if ($can_upload && Config::get('nfs.enable_batch_operation')): ?>
+<div id="<?php echo $flash_plugin_message ?>" class="message message_normal padding_1 hidden">
+	<?php echo I18N::T('nfs', '您的浏览器似乎不支持本系统的批量上传功能，如需使用该功能请%download_flash.', ['%download_flash' => URI::anchor('http://get.adobe.com/flashplayer/', I18N::T('nfs', '下载flash插件'), 'class="blue prevent_default" target="_blank"')]); ?>
+</div>
+<?php endif;?>
+<div class="panel padding_1 clearfix nfs_bar">
+	<div class="float_right">
+        <a href="<?php URI::url();?>" class="button button_search middle" q-object="search_nfs" q-static="<?php echo H(['path_type'=>$path_type, 'path'=>$path, 'form_token'=>$form_token])?>" q-event="click"><?php echo I18N::T('equipments', '搜索')?></a>
+		<?php 
+		//判断路径是否存在，或者是否是其他模块的附件引用
+		if ($can_upload): ?> 
+			<a href="#" class="button button_add middle view object:new_folder event:click static:<?php echo H(['path'=>rawurlencode($path), 'form_token'=>$form_token])?>"><?php echo I18N::T('nfs', '新建文件夹'); ?></a>
+			<a id="<?php echo $upload_one_file?>"  class="button button_import middle prevent_default"><?php echo I18N::T('nfs', '上传'); ?></a>
+		<?php #ifdef (nfs.enable_batch_operation)
+		if (Config::get('nfs.enable_batch_operation')):?>
+			<a id="<?php echo $upload_multiple_file?>" class="button middle prevent_default hidden" style="*overflow:hidden;"><span id="<?php echo $upload_placeholder?>"></span></a>
+			<a id="<?php echo $upload_cancel_button?>" class="button middle" style="display:none"><?php echo T('取消'); ?></a>
+		<?php 
+		endif;
+		#endif
+		endif; ?>
+		
+		<?php 
+		#ifdef (nfs.enable_batch_operation)
+		//检测用户是否有下载文件权限
+        if ($can_download && Config::get('nfs.enable_batch_operation')): ?>
+            <a id="<?php echo $download_id?>"  href="#" class="button button_export middle"><?php echo I18N::T('nfs', '批量下载'); ?><span>&#160;</span></a>
+            <div class="nfs_dropdown hidden">
+                <a href="#" name="win"><?php echo I18N::T('nfs', 'ZIP (Windows)')?></a>
+                <a href="#" name="mac"><?php echo I18N::T('nfs', 'ZIP (Mac/Linux)');?></a>
+            </div>
+		<?php endif;
+		#endif
+		 ?>
+
+        <?php
+		//检测用户是否有修改删除权限
+		if ($can_edit):?>
+			<a id="<?php echo $delete_all_id?>"  class="button button_delete middle prevent_default"><?php echo I18N::T('nfs', '批量删除'); ?></a>
+		<?php endif ?>
+	</div>
+	<?php echo V('nfs:nfs/path', ['path'=>$path, 'form_token'=>$form_token, 'token'=>$token, 'path_type'=>$path_type, 'object'=>$object]); ?>
+</div>
+<form method="post" action="<?php echo URI::url(strtr('!nfs/nfs/index.%object_name.%object_id.%path_type', 
+		['%object_name'=>$object->name(), '%object_id'=>$object->id, '%path_type'=>$path_type]), ['path'=>$path, 'form_token'=>$form_token])?>" class="prevent_default" id="<?php echo $files_form?>">
+<table class="sticky flexible">
+<thead>
+	<tr>
+		<?php if ($can_edit || $can_download): ?>
+		<th class="left nowrap">
+			<span class="header"><?php echo Form::checkbox('', FALSE, NULL, 'id="'.$select_all_id.'"'); ?></span>
+		</th>
+		<?php endif; ?>
+		<th class="left nowrap"><span class="header"><?php echo I18N::T('nfs', '文件名称'); ?></span></th>
+		<th class="right nowrap"><span class="header"><?php echo I18N::T('nfs', '更新时间'); ?></span></th>
+		<th class="center nowrap"><span class="header"><?php echo I18N::T('nfs', '占用空间'); ?></span></th>
+		<th class="flexible last">&#160;</th>
+	</tr>
+</thead>
+<tbody id="<?php echo $upload_list?>">
+	<tr></tr>
+</tbody>
+<tbody class="hidden">
+	<tr id="<?php echo $upload_file_template?>">
+		<td>&#160;</td>
+		<td class="filename left nowrap">
+		</td>
+		<td colspan="2" class="left nowrap">
+			<span class="description status middle"></span>
+			<span class="progress_bar middle"><span></span></span>
+		</td>
+		<td class="flexible">&#160;</td>
+	</tr>
+</tbody>
+<tbody>
+<?php 
+//显示文件列表
+$row_odd = TRUE;
+foreach ((array) $files as $file) {
+	echo V('nfs/file', ['object'=>$object, 
+							'path'=>$path, 
+							'file'=>$file, 
+							'form_token'=>$form_token,
+							'path_type'=>$path_type,
+							'can_edit'=>$can_edit,
+							'can_download'=>$can_download,
+							'row_odd' => $row_odd,
+							'token'=>$token,
+						]);
+	$row_odd = !$row_odd;
+}
+?>
+</tbody>
+</table>
+</form>
+</div>
+<?php if ($can_edit || $can_download) echo JS::load('nfs:edit', [
+    'download_id' => $download_id,
+	'form_id' => $files_form,
+	'select_all_id' => $select_all_id,
+	'delete_all_id' => $delete_all_id,
+	'submit_url' => URI::url(strtr('!nfs/nfs/index.%object_name.%object_id.%path_type', 
+		['%object_name'=>$object->name(), '%object_id'=>$object->id, '%path_type'=>$path_type]), ['path'=>$path, 'form_token'=>$form_token]),
+	'form_token' => $form_token,
+	'path' => $path,
+    'delete_all_alert'=> I18N::T('nfs', '请勾选需要删除的文件或目录!'),
+    'download_all_alert'=> I18N::T('nfs', '请勾选需要下载的文件或目录!'),
+]); ?>
+
+<?php 
+if ($can_upload) echo JS::load('nfs:upload', [
+	'upload_one_file' => $upload_one_file,
+	'upload_form' => (string) V('nfs:nfs/upload_form', ['object'=>$object, 'path_type'=>$path_type, 'path'=>$path, 'form_id'=>$files_form, 'form_token'=>$form_token]),
+	'button_text' => I18N::T('nfs', '批量上传'),
+	'upload_url' => URI::url('!nfs/nfs/upload.'.$object->name().'.'.$object->id.'.'.$path_type),
+	'upload_post_params' => ['qsession' => session_id(), 'path' => $path],
+	'file_container_id' => $upload_list,
+	'file_template_id' => $upload_file_template,
+	'cancel_button_id' => $upload_cancel_button,
+	'button_image_url' => Config::get('system.base_url') . 'images/buttons/upload.png',
+	'button_placeholder_id' => $upload_placeholder,
+	'flash_plugin_message_id' => $flash_plugin_message,
+	'upload_multiple_file_id' => $upload_multiple_file,
+	'file_size_limit' => Config::get('nfs.upload_file_size_limit')
+]); 
+if ($object->id == $user->id && $object->name() == $user->name()) {
+	$local = TRUE;
+}
+else {
+	$local = FALSE;
+}
+?>
+<script type="text/javascript">
+$("span.file_dir a, a.path").click(function(){
+	var params=$(this).attr("data");
+	if (params) {
+		window.location.hash=params;
+	}
+	else {
+		window.location.hash='';
+	}
+	});
+var hash=(!window.location.hash)?"":window.location.toString().split('#')[1];
+	hash='nfs='+hash;
+var _hashs = Q.toQueryParams(hash) || {};
+var path=_hashs['nfs'];
+var paths = path.split("/");
+var sub_path = paths[0];
+var local = "<?php echo $local ?>";
+if (!local) {
+	sub_path = 'people';
+} 
+Q.trigger({
+	object: 'show_tips',
+	event: 'refresh',
+    global: false,
+	url:"<?php echo URI::url('!nfs/nfs') ?>",
+	data: {
+		sub_path: sub_path
+	}
+});	
+
+var refresh = "<?php echo $refresh; ?>";
+if (path && refresh) {
+	Q.trigger({
+		object: 'nfs_direction',
+		event: 'refresh',
+		url:"<?php echo URI::url('!nfs/nfs') ?>",
+        global: false,
+		data: {
+			path: path,
+			oname: "<?php echo $object->name() ?>",
+			id: "<?php echo $object->id ?>",
+			uniqid: "<?php echo $uniqid?>",
+			path_type: "<?php echo $path_type ?>",
+			form_token: "<?php echo $form_token ?>"
+		}
+	});
+}
+</script>

@@ -1,0 +1,15 @@
+<div class="products_list">
+	<ul>
+		<?php
+		if ($products->total_count()) {
+			foreach($products as $product){
+				echo V('mall:search/result', array('product'=> $product) );
+			}
+		}
+		else {
+	?>
+		<div class="hr_2"></div>
+		<h4 class="center middle description"><?php echo T('未找到相应商品!')?></h4>
+	<?php } ?>
+	</ul>
+</div>

@@ -1,0 +1,97 @@
+form, table, button, label {
+	font-size: 12px;
+}
+
+input, select, textarea {
+	font-size: 12px;
+}
+
+input.text, select, textarea, .text_like {
+    padding:3px;
+    border:1px solid #ccc;
+    background-color: #fff;
+    margin:0;
+    color: #000;
+}
+
+input.text:disabled, select:disabled, textarea:disabled {
+    color: #999;
+    background-color: #e7e7e7;
+}
+
+input.text, textarea {
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
+}
+
+textarea {
+    -moz-resize: none;
+    resize: none;
+}
+
+select {
+	padding: 2px;
+}
+
+input.button, button, a.button {
+    text-decoration: none;
+    cursor: hand;
+    cursor: pointer;
+
+    margin:0;
+
+    display: inline-block;
+
+    text-align: left;
+    text-decoration: none !important;
+    -moz-user-select: none;
+    *white-space:nowrap;
+
+    font-weight: normal;
+
+    background-color: #f4f4f4;
+
+    border-width:1px;
+    border-style:solid;
+    border-color:#fff #999 #999 #fff;
+
+    color: #000;
+
+    text-transform: capitalize;
+}
+
+input.button, button {
+    padding:0 4px;
+    height:22px;
+	margin-top: 1px;
+    *width:auto;
+    *overflow:hidden;
+    _padding:0;
+    _line-height:20px;
+	_margin-top: 0;
+	_height: 24px;
+}
+
+a.button {
+    height:14px;
+    line-height:1.231;
+    padding:4px;
+}
+
+input.button:hover, button:hover, a.button:hover {
+    background-color: #ddd;
+}
+
+input.button:active, button:active, a.button:active {
+    border-color: #999 #fff #fff #999;
+}
+
+textarea {
+	display: block;
+}
+
+input.hint, textarea.hint {
+	color: #999 !important;
+}
+
+

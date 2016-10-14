@@ -1,0 +1,55 @@
+<?php
+$me = L('ME');
+?>
+<div class="hr_1">&#160;</div>
+<div class="form padding_1">
+<form method="post" action="<?php echo URI::url() ?>" autocomplete="off">
+<?php echo V('form_error', array('form'=>$form));?>
+	<table class="form flexible">
+		<tbody>
+		<?php 
+		//if($me->is_allowed_to('添加', $user)):
+		if ($me->access('管理所有内容')): 
+		?>
+		<?php $no_error = ($form->no_error!==FALSE) ?>
+		<tr>
+			<td class="right label nowrap top"><?php echo T('登录帐号')?></td>
+			<?php /*  <td class="middle"><input name="token" class="text" size="20" value="<?php echo H($no_error?$token:$form['token'])?>" /><?php echo T(' @ %backend', array('%backend'=>$backend)); ?></td> */ ?>
+			<td class="top"><input name="token" class="text middle" value="<?php echo H($no_error?$token:$form['token']) ?>" tabindex="1" />
+			<span class="middle">@</span>
+			<?php
+			echo Widget::factory('admin:backend_selector', array(
+				'select'=> $form['backend'] ? : $backend,
+				'extra_class' => 'middle monitor',
+			));
+?>
+			<?php
+			if (count(Config::get('auth.backends')) > 1):
+			?>
+			<br />
+			<?php echo Form::checkbox('remove_former_auth', Input::form('remove_former_auth'), T('修改验证后台后，尝试删除原验证信息'), ' class="middle"', 'class="middle"'); ?>
+			<?php
+			endif;
+			?>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td class="top description"><?php echo T('登录账号必须超过2个字符长, 可使用字符: 字母, 数字, "-", "_", "." 和 "@", 开头必须是数字或字母'); ?></td>
+		</tr>
+		<?php else: ?>
+		<tr>
+			<td class="label right nowrap middle"><?php echo T('登录帐号')?></td>
+			<td class="middle"><input class="text readonly"  value="<?php echo T(H($token)); ?>" disabled="disabled" tabindex="1"/></td>
+		</tr>
+		<?php endif; ?>
+		<?php echo V('admin:user/edit.account.pwd', array('form'=>$form, 'user'=>$user, 'me'=>$me, 'name'=>'backend'));?>
+		<tr>
+			<td>&#160;</td>
+			<td>
+				<input type="submit" name="submit" class="button button_save" value="<?php echo T('更新')?>" tabindex="5"/>
+			</td>
+		</tr>
+	</table>
+</form>
+</div>

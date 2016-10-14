@@ -1,0 +1,191 @@
+div.tabs_container_wrapper {
+	margin-bottom : -10px;
+}
+
+div.tabs_container {
+	top : -10px;
+	padding-top : 10px;
+	position : relative;
+}
+
+div.tabs_container .tabs {
+	display: block;
+	position: relative;
+	white-space: nowrap;
+	*width:100%;
+	text-transform: capitalize;
+
+	.tabs_body {
+		display:block;
+		position: relative;
+		*width:100%;
+		border-bottom: 1px solid #ccc;
+	}
+
+	.tabs_content {
+		padding-left : 5px;
+	}
+
+	.tab_wrapper {
+		position: relative;
+		display: inline-block;
+		vertical-align:bottom;
+		cursor: default;
+		margin:0 2px -1px 0; 
+	}
+
+	.tab {
+		white-space: nowrap;
+		background-color: #d7d7d7;
+		color: #333;
+
+		font-weight: normal;
+		text-decoration:none;
+
+		line-height:1.5;
+		padding: 2px 10px 0;
+
+		border-width: 0 0 1px 0;
+		border-style: solid;
+		border-color: #ccc;
+
+		display: inline-block;
+
+		padding:1px 10px 0\9;
+		*padding:2px 10px;
+
+		border-radius: 2px 2px 0 0; 
+
+		*z-index: -1;
+	}
+
+	.tab:hover {
+		color: #fff;
+		background-color: #333;
+		border-color: #333 #333 #ccc #333;
+
+		a { color:#fff;}
+
+	}
+
+	.active_tab, .active_tab:hover {
+		color: #000;
+		background-color: #fff;
+		border-width: 1px;
+		border-color: #ccc #ccc #fff #ccc;
+		font-weight: bold;
+
+		a { color: #000; }
+	}
+
+	.num_notif {
+		top: -8px;
+		right: -8px;
+		z-index: 10;
+	}
+
+	a, a:hover {
+		text-decoration: none;
+	}
+
+}
+
+div.secondary_tabs {
+	margin-bottom: 0;
+}
+
+div.secondary_tabs .tabs_container {
+	top: 0;
+	padding-top: 0;
+	padding-left: 5px;
+	margin-bottom: -4px;
+}
+
+div.secondary_tabs .tabs {
+	padding-top:0;
+	border-bottom: none;
+	/* margin-bottom: 2px; */
+	background-color: #fff;
+	white-space: normal;
+
+	.tabs_body {
+		border: none;
+	}
+	
+	.tabs_content {
+		padding-left: 0;
+	}
+
+	.tab_wrapper {
+		padding-bottom: 5px;
+	}
+
+	.tab {
+		border:none;
+		background-color: #fff;
+		
+		border-radius: 2px;
+		margin-right: 4px;
+		margin-bottom: 0;
+		padding: 2px 6px 1px;	
+		*padding: 1px 6px 2px;
+	}
+
+	.active_tab, .active_tab:hover {
+		background-color: #7498e0;
+		color:#fff;
+
+		a { color:#fff; }
+	}
+	
+	.num_notif {
+		top: -5px;
+		right: -5px;
+	}
+}
+
+
+div.panel_tabs .tabs {
+	padding-top:0;
+	border-bottom: none;
+	/* margin-bottom: 2px; */
+	white-space: normal;
+
+	.tabs_body {
+		border: none;
+	}
+	
+	.tabs_content {
+		padding-left: 0;
+	}
+
+	.tab_wrapper {
+		padding-bottom: 0;
+	}
+
+	.tab {
+		border:none;
+		background-color: #FFF;
+		color: #333;	
+		border-radius: 2px;
+		margin-right: 2px;
+		margin-bottom: 0;
+		padding: 0 .5em;
+
+		a { color:#333; }
+	}
+
+	.active_tab, .active_tab:hover {
+		background-color: #7498E0;
+		color:#fff;
+
+		a { color:#FFFFFF; }
+	}
+	
+	.num_notif {
+		top: -5px;
+		right: -5px;
+	}
+}
+
+

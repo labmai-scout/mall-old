@@ -1,0 +1,38 @@
+<div class="hr_1">&#160;</div>
+<?php
+
+$items = (array) Config::get('layout.people.sidebar');
+
+uasort($items, function($a, $b) {
+    $aw = (int) isset($a['weight']) ? $a['weight'] : 0;
+    $bw = (int) isset($b['weight']) ? $b['weight'] : 0;
+	if ($aw == $bw) {
+		return 0;
+	}
+	elseif ($aw < $bw) {
+		return 1;
+	}
+	else
+		return -1;
+});
+$items = array_reverse($items);
+
+foreach ($items as $id => $item) {
+	$view = (string) V(is_array($item)?$item['view']:$item);
+	if ($view) $output .= '<div class="padding_1 sidebar_item sidebar_'.$id.'">'.$view.'</div>';
+}
+
+if ($output):
+?>
+<div class="sidebar_body">
+<?php echo $output; ?>
+<div class="hr_1 sidebar_item sidebar_bottom">&#160;</div>
+</div>
+<?php else: ?>
+<script>
+jQuery(function($){
+	$('#sidebar').hide();
+});
+</script>
+<?php
+endif; 

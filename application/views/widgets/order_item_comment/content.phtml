@@ -1,0 +1,13 @@
+<div class="comment_content">
+<?php
+echo H($comment->content);
+
+$reply = Q("$comment order_item_comment_reply")->current();
+if ($reply->id):
+?>
+	<div class="padding_2">
+		<?php echo HT('商家回复: ') . H($reply->content); ?>
+	</div>
+<?php endif; ?>
+
+</div>

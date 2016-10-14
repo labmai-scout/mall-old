@@ -1,0 +1,13 @@
+<div class="hr_3">&#160;</div>
+<div class="home_item">
+	<div class="title"><?php echo T('新闻公告')?></div>
+    <div class="hr_2">&#160;</div>
+	<div class="content">
+		<div class="hr_2">&#160;</div>
+        <?php if ($news->total_count()) :?>
+            <?php echo V('news:home/list', array('news'=> $news));?>
+        <?php else: ?>
+            <?php echo V('news:home/none')?>
+        <?php endif;?>
+	</div>
+</div>

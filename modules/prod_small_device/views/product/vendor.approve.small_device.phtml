@@ -1,0 +1,42 @@
+<?php
+	$me = L('ME');
+	$no_error = ($form->no_error !== FALSE);
+	$require = (string) V('form_require');
+?>
+<div class="form padding_2 toggle:
+type show_on:small_device">
+<h4><?php echo HT('小型仪器') ?></h4>
+<div class="hr_1">&#160;</div>
+<table class="form">
+<tr>
+	<td class="label right top nowrap"><?php echo HT('产地'); ?></td>
+	<td class="middle nowrap" colspan="3">
+		<?php echo Form::radio('n_origin', 0, $form['n_origin'], H($template_product->origin), 'class="monitor"') ?>
+		<br/>
+		<?php echo Form::radio('n_origin', 1, $form['n_origin'], NULL, 'class="monitor"') ?>
+		<input name="origin" class="text" size="60" value="<?php echo H($form['origin']); ?>" />
+		<?php echo $require; ?>
+	</td>
+</tr>
+<tr>
+	<td class="label right top nowrap"><?php echo HT('质保期'); ?></td>
+	<td class="middle nowrap" colspan="3">
+		<?php echo Form::radio('n_warranty_period', 0, $form['n_warranty_period'], H($template_product->warranty_period), 'class="monitor"') ?>
+		<br/>
+		<?php echo Form::radio('n_warranty_period', 1, $form['n_warranty_period'], NULL, 'class="monitor"') ?>
+		<input name="warranty_period" class="text" size="60" value="<?php echo H($form['warranty_period']); ?>" />
+		<?php echo $require; ?>
+	</td>
+</tr>
+<tr>
+	<td class="label right top nowrap"><?php echo HT('服务电话'); ?></td>
+	<td class="middle nowrap" colspan="3">
+		<?php echo Form::radio('n_service_no', 0, $form['n_service_no'], H($template_product->service_no), 'class="monitor"') ?>
+		<br/>
+		<?php echo Form::radio('n_service_no', 1, $form['n_service_no'], NULL, 'class="monitor"') ?>
+		<input name="service_no" class="text" size="60" value="<?php echo H($form['service_no']); ?>" />
+		<?php echo $require; ?>
+	</td>
+</tr>
+</table>
+</div>

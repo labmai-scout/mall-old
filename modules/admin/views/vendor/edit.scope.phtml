@@ -1,0 +1,49 @@
+<?php
+$me = L('ME');
+$no_error = (!is_object($form) || !!$form->no_error);
+$require = (string) V('form_require');
+?>
+<form method="post" action="<?php echo URI::url() ?>" autocomplete="off">
+<?php echo V('form_error', array('form'=>$form));?>
+<div class="form padding_2">
+	<h4><?php echo HT('供应商经营范围')?></h4>
+	<div class="hr_1">&#160;</div>
+	<p class="lpadding_2 description">
+	<?php echo $vendor->scope; ?>
+	</p>
+	<h4><?php echo HT('准营商品类别')?></h4>
+	<div class="hr_1">&#160;</div>
+	<div class="lpadding_2">
+	<ul class="vendor_scopes">
+	<?php
+		$types = Product_Model::get_types();
+		$available_types = $types; // TODO 筛选当前 vendor 可添加的 type(xiaopei.li@2012-03-08)
+		foreach($available_types as $type => $label) : 
+			$scope_name = 'product_type.'.$type;
+			$scope = O("vendor_scope", array('vendor'=>$vendor, 'name'=>$scope_name));
+			$scope_checkbox_name = "scope_allowed[{$scope_name}]";
+		?>
+		<li>
+				<?php echo Form::checkbox($scope_checkbox_name, $scope->id > 0, $label, 'class="monitor"', 'class="scope_check"'); ?>
+				&#160;&#160;
+				<label><?php echo HT('准营有效期至'); ?></label>
+				<input name="<?php echo 'scope_expire_date[' . $scope_name . ']'; ?>" class="text toggle_status:<?php echo $scope_checkbox_name;?> enable_on:on date" q-date_format="<?php echo HT('$year年$month月$day日')?>" value="<?php echo H($scope->expire_date); ?>" />
+				<div class="hr_1">&#160;</div>
+				<?php
+				$sub_scope = Event::trigger("admin.vendor.sub_scope.{$type}", $vendor);
+				if ($sub_scope) { ?>
+				<div class="lpadding_2 toggle:<?php echo $scope_checkbox_name;?> show_on:on">
+					<div class="form padding_2"><?php echo $sub_scope; ?></div>
+				</div>
+				<?php } ?>
+		</li>
+	<?php
+		endforeach;
+	?>
+	</ul>
+	</div>
+</div>
+<div class="form padding_2">
+	<input type="submit" name="submit" class="button button_save" value="<?php echo HT('更新')?>" />
+</div>
+</form>

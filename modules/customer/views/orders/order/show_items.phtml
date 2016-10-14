@@ -1,0 +1,52 @@
+<?
+
+$table = Widget::factory('table');
+
+$table->name = 'customer_order_items';
+$table->form = $form;
+
+$table->add_columns(array(
+	'product_name'=>array(
+		'title'=>T('商品名称'),
+		'nowrap'=>TRUE
+    ),
+    'unit_price' => array(
+    	'title'=>T('单价'),
+    	'align'=>'right',
+    	'nowrap'=>TRUE
+    ),
+    'quantity'=>array(
+    	'title'=>T('数量'),
+    	'align'=>'right',
+    	'nowrap'=>TRUE
+    ),
+    'price'=>array(
+    	'title'=>T('总价'),
+    	'align'=>'right',
+    	'nowrap'=>TRUE,
+    	'extra_class'=>'flexible'
+    ),
+    'purchase_date'=>array(
+    	'title'=>T('订购时间'),
+    	'nowrap'=>TRUE,
+    ),
+));
+
+$items = Q("order_item[order={$order}]");
+
+foreach ($items as $item) {
+	
+	$table->add_row(array(
+		'product_name' => '<p style="font-size:14px">'.H($item->product->product->name).'</p>',
+		'unit_price' => Number::currency($item->unit_price),
+		'quantity' => '<p style="font-size:16px">'.$item->quantity.'</p>',
+		'price' => V('customer:orders_tables/data/price', array('order'=>$item)),
+		'purchase_date' => Date::format($item->purchase_date)
+	));
+}
+
+$table->add_row(array(
+	'#special_view' => '<div class="float_right"><input class="button button_add middle" value="'.HT('审核').'" type="submit" /></div>'
+));
+
+echo $table;

@@ -1,0 +1,21 @@
+ul.vendor_scopes {
+	li {
+		label.scope_check {
+			display: inline-block;
+			width: 60px;
+			margin-right: 10px;
+		}
+	}
+}
+
+.vendor_info {
+	.status_tag_label {
+		display: block;
+	}
+}
+
+ul.vendor_scopes {
+	li {
+		margin-left: 0;
+	}
+}

@@ -1,0 +1,27 @@
+<div class="first_tab clearfix">
+    <span class="item_tab <?php echo 'home' == $this->select_tab ? 'active' : ''; ?> clearfix">
+        <a href="<?php echo URI::url('!mall/home/index.home')?>" class="tab_link"><?php echo T('首页'); ?></a>
+    </span>
+	<?php
+	$types = Product_Model::get_types();
+
+	foreach ($types as $key => $tab):
+	?>
+	<span class="item_tab <?php echo $key == $this->select_tab ? 'active' : ''; ?> clearfix">
+		<a href="<?php echo URI::url('!mall/home/index.'.$key.'.'.$keyword)?>" class="tab_link"><?php echo T($tab); ?></a>
+	</span>
+	<?php endforeach; ?>
+
+	<?php $other_tabs = Config::get('mall.index.tab');?>
+    <?php if (count($other_tabs)) :?>
+    <?php uasort($other_tabs, function($a, $b) {
+        return $a['weight'] > $b['weight'];
+    });?>
+    <?php foreach($other_tabs as $key=>$t) :?>
+        <span class="item_tab <?php echo $key == $this->select_tab ? 'active' : ''; ?> clearfix">
+            <a href="<?php echo $t['url'] ? URI::url($t['url']) : URI::url('!mall/home/index.'.$key)?>" class="tab_link"><?php echo T($t['title']); ?></a>
+        </span>
+    <?php endforeach;?>
+    <?php endif;?>
+</div>
+<div class="secondary_tab clearfix">&#160;</div>

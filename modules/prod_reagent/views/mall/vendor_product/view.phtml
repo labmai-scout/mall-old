@@ -1,0 +1,149 @@
+<div class="hr_3">&#160;</div>
+<?php $me = L('ME'); ?>
+<div class="product_profile clearfix">
+	<?php echo V('prod_reagent:mall/crumb', array('category' => $product->category, 'form' => $form, 'product'=>$product->product));?>
+	<div class="hr_2">&#160;</div>
+	<div class="profile_list">
+		<table class="profile_header flexible">
+			<tr>
+				<td class="top icon">
+					<?php echo $product->icon(128); ?>
+					<div class="center">
+					<?php
+						switch ($product->rgt_type) {
+							case Reagent_Type::DANGEROUS:
+								$rgt_type_class = 'rgt_type_d';
+								break;
+							case Reagent_Type::EASYMADE_TOXIC:
+								$rgt_type_class = 'rgt_type_emt';
+								break;
+							case Reagent_Type::SUPER_TOXIC:
+								$rgt_type_class = 'rgt_type_st';
+								break;
+							default:
+						}
+						$types = Config::get('reagent.types');
+						if ($rgt_type_class):
+					?>
+						<span class="status_tag <?php echo $rgt_type_class ?>"><?php echo $types[$product->rgt_type]; ?></span>
+					<?php endif; ?>
+					</div>
+				</td>
+				<td class="top">
+					<div class="profile_title clearfix">
+						<?php echo H($product->name);?>
+						<?php if ($product->can_buy($avoid_reason)) {?>
+							<div class="float_right">
+							<?php echo Widget::factory('application:links', array('links'=>$product->links('mall_index'))); ?>
+							</div>
+						<?php } elseif (is_string($avoid_reason)) {
+							echo $avoid_reason;
+						}
+						elseif (is_array($avoid_reason)) {
+							echo implode(', ', $avoid_reason);
+						}
+						?>
+					</div>
+					<div class="hr_2">&#160;</div>
+					<table class="flexible profile_content">
+						<tr>
+							<th class="nowrap"><?php echo HT('生产商'); ?>:</th>
+							<td><?php echo H($product->manufacturer);?></td>
+							<th class="nowrap"><?php echo HT('目录号'); ?>:</th>
+							<td><?php echo H($product->catalog_no);?></td>
+						</tr>
+						<tr>
+							<th class="nowrap"><?php echo HT('型号'); ?>:</th>
+							<td><?php echo H($product->model);?></td>
+							<th class="nowrap"><?php echo HT('规格'); ?>:</th>
+							<td><?php echo $product->spec;?></td>
+						</tr>
+						<tr>
+							<th class="nowrap"><?php echo HT('品牌'); ?>:</th>
+							<td><?php echo H($product->brand);?></td>
+							<th class="nowrap"><?php echo HT('供货时间'); ?>:</th>
+							<td><?php echo HT('%supply_time 天', array('%supply_time'=>$product->supply_time)); ?></td>
+						</tr>
+						<tr>
+							<th class="nowrap"><?php echo HT('包装'); ?>:</th>
+							<td><?php echo $product->package;?></td>
+							<th class="nowrap"><?php echo HT('关键字'); ?>:</th>
+							<td><?php echo H(join(', ', (array)json_decode($product->keywords, TRUE))); ?></td>
+						</tr>
+						<tr>
+							<th class="nowrap"><?php echo HT('英文名'); ?>:</th>
+							<td><?php echo $product->rgt_en_name;?></td>
+							<th class="nowrap"><?php echo HT('CAS 号'); ?>:</th>
+							<td><?php echo $product->cas_no;?></td>
+						</tr>
+						<tr>
+							<th class="nowrap"><?php echo HT('分子式'); ?>:</th>
+							<td><?php echo H($product->reagent_formula);?></td>
+							<th class="nowrap"><?php echo HT('分子量'); ?>:</th>
+							<td><?php echo $product->reagent_mw;?></td>
+						</tr>
+						<tr>
+							<th class="nowrap"><?php echo HT('别名'); ?>:</th>
+							<td><?php echo H(join(', ', (array)json_decode($product->rgt_aliases, TRUE)));?></td>
+							<th class="nowrap"><?php echo HT('危险品分类'); ?>:</th>
+							<td><?php echo Widget::factory('prod_reagent:rgt_danger_class', array('class' => $product->rgt_danger_class));?></td>
+						</tr>
+						<tr>
+							<th class="nowrap"><?php echo HT('供应商'); ?>:</th>
+							<td colspan="3">
+								<?php echo URI::anchor($product->vendor->url(), HT($product->vendor->name)); ?>
+							</td>
+						</tr>
+						<tr>
+							<th class="nowrap"><?php echo HT('价格'); ?>:</th>
+							<td>
+							<?php if ($me->is_allowed_to('查看价格', $product)): ?>
+								<?php echo V('application:common/price', array('price' => $product->unit_price)) ?>
+							<?php else: ?>
+								<span class="hidden_price">
+									<?php echo HT('授权用户可见'); ?>
+								</span>
+							<?php endif; ?>
+							</td>
+							<th class="nowrap"><?php echo HT('销量'); ?>:</th>
+							<td><?php echo V('mall:vendor_product/table/data/sale_volume', array('product'=>$product));?></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td class="top left" colspan="2">
+					<div class="hr_3">&#160;</div>
+					<div class="hr_2">&#160;</div>
+					<h4><?php echo T('说明')?></h4>
+					<div class="description">
+						<?php echo H($product->description ?: '暂无说明'); ?>
+					</div>
+					<div class="hr_3">&#160;</div>
+					<div class="hr_2">&#160;</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="top left" colspan="2">
+					<div class="hr_3">&#160;</div>
+					<div class="hr_2">&#160;</div>
+					<h4><?php echo T('评价')?></h4>
+							<p><?php echo T('评价概况'); ?></p>
+							<?php
+							echo Widget::factory('product_rating_summary', array(
+								'product' => $product,
+							));
+							?>
+							<p><?php echo T('评价列表'); ?></p>
+							<?php
+							echo Widget::factory('product_comment_list', array(
+								'product' => $product,
+							));
+							?>
+					<div class="hr_3">&#160;</div>
+					<div class="hr_2">&#160;</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>

@@ -1,0 +1,31 @@
+<?php
+foreach($role_perms as $id => $perms):
+	$mid = $perms['mid'];
+	$perm_names = (array)$perms['perms'];
+?>
+<div class="perms_container">
+	<?php if ($perms['#name']): ?>
+	<div class="perms_title padding_1">
+		<img class="middle" src="<?php echo $perms['#icon'] ?>" />
+		<span class="middle">
+			<?php echo HT($perms['#name'])?>
+		</span>
+	</div>
+	<?php endif; ?>
+	<div class="perms_group clearfix">
+		<?php 
+	foreach($perm_names as $name):
+		if ($name[0] == '-') :?>
+			<div class="clear">&#160;</div>
+			<h4><?php echo HT(mb_substr($name, 1)) ?></h4>
+			<div class="hr_1">&#160;</div>
+<?php	else: ?>
+		<div class="perms_item">
+			<?php echo Form::checkbox("perms[{$role->id}][{$name}]", $role->perms[$name]=='on', T($name))?>
+		</div>
+<?php	endif;
+endforeach;
+?>
+	</div>
+</div>
+<?php endforeach;?>

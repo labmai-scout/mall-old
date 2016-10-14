@@ -1,0 +1,36 @@
+<div class="hr_1">&#160;</div>
+<form method="post" action="" autocomplete="off">
+<?php 
+
+	$mids = array_merge(array('application'), array_keys((array) Config::get('site.modules')));
+
+	$role_perms = array();
+	foreach ($mids as $mid) {
+		$perms = Config::get("perms.$mid");
+
+		$f_perms = array();
+		$attr = array();
+		foreach ((array)$perms as $perm_name => $default) {
+			if ($perm_name[0] == '#') {
+				$attr[$perm_name] = $default;
+				continue;
+			}
+			elseif ($perm_name[0] == '-') {
+				$f_perms[] = $perm_name;
+				continue;
+			}
+			if ($perm_name =='管理所有内容' && !L('ME')->access($perm_name)) continue;
+			$f_perms[] = $perm_name;
+		}
+
+		if (count($f_perms) > 0) {
+			$role_perms[$mid] = $attr + array('perms'=>$f_perms, 'mid'=>$mid);
+		}
+
+	}
+
+	echo V('role_perms', array('role'=>$role, 'role_perms'=>$role_perms));
+?>
+<input name="submit" type="submit" class="button button_save" value="<?php echo T('保存')?>" />
+</form>
+

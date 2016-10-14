@@ -1,0 +1,60 @@
+.popover_container {
+	position:absolute;
+	display: none;
+	z-index: 600;
+}
+
+.popover_content {
+	padding-top: 20px;
+	border:1px solid #999;
+	min-width: 100px;
+	min-height: 50px;
+	_width:150px;
+	_height:100px;
+	margin-left: 15px;
+	background-color: #fff;
+	box-shadow: rgba(0,0,0,0.5) 2px 2px 5px;
+	filter: progid:DXImageTransform.Microsoft.Shadow (Color=#000000, Direction=135, Strength=2);
+	border-radius: 5px;
+}
+
+.popover_content_left {
+	box-shadow: rgba(0,0,0,0.5) -2px 2px 5px!important;
+	filter: progid:DXImageTransform.Microsoft.Shadow (Color=#000000, Direction=225, Strength=2)!important;
+}
+
+.popover_arrow {
+	position: absolute;
+	width: 17px;
+	height: 30px;
+	left: 0;
+	background-image: url(images/preview/arrow.png);
+	background-repeat: no-repeat;
+	z-index: 50;
+}
+.popover_arrow_left {
+	background-image:url(images/preview/arrow_left.png);
+	left:auto;
+	right:-15px;
+	_right:-16px;
+	right:-17px\0;
+	right:-15px\9\0;
+}
+
+.popover_loading {
+	background:url('images/loading.gif') #FFFFFF no-repeat center center;
+}
+
+a.popover_close {
+	color:gray;
+	text-align:center;
+	float: right;
+	cursor:pointer;
+	display: inline-block;
+	padding:0;
+	z-index:5000;
+	height:20px;
+	width: 20px;
+	text-decoration:none;
+	background: url(images/token/x.gif) no-repeat 4px 4px;
+}

@@ -1,0 +1,41 @@
+.datetime_picker {
+
+	position: absolute;
+	border: 1px solid #aaa;
+	box-shadow: rgba(0,0,0,0.7) 0 1px 5px;
+	filter: progid:DXImageTransform.Microsoft.Shadow (Color=#000000, Direction=135, Strength=2);
+	padding: 0;
+	background-color: #fff;
+
+	font-size: 24px;
+	font-weight: bold;
+	color: #999;
+
+	vertical-align: middle;
+
+	.unit {
+		display: inline-block;
+		margin: 0 5px;
+		a {
+			display: inline-block;
+			border: none;
+			font-size: 22px;
+			text-align:center;
+			font-weight: bold;
+			color: #000;
+			padding: 5px;
+		}
+
+		a:focus, a.focus {
+			background-color: #7498E0;
+			text-decoration: none;
+			color: #fff;
+		}
+
+		a:hover {
+			text-decoration: none;
+		}
+
+	}
+
+}

@@ -1,0 +1,26 @@
+<?php 
+$me = L('ME');
+if ($me->id && $me->is_active()) :
+	$uniqid = 'sbmenu_'.uniqid(); 
+
+	$ct_items = (array) Config::get('layout.customer.sidebar.menu');
+	$ct_items += (array) Event::trigger('layout.customer.sidebar.menu');
+
+	$view_name = 'customer:sidebar/menu/list';
+
+	$content = '';
+
+	foreach ((array) $ct_items as $id => $item) {
+		$mid = $item['#module'] ?: $id;
+		
+		if (!$item['i18n']) $item['i18n'] = $mid;
+
+		$content .= trim((string) V($view_name, array('item'=>$item, 'class'=>$class)));
+	}
+
+	if ($content): ?>
+<div id="<?php echo $uniqid;?>" class="menu clearfix">
+<?php echo V('customer:sidebar/menu/category', array('content'=>$content)); ?>
+</div>
+<?php endif; 
+endif;

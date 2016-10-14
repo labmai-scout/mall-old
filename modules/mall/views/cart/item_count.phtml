@@ -1,0 +1,8 @@
+<?php $count = $cart->item_count();?>
+<span class="cart_item_count">
+<?php if ($count) :?>
+    <span class="num_notif">
+        <?php echo H($count);?>
+    </span>
+<?php endif;?>
+</span>

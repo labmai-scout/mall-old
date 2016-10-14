@@ -1,0 +1,45 @@
+<div class="category_title check_hover form padding_1 clearfix">
+	<div class="category_drag_handle middle category_id:<?php echo $category->id?>" >&#160;</div>
+	<div class="hidden">
+		<div class="category_drag_helper center"><?php echo HT($category->name); ?></div>
+	</div>
+	<?php if (!$collapsed || ($category->id && Q("product_category[parent=$category]")->length()>0)): ?>
+	<span class="toggle_button <?php echo $collapsed ?' toggle_collapse':'toggle_expand'?> middle view event:click object:category_view static:<?php echo H(array('collapse'=>!$collapsed, 'category'=>$category->id, 'uniqid'=>$uniqid, 'parent_uniqid'=>$parent_uniqid)); ?> src:<?php echo URI::url('!admin/product/category') ?> "></span>
+	<?php else: ?>
+	<span class="toggle_button middle"></span>
+	<?php endif; ?>
+	<span class="middle category_name">
+		<?php echo HT($category->name); ?>
+		&#160;&#160;&#160;&#160;
+		<span class="show_on_hover category_hover">
+			<?php if (!$category->readonly): ?>
+			<a class="button button_view middle view event:click object:category_edit_icon src:<?php echo URI::url('!admin/product/category') ?> static:<?php echo H(array('id'=>$category->id, 'uniqid'=>$uniqid, 'parent_uniqid'=>$parent_uniqid, 'collapsed'=>$collapsed)); ?>"><?php echo T('图片'); ?></a>
+			<a class="button button_edit middle view event:click object:category_edit src:<?php echo URI::url('!admin/product/category') ?> static:<?php echo H(array('id'=>$category->id, 'uniqid'=>$uniqid, 'parent_uniqid'=>$parent_uniqid, 'collapsed'=>$collapsed)); ?>"><?php echo T('编辑'); ?></a>
+			<a class="button button_delete middle view event:click object:category_delete src:<?php echo URI::url('!admin/product/category') ?> static:<?php echo H(array('id'=>$category->id, 'uniqid'=>$uniqid, 'parent_uniqid'=>$parent_uniqid)); ?>"><?php echo T('删除'); ?></a>
+			<?php endif; ?>
+			<?php
+			/*
+			guoping.zhang@2011.01.17
+			组织机构最大层数（上限）
+				默认为3层
+			*/
+			if (Config::get('category.group_limit')):
+			#if (category.group_limit >= 1)
+				if ($current_levels < Config::get('category.group_limit')):
+			?>
+			<a class="button button_add middle view event:click object:category_edit src:<?php echo URI::url('!admin/product/category') ?> static:<?php echo H(array('parent'=>$category->id, 'uniqid'=>$uniqid, 'parent_uniqid'=>$parent_uniqid)); ?>"><?php echo T('添加'); ?></a>
+			<?php
+				endif;
+			#endif
+			else:
+			#ifndef (category.group_limit)
+			?>
+			<a class="button button_add middle view event:click object:category_edit src:<?php echo URI::url('!admin/product/category') ?> static:<?php echo H(array('parent'=>$category->id, 'uniqid'=>$uniqid, 'parent_uniqid'=>$parent_uniqid)); ?>"><?php echo T('添加'); ?></a>
+			<?php
+			#endif
+			 endif;?>
+		</span>
+	</span>
+</div>
+
+

@@ -1,0 +1,31 @@
+<?php
+// 现在 toggle 相关的属性好像还不能用 q-toggle 指定(xiaopei.li@2012-03-18)
+// <ul q-toggle_status="echo $toggle" q-enable_on="true">
+$no_error = (!is_object($form) || !!$form->no_error);
+$me = L('ME');
+?>
+<table class="form">
+<?php
+foreach ($properties as $property => $label):
+	$scope_name = 'rgt_type.' . $property;
+	$scope = O('vendor_scope', array('vendor' => $vendor, 'name' => $scope_name));
+	$scope_checkbox_name = 'scope_allowed[' . $scope_name . ']';
+?>
+	<tr>
+		<td class="left middle nowrap"><?php echo Form::checkbox($scope_checkbox_name, $no_error && $scope->expire_date > 0 ? !!$scope->id : !!$form['scope_allowed'][$scope_name], $label, 'class="monitor"', 'class="scope_check"'); ?></td>
+		<td>
+			<div class="nowrap">
+				<label><?php echo HT('经营有效期'); ?></label>
+				<input name="<?php echo 'scope_expire_date_from[' . $scope_name . ']'; ?>" class="text toggle_status:<?php echo $scope_checkbox_name ?> enable_on:on date" q-date_format="<?php echo HT('$year年$month月$day日')?>" value="<?php echo H($no_error ? $scope->expire_date_from : $form['scope_expire_date_from'][$scope_name]); ?>" />&#160;~&#160;<input name="<?php echo 'scope_expire_date_to[' . $scope_name . ']'; ?>" class="text toggle_status:<?php echo $scope_checkbox_name ?> enable_on:on date" q-date_format="<?php echo HT('$year年$month月$day日')?>" value="<?php echo H($no_error ? $scope->expire_date : $form['scope_expire_date_to'][$scope_name]); ?>" />
+			</div>
+		</td>
+		<td>
+			<div>
+       			<?php if ($scope->id  && $me->is_allowed_to('查看证书', $scope->vendor)):?>
+        			<span class="nowrap"><a herf="#" q-object="show_pic"  q-static="<?php echo H(array('sid'=>$scope->id))?>" q-src="<?php echo URI::url('cert')?>" q-event="click" class="button button_view" /><?php echo HT('查看')?></a></span>
+        		<?php endif;?>
+			</div>
+		</td>
+	</tr>
+<?php endforeach; ?>
+</table>

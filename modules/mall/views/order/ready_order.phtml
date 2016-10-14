@@ -1,0 +1,113 @@
+<div class="ready_order clearfix">
+	<div class="general_info">
+		<div class="purchaser">
+			<label>订购人: </label>
+			<?php
+				// purchaser id ME
+				$me = L('ME');
+				echo $me->name;
+			?>
+		</div>
+		<div class="vendor">
+			<label>供应商: </label>
+			<?php
+				echo URI::anchor(URI::url('!mall/vendor/'), $order->vendor->name);
+			?>
+		</div>
+		<div class="deliver_address">
+			<label>配送地址:</label>
+			<br/>
+			<?php
+				foreach ($order->customer->deliver_addresses as $i => $deliver_address):
+				// 记录 customer 上一次使用的地址(last_used_deliver_address, 并默认选中
+				// 若无, 则选第一个
+			?>
+			<input type="radio" name="deliver_address_<?php /* echo $order->id;*/ echo $order->vendor->name ?>" value="<?php echo $deliver_address->id ?>" <?php echo $i == 0 ? 'checked' : ''; ?>>
+			<?php
+			echo $deliver_address->address;
+			echo ' ( ' . $deliver_address->phone . ' ) ';
+			?>
+			<br/>
+			<?php
+				endforeach;
+				?>
+		</div>
+	</div>
+	<div class="items">
+		<?php
+		$table = Widget::factory('table');
+		$table->name = 'order_items';
+
+		$table->add_columns(
+		array(
+			/*
+			'requester' => array(
+			'title' => T('申购人'),
+			'nowrap' => TRUE,
+			'align' => 'center',
+			),
+			'request_date' => array(
+			'title' => T('申购时间'),
+			'nowrap' => TRUE,
+			'align' => 'center',
+			),
+			*/
+			'request_info' => array(
+			'title' => T('申购信息'),
+			'nowrap' => TRUE,
+			'align' => 'left',
+			),
+			'product' => array(
+			'title' => T('商品名称'),
+			'nowrap' => TRUE,
+			'align' => 'left',
+			),
+			'unit_price' => array(
+			'title' => T('单价'),
+			'nowrap' => TRUE,
+			'align' => 'right',
+			),
+			'quantity' => array(
+			'title' => T('数量'),
+			'nowrap' => TRUE,
+			'align' => 'right',
+			),
+			'price' => array(
+			'title' => T('金额小计'),
+			'nowrap' => TRUE,
+			'align' => 'right',
+			),
+		));
+
+		$table->empty_message = T('您的订单无商品? 不可能吧...');
+
+		$price = 0;
+
+		foreach ($order->order_items as $order_item) {
+		$auto_price = $order_item->unit_price * $order_item->quantity;
+		$table->add_row( array(
+		'request_info' => V('mall:order/table/data/request_info', array('requester' => $order_item->requester, 'request_date' => $order_item->request_date)),
+		'product' => V('mall:order/table/data/product', array('product' => $order_item->product)),
+		'unit_price' => H(Number::currency($order_item->unit_price)),
+		'quantity' => $order_item->quantity,
+		'price' => V('mall:order/table/data/price', array('auto_price' => $auto_price, 'price' => $order_item->price)),
+		));
+
+		$price += $order_item->price;
+		}
+
+		$table->add_row( array(
+		'#special_view' => V('mall:order/summary_row', array('price' => $price)),
+		'#extra_class' => 'summary_row',
+		));
+
+		echo $table;
+
+		?>
+		<div class="actions">
+			<a class="button button_delete">删除订单</a>
+			<a class="button button_edit">修改订单项目</a>
+			<a class="button button_tick">确认</a>
+		</div>
+	</div>
+</div>

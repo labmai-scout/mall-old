@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+">
+    <information>
+        <title>LabMai Order Printer Applet</title>
+        <vendor>Genee</vendor>
+        <description>LabMai Order Printer Applet</description>
+    </information>
+    <resources>
+        <j2se version="1.7+" href="http://java.sun.com/products/autodl/j2se" />
+        <jar href="order-printer-applet-0.1.1-2025442171.jar" main="true" />
+        <jar href="fastjson-1.2.17.jar" />
+    </resources>
+    <applet-desc
+         name="LabMai Order Applet"
+         main-class="com.labmai.order.v1.Printer"
+         width="1" height="1" />
+    <update check="background"/>
+    <security>
+        <all-permissions/>
+    </security>
+</jnlp>

@@ -1,0 +1,26 @@
+<div>
+    <table width="100%" style="text-align:center;font-size:12px;">
+        <thead>
+            <tr style="background-color:#E5E5E5;height:40px;line-height:40px;">
+                <th width="40%"><?=H(T('商品名'))?></th>
+                <th width="15%"><?=H(T('CAS号'))?></th>
+                <th width="10%"><?=H(T('数量'))?></th>
+                <th width="10%"><?=H(T('包装'))?></th>
+                <th width="15%"><?=H(T('金额'))?></th>
+                <th width="10%"><?=H(T('二维码'))?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach (Q("order_item[order=$order]") as $item) {$product = $item->product();?>
+                <tr style="height:70px;line-height:70px;" >
+                    <td width="40%"><?php echo H($product->name)?:'--' ?></td>
+                    <td width="15%"><?php echo H($product->cas_no)?:'--' ?></td>
+                    <td width="10%"><?php echo H($item->quantity)?:'--' ?></td>
+                    <td width="10%"><?php echo H($product->package)?:'--' ?></td>
+                    <td width="15%"><?php echo H(Number::currency($item->price))?:'--' ?></td>
+                    <td width="10%"></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>

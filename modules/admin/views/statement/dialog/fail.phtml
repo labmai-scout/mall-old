@@ -1,0 +1,19 @@
+<div class="padding_2">
+<form method="post" q-static="id=<?= $statement->id?>" q-src="<?= $statement->url(NULL,NULL,NULL,'admin_view') ?>" q-event="submit" q-object="admin_fail_transfer">
+<?php echo V('form_error', array('form' => $form)); ?>
+<table>
+<tr>
+	<td>
+		<textarea name="fail_reason" class="text" rows="5" cols="40"></textarea>
+	</td>
+</tr>
+<tr>
+	<td class="label nowrap">
+		<div class="padding_1">
+		<input type="submit" name="submit" class="button button_save" value="<?= T('确定')?>">
+		</div>
+	</td>
+</tr>
+</table>
+</form>
+</div>

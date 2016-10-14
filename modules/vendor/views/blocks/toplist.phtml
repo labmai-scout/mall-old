@@ -1,0 +1,20 @@
+<?php
+
+$vendors = Q("vendor:limit(10)");
+?>
+<div class="block block_vendor">
+	<div class="header">
+		<h1><?php echo HT('供应商列表'); ?></h1>
+	</div>
+	<div class="body">
+<?php foreach ($vendors as $d) : ?>
+	<?php echo V('vendor:vendor/block_teaser', array('vendor'=>$d)); ?>
+<?php endforeach; ?>
+	</div>
+	<div class="footer">
+		<div class="right">
+			<a href="<?php echo URI::url('!vendor/list'); ?>"><?php echo HT('更多 &#187;') ?></a>
+		</div>
+	</div>
+</div>
+

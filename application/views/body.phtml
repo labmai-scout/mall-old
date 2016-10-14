@@ -1,0 +1,10 @@
+<?php
+
+$me = L('ME');
+
+if (!Auth::logged_in()) {
+	echo V('login');
+}
+else {
+	echo '<h1>需要重载登录之后的界面信息</h1>';
+}

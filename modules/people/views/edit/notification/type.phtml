@@ -1,0 +1,25 @@
+<?php $uniqid = uniqid(); ?>
+<div class="notification_type <?php echo $key == $selected_key ? 'active' : '';?>" id="<?php echo $uniqid?>">
+    <div class="tag_title">
+        <input class="text hidden" name="key" value="<?php echo $key;?>" />
+        <span class="type_name"><?php echo H($value['#name'])?></span>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#<?php echo $uniqid?>").bind('click', function(e){
+        var $item = $(this);
+        Q.trigger({
+            object: 'get_type_item',
+            event: 'click',
+            data: {
+                key: '<?php echo $key;?>',
+                container_id: '<?php echo $container_id;?>'
+            },
+            url: '<?php echo URI::url()?>'
+        });
+        $('div.notification_type').removeClass('active');
+        $item.addClass('active');
+        return false;
+    });
+</script>

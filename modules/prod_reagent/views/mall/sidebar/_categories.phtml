@@ -1,0 +1,28 @@
+<?php
+	$children = $root->children()->filter(':sort(weight A)');
+	if ($children->count() > 0):
+	$is_root = !$root->root->id;
+?>
+<ul<?php echo $is_root ? ' class="root"': ' class="parent"'; ?>>
+	<?php
+		foreach ($children as $c):
+			$extra = NULL;
+			if ($c->id == $selected->id) {
+				$extra = ' class="selected"';
+			}
+	?>
+	<li>
+		<a <?php echo $extra;?> href="<?php echo $c->url(); ?>"><?php echo H($c->name); ?></a>
+		<?php
+			if ($selected->id && $c->is_itself_or_ancestor_of($selected)) {
+				echo V('prod_reagent:mall/sidebar/_categories', array(
+					'root' => $c,
+					'selected' => $selected,
+					'group_by' => $group_by
+				));
+			}
+		?>
+	</li>
+	<?php endforeach; ?>
+</ul>
+<?php endif;

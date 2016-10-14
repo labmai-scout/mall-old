@@ -1,0 +1,20 @@
+<?php
+	$class = 'status_'.Order_Model::$status_label[$order->status];
+?>
+<div style="padding:.3em 0">
+<span class="status_tag <?php echo $class?>">
+	<?php 
+		if ($order->status == Order_Model::STATUS_NEED_VENDOR_APPROVE) {
+			echo T('待确认');
+		}
+		else {
+			echo Order_Model::$status[$order->status];
+		}
+	?>
+</span>
+</div>
+<?php if ($order->vendor_note): ?>
+<div class="description content_wrap" style="max-width:500px">
+<?php echo H($order->vendor_note, TRUE); ?>
+</div>
+<?php endif; ?>

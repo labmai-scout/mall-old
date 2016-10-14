@@ -1,0 +1,66 @@
+<div class="padding_2">
+<h2>工商信息</h2>
+<table class="form vendor_info">
+    <?php $license = $vendor->scanned_copies['license'];?>
+    <tr class="tight nowrap top">
+        <td class="tight"><span class="status_tag status_tag_label"><?=H('公司全称')?></span></td>
+        <td colspan="3"><?=H($vendor->name?:'--')?></td>
+    </tr>
+    <tr class="tight nowrap top">
+        <td class="tight"><span class="status_tag status_tag_label"><?=H('法人姓名')?></span></td>
+        <td><?=H($vendor->legal_person_name?:'--')?></td>
+        <td class="tight"><span class="status_tag status_tag_label"><?=H('营业执照注册号')?></span></td>
+        <td><?=H($license['serial_no']?:'--')?></td>
+    </tr>
+    <tr class="tight nowrap top">
+        <td><span class="status_tag status_tag_label"><?=H('法人身份证号')?></span></td>
+        <td><?=H($vendor->legal_person_name_id_no?:'--')?></td>
+        <td><span class="status_tag status_tag_label"><?=H('执照年检日期')?></span></td>
+        <td><?=H($license['yearly_inspect_date']?date('Y-m-d', strtotime($license['yearly_inspect_date'])):'--')?></td>
+    </tr>
+    <tr class="tight nowrap top">
+        <td><span class="status_tag status_tag_label"><?=H('总经理姓名')?></span></td>
+        <td><?=H($vendor->gm_name?:'--')?></td>
+        <td><span class="status_tag status_tag_label"><?=H('上次年检日期')?></span></td>
+        <td><?=H($vendor->prev_yearly_inspect_date?date('Y-m-d', strtotime($vendor->prev_yearly_inspect_date)):'--')?></td>
+    </tr>
+    <tr class="tight nowrap top">
+        <td><span class="status_tag status_tag_label"><?=H('总经理电话')?></span></td>
+        <td><?=H($vendor->gm_phone?:'--')?></td>
+        <td><span class="status_tag status_tag_label"><?=H('公司成立日期')?></span></td>
+        <td><?=H($vendor->reg_date?date('Y-m-d', strtotime($vendor->reg_date)):'--')?></td>
+    </tr>
+    <tr class="tight nowrap top">
+        <td><span class="status_tag status_tag_label"><?=H('联系人姓名')?></span></td>
+        <td><?=H($vendor->contact_name?:'--')?></td>
+        <td><span class="status_tag status_tag_label"><?=H('公司经营期限至')?></span></td>
+        <td><?=H($license['expiry_date']?date('Y-m-d', strtotime($license['expiry_date'])):'--')?></td>
+    </tr>
+    <tr class="tight nowrap top">
+        <td><span class="status_tag status_tag_label"><?=H('联系人电话')?></span></td>
+        <td><?=H($vendor->contact_phone?:'--')?></td>
+        <td><span class="status_tag status_tag_label"><?=H('注册资金 (万元)')?></span></td>
+        <td><?=H($vendor->capital?:'--')?></td>
+    </tr>
+    <tr class="tight nowrap top">
+        <td><span class="status_tag status_tag_label"><?=H('开户行省份')?></span></td>
+        <td><?=H($vendor->province?:'--')?></td>
+        <td><span class="status_tag status_tag_label"><?=H('开户行城市')?></span></td>
+        <td><?=H($vendor->city?:'--')?></td>
+    </tr>
+    <tr class="tight nowrap top">
+        <td><span class="status_tag status_tag_label"><?=H('开户行')?></span></td>
+        <td><?=H($vendor->bank_name?:'--')?></td>
+        <td><span class="status_tag status_tag_label"><?=H('员工人数')?></span></td>
+        <td><?=H($vendor->employee_count?:'--')?></td>
+    </tr>
+    <tr class="tight nowrap top">
+        <td><span class="status_tag status_tag_label"><?=H('开户行账号')?></span></td>
+        <td colspan="3"><?=H($vendor->bank_account?:'--')?></td>
+    </tr>
+    <tr class="tight nowrap top">
+        <td><span class="status_tag status_tag_label"><?=H('经营范围')?></span></td>
+        <td colspan="3" style="white-space:normal"><?=H($vendor->scope?:'--')?></td>
+    </tr>
+</table>
+</div>

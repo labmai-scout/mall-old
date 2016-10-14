@@ -1,0 +1,15 @@
+<?php
+$ratings = Q("$comment<order_item_comment order_item_rating");
+$rating_subjects = Order_Item_Rating_Model::get_rating_subjects();
+
+foreach ($ratings as $r):
+?>
+	<?php echo HT($rating_subjects[$r->subject]); ?>
+	<?php echo Widget::factory('rateit_show', array(
+				'value' => $r->rating,
+				'readonly' => TRUE,
+				));
+	?>
+	<br/>
+<?php
+endforeach;

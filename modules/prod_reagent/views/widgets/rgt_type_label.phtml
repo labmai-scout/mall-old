@@ -1,0 +1,21 @@
+<?php
+switch ($type) {
+case Reagent_Type::DANGEROUS:
+	$rgt_type_class = 'rgt_type_d';
+	$type_name = '危险品';
+	break;
+case Reagent_Type::EASYMADE_TOXIC:
+	$rgt_type_class = 'rgt_type_emt';
+	$type_name = '易制毒';
+	break;
+case Reagent_Type::SUPER_TOXIC:
+	$rgt_type_class = 'rgt_type_st';
+	$type_name = '剧毒品';
+	break;
+default:
+}
+$types = Config::get('reagent.types');
+if ($rgt_type_class) {
+?>
+<span class="nowrap middle status_tag <?php echo $rgt_type_class ?>"><?php echo $type_name; ?></span>
+<?php }

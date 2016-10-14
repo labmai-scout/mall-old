@@ -1,0 +1,21 @@
+<div class="form padding_1">
+	<table class="form">
+		<tr>
+			<td class="top icon">
+				<?php echo $vendor->icon('64'); ?>
+			</td>
+			<td class="top">
+				<form action="<?php echo URI::url()?>" method="post" enctype="multipart/form-data">
+					<p>
+						<input name="file" type="file" class="file" />
+						<input type="submit" class="button button_import" name="submit" value="<?php echo T('上传商标')?>"/>
+					</p>
+					<div class="hr_1">&#160;</div>
+					<p>
+						<a class="button button_delete" q-object="delete_vendor_icon" q-event="click" q-src="<?php echo URI::url() ?>" q-static="<?php echo H(array('id' => $vendor->id)) ?>" href="#"><?php echo T('删除商标')?></a>
+					</p>
+				</form>
+			</td>
+		</tr>
+	</table>
+</div>

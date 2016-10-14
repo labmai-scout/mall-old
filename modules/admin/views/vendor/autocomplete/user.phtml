@@ -1,0 +1,15 @@
+<?php list($token, $backend) = Auth::parse_token($user->token);?>
+<table class="mini_form">
+	<tr>
+		<td class="top icon"><?php echo $user->icon('32') ?></td>
+		<td class="middle">
+			<span class="name"><?php echo H($user->name) ?>(<?php echo  $token?>)</span><br>
+			<?php if($user->email):?>
+				<span class="email"><?php echo $user->email?></a></span><br>
+			<?php endif;?>
+			<?php if($user->phone):?>
+				<span class="phone description"><?php echo $user->phone?></span>
+			<?php endif;?>
+		</td>
+	</tr>
+</table>

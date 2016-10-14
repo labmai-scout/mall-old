@@ -1,0 +1,29 @@
+<div class="hr_1">&#160;</div>
+<?php 
+
+echo $pagination; 
+
+$me = L('ME');
+$table = Widget::factory('table');
+
+$table->name = 'customer_members';
+$table->form = $form;
+
+$table->add_columns(array(
+	'@'=>NULL,
+	'name'=>array(
+		'title'=>T('用户姓名'),
+		'nowrap'=>TRUE
+    ),
+    'type'=>array(
+        'title'=>T('用户类型'),
+        'nowrap'=>TRUE
+    ),
+    'rest'=>array(
+    	'nowrap'=>TRUE
+    )
+));
+
+$table->empty_message = T('没有相关条件的人员信息!');
+
+echo $table;

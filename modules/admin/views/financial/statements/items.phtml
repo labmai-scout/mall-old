@@ -1,0 +1,28 @@
+<ul class="orders">
+<?php
+$i = 0;
+$orders = Q("$statement order");
+foreach ($orders as $order) {
+	$i++;
+	if ($i < 5) {
+		if($i > 1) { echo ",&#160;"; }
+?>
+
+	<a href="<?php echo $order->url(NULL, NULL, NULL, 'admin_view'); ?>" class="blue">
+		<span class="middle">#<?php echo H($order->order_no); ?></span>
+	</a>
+	<span class="description middle">(<?php echo H(Number::currency($order->price)); ?>)</span>
+<?php 
+	}
+	else {
+?>
+   ,&#160<a class="blue" href="<?php echo $statement->url(NULL, NULL, NULL, 'admin_view'); ?>">更多...</a>
+<?php
+	break;
+	}
+}
+?>
+</ul>
+<?php if($statement->status == Billing_Statement_Model::STATUS_REJECTED):?>
+<div class="message_normal margin_1 description content_wrap" style="max-width:500px"><?php echo $statement->reject_reason?></div>
+<?php endif;?>

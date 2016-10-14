@@ -1,0 +1,50 @@
+<div class="step_form">
+	<h4><?php echo HT('订单列表'); ?></h4>
+	<div class="step_form_content orders_content">
+<?php
+
+$table = Widget::factory('table');
+$table->name = 'cart_items';
+
+$table->add_columns(array(
+    'ref_no'=>array(
+        'title'=>T('订单编号'),
+        'nowrap'=>TRUE
+    ),
+	'customer' => array(
+		'title' => HT('买方'),
+		'nowrap' => TRUE,
+	),
+    'items'=>array(
+        'title'=>T('订单商品'),
+        'nowrap'=>TRUE
+    ),
+   'payment_msg'=>array(
+    	'title'=>T('付款信息'),
+        'extra_class'=>'flexible'
+    ),
+    'price'=> array(
+        'title'=>T('金额'),
+        'align' => 'right',
+        'nowrap' => TRUE,
+    ),
+));
+
+$status = Transfer_Statement_Model::STATUS_TRANSFERRED;
+foreach(Q("$statement order") as $order) {
+
+    $transfer_statement = Q("$order transfer_statement[status=$status]")->current();
+
+	$table->add_row(array(
+        'ref_no'=> V('admin:orders/table/data/ref_no', array('order'=>$order)),
+        'customer'=> V('admin:orders/table/data/customer', array('order'=>$order)),
+        'items'=> V('admin:orders/table/data/items', array('order'=>$order)), // items + description
+        'payment_msg' => V('admin:orders/table/data/payment_msg', array('order'=>$order)),
+        'price'=> V('admin:orders/table/data/price', array('order'=>$order)),
+	));
+}
+
+echo $table;
+?>
+	</div>
+</div>

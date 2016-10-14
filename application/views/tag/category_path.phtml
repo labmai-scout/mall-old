@@ -1,0 +1,35 @@
+<?php
+
+if (!$tag || !$tag->id) return;
+
+if (!isset($tag_root)) $tag_root = $tag->root;
+
+if ($tag->path_mtime != $tag->mtime) {
+	if ($tag->root->id != $tag_root->id) return;
+
+	$tag_links = array();
+	$t = $tag;
+
+	$root_id = $tag->root->id;
+	while ($t->id && $t->id != $root_id) {
+		$tag_links[] = array($t->id, $t->name);
+		$t = $t->parent;
+	}
+
+	$tag->path_mtime = $tag->mtime = time();
+	$tag->path = array_reverse($tag_links);
+	$tag->save();
+}
+
+$anchors = array();
+$found_root =  ($tag_root->id == $tag->root->id);
+foreach ((array) $tag->path as $unit) {
+	list($tag_id, $tag_name) = $unit;
+	if (!$found_root) {
+		if ($tag_id != $tag_root->id) continue;
+		$found_root = TRUE;
+	}
+	$anchors[] = $url_template ? URI::anchor(strtr($url_template,array('%tag_id'=>$tag_id)), H($tag_name)) : HT($tag_name);
+}
+
+echo implode(' &#187; ', $anchors);

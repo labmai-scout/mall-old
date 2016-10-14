@@ -1,0 +1,96 @@
+<?php
+	echo CSS::load_async('customer:gapper');
+	$form_errors = $form->errors;
+?>
+<link href="<?php echo Config::get('system.base_url') ?>font-awesome/css/font-awesome.css" rel="stylesheet">
+<div class="gapper_upgrade">
+<div class="process">
+	<div>
+		<div class="proce proce_ed proce_first float_left">&#160;</div>
+		<div class="node node_ing float_left">&#160;</div>
+		<div class="proce proce_ed proce_normal float_left">&#160;</div>
+		<div class="node node_ing float_left">&#160;</div>
+		<div class="proce proce_will proce_normal float_left">&#160;</div>
+		<div class="node node_will float_left">&#160;</div>
+		<div class="proce proce_will proce_last float_left">&#160;</div>
+	</div>
+	<div class="clearfix"></div>
+	<div class="announce">
+		<div class="float_left center announce-slim"><b><?= T('负责人开通')?></b></div>
+		<div class="float_left center announce-fat"><b><?= T('分组设置')?></b></div>
+		<div class="float_left center announce-slim text-grey"><?= T('完成')?></div>
+	</div>
+</div>
+<div class="clearfix"></div>
+
+<div class="gapper_content">
+	<div class="float_left gapper_img">
+		<div>
+			<img src="/images/gapper.png">
+		</div>
+	</div>
+    <p class="title">
+		<?php echo T('分组设置')?>
+	</p>
+	<?php if($count = count($groups)) {?>
+		<p class="notes">
+			<?php echo T('为%customer_name下的成员选择一个分组', ['%customer_name'=>$customer->name]) ?>&#160;
+		</p>
+
+		<div style="margin:40px 120px">
+			<?php foreach ($groups as $group) { ?>
+				<div class="float_left center group_img gapper_img">
+					<div class="icon_location" >
+						<a class="app_bind" q-object="bind_group" q-event="click" q-static="<?= H(['gid'=>$group['id'], 'form_token'=>$form_token])?>">
+						<?php if($group['icon']) {?>
+						<img class="app_icon" src="<?= $group['icon']?>">
+						<?php }else{?>
+
+						<div class="gapper_icon">
+							<div class="icon_text">
+								<p class="icon_font"><b><?php echo $group['abbr'] ?></b></p>
+							</div>
+						</div>
+						<?php }?>
+						</a>
+					</div>
+					<p><?= $group['title']?></p>
+				</div>
+			<?php }?>
+		</div>
+		<div class="clearfix"></div>
+		<hr style="margin:20px 120px;width:80%">
+	<?php }?>
+	<div style="margin:40px">
+		<form action="<?php echo URI::url('!customer/gapper/group_upgrade',['form_token'=>$form_token]) ?>" method="POST">
+			<p style="margin-bottom: 5px;margin-left: 78px;color:#787878;font-size:13px">
+				<?php if ($count) {echo T('没有对应分组？');}?>
+				<?= T('创建新的分组:')?>
+			</p>
+
+			<?php if(isset($form_errors['name'])) {?>
+			<div class="text-danger">
+                <small><?= $form_errors['name'][0]?></small>
+            </div>
+        	<?php }?>
+			<div class="form-control">
+				<input type="text" value="<?= trim($form['name'])?>" class="text-group-input <?= $form_errors['name'] ? 'has-error' : ''?>" placeholder="<?= T('组标识')?>" name="name" >
+				<div class="text-note">
+					<?= T('组标识只可使用包括字母、数字、“-”、“_”、“.” 和 “@”.') ?>
+				</div>
+			</div>
+			<?php if(isset($form_errors['title'])) {?>
+			<div class="text-danger">
+                <small><?= $form_errors['title'][0]?></small>
+            </div>
+        	<?php }?>
+			<div class="form-control">
+				<input type="text" value="<?= trim($form['title'])?>" class="text-group-input <?= $form_errors['title'] ? 'has-error' : ''?>" placeholder="<?= T('名称')?>"  name="title" >
+			</div>
+			<div style="margin: 20px 80px;">
+				<input type="submit" value="<?php echo T('创建组') ?>" class="upgrade_button" name="submit" style="padding:7px 105px"/>
+			</div>
+		</form>
+	</div>
+</div>
+</div>

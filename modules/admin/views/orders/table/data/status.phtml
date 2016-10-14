@@ -1,0 +1,23 @@
+<?php
+	$class = 'status_'.Order_Model::$status_label[$order->status];
+?>
+<div style="padding:.3em 0">
+<span class="status_tag <?php echo $class?>">
+	<?php
+	if ($order->status==Order_Model::STATUS_APPROVED && $order->is_transfer_failed()) {
+		echo HT('支付失败');
+	}
+	else {
+		echo Order_Model::$status[$order->status];
+	}
+	?>
+</span>
+<?php if(Config::get('order.post_info_required') && $order->post_no && $order->post_company) {?>
+<span class="status_tag"><?= HT('邮') ?></span>
+<?php } ?>
+</div>
+<?php if ($order->admin_note): ?>
+<div class="description content_wrap" style="max-width:500px">
+<?php echo H($order->admin_note, TRUE); ?>
+</div>
+<?php endif; ?>

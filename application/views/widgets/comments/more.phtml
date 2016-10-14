@@ -1,0 +1,13 @@
+<?php 
+$more_id = 'comment_'.uniqid(); 
+$opt = array(
+	'oname' => $object->name(),
+	'oid' => $object->id,
+	'start' => $start,
+	'more_id'=>$more_id,
+	'list_id'=>$list_id
+);
+?>
+<a id="<?php echo $more_id?>" class="more padding_1 center" q-widget="comments" q-object="more" q-event="click" q-static="<?php echo H($opt) ?>" href="#" onclick="return false">
+	<?php echo HT('更多...') ?>
+</a>

@@ -1,0 +1,7 @@
+<?php if ($message->sender->id):?>
+	<?php if(L('ME')->access('管理所有内容') || L('ME')->access('管理分组')):?>
+		<a href="<?php echo $message->sender->url(NULL, NULL, NULL, 'admin_view')?>"><?php echo H($message->sender->name)?>
+	<?php else:?>
+		<?php echo H($message->sender->name)?>
+	<?php endif;?>
+<?php else: echo I18N::T('messages', '系统');endif;?>

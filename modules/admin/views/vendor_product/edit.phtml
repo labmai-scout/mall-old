@@ -1,0 +1,159 @@
+<?php
+	$me = L('ME');
+	$no_error = ($form->no_error !== FALSE);
+	$require = (string) V('form_require');
+?>
+<div class="hr_1">&#160;</div>
+<form method="post" autocomplete="off" action="<?php echo URI::url() ?>">
+<div class="form padding_2">
+	<?php echo V('form_error', array('form'=>$form));?>
+	<h4><?php echo HT('常规信息'); ?></h4>
+	<div class="hr_1">&#160;</div>
+	<table class="form">
+		<tbody>
+			<tr>
+				<td class="label right nowrap middle"><?php echo T('类别')?></td>
+				<td class="middle nowrap" colspan="4">
+				<?php
+					$types = Product_Model::get_types();
+					$available_types = $types; // TODO 筛选当前 vendor 可添加的 type(xiaopei.li@2012-03-08)
+					$sel_type = $form['type'];
+					if (!isset($available_types[$sel_type])) $sel_type = key($available_types);
+					echo Form::dropdown('type', $available_types, $sel_type, 'class="monitor"');
+
+					$input_type = $form['type'];
+					foreach ($available_types as $type => $type_name): ?>
+					<span class="toggle:type show_on:<?php echo H($type) ?> ">
+					<?php
+						$input_category_name = "category_{$type}"; // category[$type] will cause js selector error, so here uses category_{$type} (xiaopei.li@2012-03-16)
+
+						if ($type == $input_type) {
+							$input_category = O('product_category', $form[$input_category_name]);
+						}
+
+						$root = Product_Category_Model::root($type);
+
+						echo Widget::factory('application:category_selector', array(
+							'category'=> $input_category,
+							'root'=>$root,
+							'name'=>$input_category_name,
+							'ajax'=>true,
+						));
+					?>
+					</span>
+				<?php endforeach; ?>
+				</td>
+			</tr>
+			<tr>
+				<td class="label right nowrap middle"><?php echo T('名称')?></td>
+				<td class="middle nowrap" colspan="4">
+					<input name="name" class="text" size="60" value="<?php echo H($form['name']); ?>" /><?php echo $require?>
+				</td>
+			</tr>
+			<tr>
+				<td class="label right nowrap middle"><?php echo T('生产商')?></td>
+				<td class="middle tight nowrap">
+					<input name="manufacturer" class="text" size="20" value="<?php echo H($form['manufacturer']); ?>" /><?php echo $require?>
+				</td>
+				<td class="label right nowrap middle"><?php echo T('目录号')?></td>
+				<td class="middle">
+					<input name="catalog_no" class="text" size="20" value="<?php echo H($form['catalog_no']); ?>" /><?php echo $require?>
+				</td>
+			</tr>
+			<tr>
+				<td class="label right nowrap middle"><?php echo T('型号')?></td>
+				<td class="middle">
+					<input name="model" class="text" size="20" value="<?php echo H($form['model']); ?>" />
+				</td>
+				<td class="label right nowrap middle"><?php echo T('包装')?></td>
+				<td class="middle">
+					<input name="package" class="text" size="20" value="<?php echo H($form['package']); ?>" /><?php echo $require?>
+				</td>
+			</tr>
+			<tr>
+				<td class="label right nowrap middle"><?php echo T('规格')?></td>
+				<td class="middle" colspan="4">
+					<input name="spec" class="text" size="60" value="<?php echo H($form['spec']); ?>" /><?php echo $require?>
+				</td>
+			</tr>
+			<tr>
+				<td class="label right middle nowrap"><?php echo HT('关键字'); ?></td>
+				<td class="middle nowrap" colspan="4">
+					<?php
+						$root = Tag_Model::root('product_keyword');
+						echo Widget::factory('application:multi_tag_selector',
+										array(
+											// TODO 'autocomplete'=> URI::url("autocomplete/tags.$root->id"),
+											'name'=>'keywords',
+											'value'=> H($form['keywords']),
+											'size'=>'60',
+											'allow_creating'=>TRUE,
+											'token_tip' => T('输入每个关键字后请按回车键')
+											));
+					?>
+				</td>
+			</tr>
+			<tr>
+				<td class="label right nowrap top"><?php echo T('说明')?></td>
+				<td class="middle" colspan="4">
+					<textarea name="description" class="text autogrow" cols="60" rows="5"><?php echo H($form['description']); ?></textarea>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<?php
+$sections = new ArrayIterator;
+$ret =  Event::trigger('form[vendor.product].sections', $product, $form, $sections);
+echo implode('', (array)$sections);
+?>
+<div class="form padding_2">
+	<h4><?php echo HT('销售信息'); ?></h4>
+	<div class="hr_1">&#160;</div>
+	<table class="form">
+		<tbody>
+			<tr>
+				<td class="label right nowrap middle"><?php echo T('单价')?></td>
+				<td class="middle nowrap">
+					<input name="unit_price" class="text currency" size="20" value="<?php echo H($form['unit_price']); ?>" /><?php echo $require?>
+				</td>
+				<td class="label right nowrap middle"><?php echo T('现货')?></td>
+				<td class="middle nowrap">
+				<?php
+				$options = array(
+					1 => HT('是'),
+					0 => HT('否'),
+					);
+				echo Form::dropdown('stock_status', $options, isset($form['stock_status']) ?$form['stock_status'] : 0);
+				echo $require;
+				?>
+				</td>
+			</tr>
+			<tr>
+				<td class="label right nowrap top"><?php echo T('商家备注')?></td>
+				<td class="middle" colspan="4">
+					<textarea name="vendor_note" class="text autogrow" cols="60" rows="5"><?php echo H($form['vendor_note']); ?></textarea>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div class="form padding_2">
+	<h4><?php echo HT('其他'); ?></h4>
+	<div class="hr_1">&#160;</div>
+	<table class="form">
+		<tbody>
+		<tr>
+			<td class="label right nowrap top"><?php echo T('备注')?></td>
+			<td class="left" colspan="3">
+				<textarea name="note" class="text autogrow" cols="60" rows="5"><?php echo H($no_error ? $product->note : $form['note'])?></textarea>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+<div class="form padding_2">
+		<input type="submit" name="submit" class="button button_save" value="<?php echo HT('保存')?>" />
+		<a class="button button_delete" href="<?php echo $product->url(NULL, NULL, NULL, 'vendor_delete'); ?>" confirm="<?php echo T('您确定删除该商品吗？'); ?>"><?php echo HT('删除')?></a>
+</div>
+</form>

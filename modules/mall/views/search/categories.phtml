@@ -1,0 +1,15 @@
+<div class="category_list left_sidebar_item">
+	<?php
+		echo V('mall:search/_categories', array(
+					'root' => Product_Category_Model::root($tab),
+					'selected'=>$category,
+					'keyword' => $keyword,
+				));
+	?>
+
+	<?php /*?>
+		<div class="right padding_1">
+		<a class="blue" href="<?php echo URI::url('!mall/search', 'reset_search=1'); ?>"><?php echo HT('查看全部'); ?> &#187;</a>
+		</div>
+	<?php */?>
+</div>

@@ -1,0 +1,18 @@
+<?php $uniqid = 'category_'.uniqid(); ?>
+<?php if (!$disable_add_panel): ?>
+	<div class="panel padding_1">
+		<a class="button button_add middle view event:click object:category_edit static:<?php echo H(array('uniqid'=>$uniqid, 'parent'=>$root->id, 'is_root'=>TRUE)); ?> src:<?php echo URI::url('!admin/product/category')?>"><?php echo T('添加');?></a>
+	</div>
+<?php else: ?>
+	<div class="hr_1"></div>
+<?php endif; ?>
+<div id="<?php echo $uniqid; ?>">
+	<div class="category_container category_root_container">
+		<?php echo V('admin:admin/categories/category_list', array('categories'=>$categories, 'parent_uniqid'=>$uniqid)) ?>
+	</div>
+</div>
+<script type="text/javascript">
+jQuery(function($) {
+	Q.category_sortable("<?php echo (int)$root->id?>", "<?php echo $uniqid?>", "<?php echo JS::escape(URI::url('!admin/product/category')) ?>");
+});
+</script>

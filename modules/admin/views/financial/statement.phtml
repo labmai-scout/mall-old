@@ -1,0 +1,44 @@
+<?php
+$vendor = $statement->vendor;
+?>
+<div class="hr_1">&#160;</div>
+<div id="statement_view" class="clearfix">
+<h1><?php echo HT('结算单 #%ref_no', array('%ref_no'=>Number::fill($statement->id, 6))); ?></h1>
+<div><?php echo V('admin:financial/statements/status', array('statement'=>$statement)); ?></div>
+<div class="hr_2">&#160;</div>
+<div class="step_form">
+    <h4><?php echo HT('结算单位'); ?></h4>
+    <div class="step_form_content">
+        <strong><big><?php echo H($vendor->name); ?></big></strong><br/>
+		<strong>开户行: <?php echo $vendor->bank_name; ?></strong><br/>
+		<strong>开户行账号: <?php echo $vendor->bank_account; ?></strong>
+    </div>
+</div>
+<div class="step_form">
+    <h4><?php echo HT('结算时间'); ?></h4>
+    <div class="step_form_content">
+        <strong><big><?php echo Date::format($statement->ctime); ?></big></strong>
+    </div>
+</div>
+<div class="step_form">
+	<h4><?php echo HT('结算金额'); ?></h4>
+	<div class="step_form_content">
+		<strong><big><?php echo Number::currency($statement->balance); ?></big></strong>
+	</div>
+</div>
+<?php
+    echo V('admin:financial/statement/list',[
+            'statement' => $statement,
+        ]);
+?>
+<?php
+$links = $statement->links('admin_view');
+if (count($links) > 0):
+?>
+<div class="no_print padding_1">
+<?php echo Widget::factory('application:links', array('links'=>$links, 'separator'=>' ')); ?>
+</div>
+<?php
+endif;
+?>
+</div>

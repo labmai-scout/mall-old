@@ -1,0 +1,19 @@
+<?php
+$uniqid = $this->uniqid ?: 'user_'.uniqid();
+
+$user = is_object($this->user) ? $this->user : O('user', $this->user);
+$autocomplete = $this->autocomplete ?: URI::url('autocomplete/user');
+
+
+$size = $this->size ?: 40;
+
+if ($user->id) {
+	$name = $user->name;
+}
+else {
+	$name = $this->user_name;
+}
+
+?>
+<input id="<?php echo $uniqid?>" <?php echo $cardread_str;?> name="<?php echo $this->name?>" class="text middle select_on_focus autocomplete:<?php echo H($autocomplete) ?> autocomplete_alt:#<?php echo $uniqid?>_user" style="font-size:10px" size="<?php echo $size?>"
+ value="<?php echo H($name) ?>" q-tooltip="<?php echo T('请输入关键字并选择') ;?>" />

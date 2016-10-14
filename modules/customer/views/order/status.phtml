@@ -1,0 +1,12 @@
+<?php
+if(in_array($order->status,[Order_Model::STATUS_PENDING_PAYMENT, Order_Model::STATUS_PAID])):
+   $class = 'status_'.Order_Model::$status_label[Order_Model::STATUS_TRANSFERRED];
+?>
+	<span class="status_tag <?php echo $class?>"><?php echo Order_Model::$status[Order_Model::STATUS_TRANSFERRED]?></span>
+<?php
+else:
+	$class = 'status_'.Order_Model::$status_label[$order->status];
+?>
+	<span class="status_tag <?php echo $class?>"><?php echo Order_Model::$status[$order->status]?></span>
+<?php
+endif;

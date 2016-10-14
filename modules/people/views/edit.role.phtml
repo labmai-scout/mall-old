@@ -1,0 +1,36 @@
+<?php
+
+$user_roles = $user->roles();
+$roles = L('ROLES');
+
+?>
+<div class="hr_1">&#160;</div>
+<div class="form padding_1">
+<table class="form">
+	<tbody>
+	<tr>
+		<td class="top icon">
+			<a href="<?php echo $user->url('photo', NULL, NULL, 'edit')?>"><img src="<?php echo $user->icon_url('64')?>" /></a>
+		</td>
+		<td class="top">
+			<p><?php echo I18N::T('roles', '所属分组'); ?>:</p>
+			<ul>
+				<?php
+				if (count($user_roles) > 0) {
+					foreach ($user_roles as $rid) {
+						if ($roles[$rid]) {
+							$role = $roles[$rid];
+							echo '<li>'. H($role->name).'</li>';
+						}
+					}
+				}
+				else {
+					echo '<li>'.I18N::T('roles', '暂无分组信息。').'</li>';
+				}
+				?>
+			</ul>
+		</td>
+	</tr>
+	</tbody>
+</table>
+</div>

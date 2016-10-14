@@ -1,0 +1,54 @@
+<?php
+	if (Input::route() != $_SESSION['system.current_layout_url']) {
+		$_SESSION['system.last_layout_url'] = $_SESSION['system.current_layout_url'];
+	}
+	$_SESSION['system.current_layout_url'] = Input::route();
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<?php /*web app中去除浏览器上地址栏选项的设置*/ ?>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<?php /*web app中去除iphone对连串数字拨号映射设置*/ ?>
+<meta name="format-detection" content="telephone=no" />
+<base href="<?php echo Config::get('system.base_url') ?>" />
+<?php /*web app 中定义app图片的方式*/ ?>
+<?php echo $this->controller->load_css(); ?>
+<?php echo $this->controller->load_js(TRUE); ?>
+</head>
+<body>
+	<div style="vertical-align: middle;">
+		<div style="height:260px;line-height:260px;margin:auto;text-align:center;font-weight:bold;font-size:15pt">
+			<h5 class="center middle"><?php echo I18N::T('oauth', '授权失败, 请重新尝试授权')?></h5>
+		</div>
+	</div>
+	<script>
+		jQuery(function($){
+			// $parent = window.parent;
+			// $parent.$('.dialog_close').unbind().click(function(){
+			// 	refresh();
+			// });
+
+			// //刷新整个页面
+			// function refresh(){
+			// 	$parent.location.reload();
+			// }
+
+			// //禁用回车和esc
+			// $(document).keydown(function(e){
+			// 	var keycode = e.which;
+			// 	if(keycode == 27 || keycode == 13){
+			// 	return false;
+			// 	}
+			// });
+
+			// refresh();
+		})
+	</script>
+	<?php echo $this->controller->load_js(FALSE); ?>
+</body>
+</html>

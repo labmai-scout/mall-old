@@ -1,0 +1,289 @@
+<?php
+// TODO 分拆此表单, add heading to each section (xiaopei.li@2012-03-28)
+$me = L('ME');
+$no_error = (!is_object($form) || !!$form->no_error);
+?>
+<div class="hr_1">&#160;</div>
+<div class="form padding_2">
+	<form method="post" action="<?php echo URI::url() ?>" autocomplete="off">
+		<?php echo V('form_error', array('form'=>$form));?>
+		<?php $require = (string) V('form_require'); ?>
+		<table class="form">
+			<tbody><?php // 工商信息 ?>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('公司名称')?></td>
+					<td class="left" colspan="3"><input name="name" class="text" size="40" value="<?php echo H($no_error ? $vendor->name : $form['name']) ?>" /><?php echo $require; ?></td>
+				</tr>
+				<?php /*?>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('公司曾用名')?></td>
+					<td class="left" colspan="3"><input name="alt_name" class="text" size="40" value="<?php echo H($no_error ? $vendor->alt_name : $form['alt_name']) ?>" /></td>
+				</tr>
+				<?php */?>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('法人姓名') ?></td>
+					<td class="left" colspan="3"><input name="owner_name" class="text" size="18" value="<?php echo H($no_error ? $vendor->owner_name : $form['owner_name'])?>" /></td>
+				</tr>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('总经理姓名') ?></td>
+					<td class="left tight"><input name="manager_name" class="text" size="18" value="<?php echo H($no_error ? $vendor->manager_name : $form['manager_name'])?>" /></td>
+					<td class="label right nowrap"><?php echo HT('总经理电话') ?></td>
+					<td class="left"><input name="manager_phone" class="text" size="18" value="<?php echo H($no_error ? $vendor->manager_phone : $form['manager_phone'])?>" /></td>
+				</tr>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('联系人姓名') ?></td>
+					<td class="left"><input name="contact_name" class="text" size="18" value="<?php echo H($no_error ? $vendor->contact_name : $form['contact_name'])?>" /></td>
+					<td class="label right nowrap"><?php echo HT('联系人电话') ?></td>
+					<td class="left"><input name="contact_phone" class="text" size="18" value="<?php echo H($no_error ? $vendor->contact_phone : $form['contact_phone'])?>" /></td>
+				</tr>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('开户行') ?></td>
+					<td class="left"><input name="bank_name" class="text" size="18" value="<?php echo H($no_error ? $vendor->bank_name : $form['bank_name'])?>" />
+					<?php echo $require; ?>
+					</td>
+					<td class="label right nowrap"><?php echo HT('开户行账号') ?></td>
+					<td class="left"><input name="bank_account" class="text" size="18" value="<?php echo H($no_error ? $vendor->bank_account : $form['bank_account'])?>" />
+					<?php echo $require; ?>
+					</td>
+				</tr>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('开户行省份') ?></td>
+					<td class="left"><input name="province" class="text" size="18" value="<?php echo H($no_error ? $vendor->province : $form['province'])?>" />
+					<?php echo $require; ?>
+					</td>
+					<td class="label right nowrap"><?php echo HT('开户行城市') ?></td>
+					<td class="left"><input name="city" class="text" size="18" value="<?php echo H($no_error ? $vendor->city : $form['city'])?>" />
+					<?php echo $require; ?>
+					</td>
+				</tr>
+				<tr>
+					<td class="label right nowrap top">
+						<?php echo HT('经营范围')?>
+					</td>
+					<td class="left" colspan="3">
+						<textarea name="scope" class="text autogrow" cols="60" rows="5"><?php echo H($no_error ? $vendor->scope : $form['scope'])?></textarea>
+						<div class="description">* <?php echo HT('请按照营业执照内容如实填写.')?></div>
+					</td>
+				</tr>
+				<tr>
+					<td class="label right nowrap top"><?php echo HT('经营商品类别')?></td>
+					<td class="left" colspan="3">
+						<ul class="vendor_scopes">
+							<?php
+							$types = Product_Model::get_types();
+							$available_types = $types; // TODO 筛选当前 vendor 可添加的 type(xiaopei.li@2012-03-08)
+							foreach($available_types as $type => $label) :
+									$scope_name = 'product_type.'.$type;
+									$scope = O("vendor_scope", array('vendor'=>$vendor, 'name'=>$scope_name));
+									$scope_checkbox_name = "scope_allowed[{$scope_name}]";
+							?>
+							<li>
+								<?php
+									echo Form::checkbox($scope_checkbox_name,
+												$no_error && $scope->expire_date>0 ? !!$scope->id : !!$form['scope_allowed'][$scope_name],
+												$label, 'class="monitor"', 'class="scope_check"');
+								?>
+								&#160;&#160;
+								<label><?php echo HT('经营有效期'); ?></label>
+								<input name="<?php echo 'scope_expire_date_from[' . $scope_name . ']'; ?>" class="text toggle_status:<?php echo $scope_checkbox_name;?> enable_on:on date" q-date_format="<?php echo HT('$year年$month月$day日')?>" value="<?php echo H($no_error ? $scope->expire_date_from : $form['scope_expire_date_from'][$scope_name]); ?>" />&#160;~&#160;<input name="<?php echo 'scope_expire_date_to[' . $scope_name . ']'; ?>" class="text toggle_status:<?php echo $scope_checkbox_name;?> enable_on:on date" q-date_format="<?php echo HT('$year年$month月$day日')?>" value="<?php echo H($no_error ? $scope->expire_date : $form['scope_expire_date_to'][$scope_name]); ?>" />
+								<div class="hr_1">&#160;</div>
+								<?php
+								$sub_scope = Event::trigger("admin.vendor.sub_scope.{$type}", $vendor, $form);
+								if ($sub_scope) { ?>
+								<div class="lpadding_2 bpadding_1 toggle:<?php echo $scope_checkbox_name;?> show_on:on">
+									<div class="form padding_2"><?php echo $sub_scope; ?></div>
+								</div>
+								<?php } ?>
+							</li>
+							<?php
+							endforeach;
+							?>
+                            <li class="description nowrap">
+                                * <?php echo T('既要选择大类(如化学试剂), 又要选择小类别(如普通试剂), 商家才可正常销售')?>
+                            </li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td class="label right nowrap top"></td>
+					<td colspan="3">
+						<span class="description"><?php echo HT('* 请填写危险化学品经营许可证经营范围') ?></span>
+						<textarea name="hazardous_article_scope" class="text autogrow" cols="40" rows="4"><?php echo H($no_error ? $vendor->hazardous_article_scope : $form['hazardous_article_scope'])?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td class="label right nowrap top"></td>
+					<td colspan="3">
+						<span class="description"><?php echo HT('* 请填写易制毒化学品经营备案证明经营范围') ?></span>
+						<textarea name="precursor_scope" class="text autogrow" cols="40" rows="4"><?php echo H($no_error ? $vendor->precursor_scope : $form['precursor_scope'])?></textarea>
+					</td>
+				</tr>
+				<tr><td class="hr_2" colspan="4">&#160;</td></tr>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('营业执照注册号') ?></td>
+					<td class="left" colspan="3"><input name="license_no" class="text" size="40" value="<?php echo H($no_error ? $vendor->license_no : $form['license_no'])?>" /><?php echo $require; ?></td>
+				</tr>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('执照年检日期') ?></td>
+					<td class="left"><input name="license_valid_date" class="text date" size="40" value="<?php echo H($no_error ? $vendor->license_valid_date : $form['license_valid_date'])?>" q-date_format="<?php echo HT('$year年$month月$day日')?>"/></td>
+					<td class="label right nowrap"><?php echo HT('上次年检日期') ?></td>
+					<td class="left"><input name="license_last_valid_date" class="text date" size="40" value="<?php echo H($no_error ? $vendor->license_last_valid_date : $form['license_last_valid_date'])?>" q-date_format="<?php echo HT('$year年$month月$day日')?>"/></td>
+				</tr>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('公司成立日期') ?></td>
+					<td class="left"><input name="establish_date" class="text date" size="40" value="<?php echo H($no_error ? $vendor->establish_date : $form['establish_date'])?>" q-date_format="<?php echo HT('$year年$month月$day日')?>"/></td>
+					<td class="label right nowrap"><?php echo HT('公司经营期限至') ?></td>
+					<td class="left"><input name="operation_due" class="text date" size="40" value="<?php echo H($no_error ? $vendor->operation_due : $form['operation_due'])?>" q-date_format="<?php echo HT('$year年$month月$day日')?>"/></td>
+				</tr>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('注册资金 (万元)') ?></td>
+					<td class="left"><input name="capital" class="text currency" sign="<?php echo Config::get('site.currency_sign')?>" size="20" value="<?php echo H($no_error ? $vendor->capital : $form['capital'])?>" /></td>
+					<td class="label right nowrap"><?php echo HT('员工人数') ?></td>
+					<td class="left">
+						<?php
+						$options = Vendor_Model::$nemployees_options;
+						echo Form::dropdown('nemployees', $options, H($no_error ? $vendor->nemployees : $form['nemployees']));
+						?>
+					</td>
+				</tr>
+			</tbody>
+			<tbody><?php // 联系信息, 公司简介及商城负责人 ?>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('公司简称')?></td>
+					<td class="left" colspan="3"><input name="short_name" class="text" size="15" value="<?php echo H($no_error ? $vendor->short_name : $form['short_name']) ?>" /><?php echo $require; ?></td>
+				</tr>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('公司电话') ?></td>
+					<td class="left"><input name="phone" class="text" size="20" value="<?php echo H($no_error ? $vendor->phone : $form['phone'])?>" /></td>
+					<td class="label right nowrap"><?php echo HT('公司传真') ?></td>
+					<td class="left"><input name="fax" class="text" size="20" value="<?php echo H($no_error ? $vendor->fax : $form['fax'])?>" /></td>
+				</tr>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('公司邮箱') ?></td>
+					<td class="left" colspan="3"><input name="email" class="text" size="20" value="<?php echo H($no_error ? $vendor->email : $form['email'])?>" /><?php echo $require; ?><span class="description"><?php echo HT('订单状态更新等消息会发至此邮箱'); ?></span></td>
+				</tr>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('公司网址') ?></td>
+					<td class="left" colspan="3"><input name="homepage" class="text" size="60" value="<?php echo H($no_error ? $vendor->homepage : $form['homepage'])?>" /></td>
+				</tr>
+				<tr>
+					<td class="label right nowrap top"><?php echo HT('公司地址') ?></td>
+					<td class="left top" colspan="3">
+						<textarea name="address" class="text autogrow" cols="60" rows="3"><?php echo H($no_error ? $vendor->address : $form['address'])?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('邮政编码') ?></td>
+					<td class="left" colspan="3"><input name="postcode" class="text" size="20" value="<?php echo H($no_error ? $vendor->postcode : $form['postcode'])?>" /></td>
+				</tr>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('业务员')?></td>
+					<td class="left" colspan="3">
+						<?php echo Widget::factory('user_selector', array(
+												'name' => 'owner',
+												'user' => $no_error ? $vendor->owner : $form['owner'],
+												'autocomplete' => URI::url('!admin/vendor/autocomplete/user.'.$vendor->id),
+												// 添加 vendor 时, 无 $vendor->id, 此处正好能在 所有无 vendor 的 user 中选 owner
+												// 而修改 vendor 时, 有 $vendor->id, 此处就是在 vendor member 中选 owner 了
+												// (xiaopei.li@2012-04-18)
+										));
+										?>
+						<?php echo $require; ?>
+					</td>
+				</tr>
+				<tr>
+					<td class="label right nowrap top"><?php echo T('公司简介')?></td>
+					<td class="left" colspan="3">
+						<textarea name="description" class="text autogrow" cols="60" rows="5"><?php echo H($no_error ? $vendor->description : $form['description'])?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td class="label right nowrap top"><?php echo T('管理员备注')?></td>
+					<td class="left" colspan="3">
+						<textarea name="note" class="text autogrow" cols="60" rows="5"><?php echo H($no_error ? $vendor->note : $form['note'])?></textarea>
+					</td>
+				</tr>
+			</tbody>
+			<?php  if ($vendor->publish_date > 0): ?>
+			<tbody><?php // 审核信息 ?>
+				<tr>
+					<td class="label right nowrap"><?php echo T('审核状态')?></td>
+					<td class="left" colspan="3">
+                    <?php
+						if ($vendor->publish_date) {
+								if ($vendor->approve_date) {
+										$status = Vendor_Model::STATUS_APPROVED;
+								}
+								else {
+										$status = Vendor_Model::STATUS_PENDING_APPROVAL;
+								}
+						}
+						else {
+								$status = Vendor_Model::STATUS_REJECTED;
+								if ($vendor->id) {
+										$hint = HT('* 该供应商还未申请审核!');
+								}
+						}
+                        echo Form::dropdown('activate', Vendor_Model::$status_options, $form['activate'] ? : $status, 'class="monitor dropdown"');
+						if ($hint):
+						?>
+						<span class="description warning">
+							<?php echo $hint; ?>
+						</span>
+						<?php
+						endif;
+						?>
+					</td>
+				</tr>
+				<tr class="toggle:activate show_on:<?php echo Vendor_Model::STATUS_REJECTED;?>">
+					<td class="label right nowrap top"><?php echo HT('拒绝理由') ?></td>
+					<td class="left top" colspan="3">
+						<textarea name="reject_reason" class="text autogrow" cols="60" rows="3"><?php echo H($no_error ? $vendor->reject_reason : $form['reject_reason'])?></textarea>
+						<div class="description">* <?php echo HT('此信息将在供应商登录后显示.')?></div>
+					</td>
+				</tr>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('过期日期') ?></td>
+					<td class="left" colspan="3">
+						<?php
+						if (!isset($form['has_expire_date']) && !$vendor->expire_date) {
+								// 激活时默认不设过期
+								$has_expire_date = 0;
+						}
+						else {
+								$has_expire_date = $form->no_error ? ($vendor->expire_date > 0) : $form['has_expire_date'];
+						}
+						echo Form::checkbox('has_expire_date', $has_expire_date, NULL, 'class="middle monitor"'); ?>
+						<input name="expire_date" class="text toggle_status:has_expire_date enable_on:on date" size="40" value="<?php echo H($no_error ? $vendor->expire_date : $form['expire_date'])?>" q-date_format="<?php echo HT('$year年$month月$day日')?>"/></td>
+				</tr>
+			</tbody>
+			<?php endif; ?>
+			<tbody><?php // 提交按钮 ?>
+				<tr>
+					<td></td>
+					<td colspan="3">
+						<?php if ($vendor->id): ?>
+						<input type="submit" name="submit" class="button button_edit middle" value="<?php echo T('保存')?>" />
+						<?php
+						// 由于字号同 lims 不同, submit.button 和 a.button 在一行时无法对齐.
+						// FF 修改 input.button/a.button/button 的 line-height 到 0.9 便合适, 其他浏览器未测试
+						// 故都未修改 (xiaopei.li@2012-03-13)
+						?>
+						<?php
+						if ($vendor->approve_date <= 0 &&
+							$vendor->publish_date <= 0 &&
+							$me->is_allowed_to('删除', $vendor)):
+						?>
+							<a class="button button_delete middle" href="<?php echo $vendor->url(NULL, NULL, NULL, 'admin_delete');	?>" confirm="<?php echo T('您确定要删除吗? 请谨慎操作!'); ?>"><?php echo HT('删除'); ?></a>
+						<?php
+						endif;
+						?>
+						<?php else: ?>
+						<input type="submit" name="submit" class="button button_add middle" value="<?php echo HT('添加')?>" />
+						<?php endif; ?>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>

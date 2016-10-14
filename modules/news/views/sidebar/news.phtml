@@ -1,0 +1,20 @@
+<div class="sidebar_item">
+	<div class="title">
+		<div class="float_right"><?php echo URI::anchor(URI::url('!news/index'), T('更多 &#187;'), 'class="blue"'); ?></div>
+		<?php echo T('新闻公告')?>
+	</div>
+	<div class="content">
+		<ul>
+		<?php
+            $news = Q("news:sort(ctime D):limit(8)");
+            if ($news->total_count()) :
+                foreach ($news as $new) :
+            ?>
+                <li class="break-word"><a href="<?php echo $new->url(NULL, NULL, NULL, 'view');?>"><?php echo H($new->title);?></a></li>
+                <?php endforeach; ?>
+            <?php else:?>
+                <p><?php echo T('暂无公告')?></p>
+            <?php endif;?>
+		</ul>
+	</div>
+</div>

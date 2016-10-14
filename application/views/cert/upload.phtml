@@ -1,0 +1,10 @@
+<?php echo CSS::load_async('cert')?>
+<form method="post" action="<?php echo URI::url(). '?'. H(array('vendor_id'=>$vendor_id, 'scope_id'=>$scope_id, 'scope_name'=>$scope_name))?>" enctype="multipart/form-data">
+	<div class="relative">
+		<span class="uploadimg">
+			<input type="file" name="test" size="1" class="hiddenfile"/>
+			<a class="button"><?php echo HT('浏览图片');?></a>
+		</span>
+	    <input type="submit" class="middle center filesubmit button_import" value=" " />
+    </div>
+</form>

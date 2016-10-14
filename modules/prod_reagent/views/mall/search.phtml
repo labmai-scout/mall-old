@@ -1,0 +1,110 @@
+<?php
+$uid = 'mall_search_'.uniqid();
+ echo $sub_header; ?> 
+<div class="hr_1">&#160;</div>
+<div class="rank_list">
+	<div class="padding_1">
+			<ul>
+				<li>	
+					<div class="rank_title">
+						<?php echo T('排序:'); ?>
+					</div>
+				</li>
+				<?php if ($form['keyword']): ?>
+				<li>	
+					<div class="product_rank_default">
+						<span>
+							<a class="rank_name"><?php echo T('相关度'); ?></a>
+						</span>
+					</div>
+				</li>
+				<?php endif; ?>
+				<?php $me = L('ME'); if ($me->id): ?>
+				<li>
+					<div class="product_rank" data="price">
+						<span>
+							<a class="rank_name"><?php echo T('价格'); ?></a>
+						</span>
+					</div>
+				</li>
+				<?php endif; ?>
+				<li>
+					<div class="product_rank" data="vendor">
+						<span>
+							<a class="rank_name"><?php echo T('供应商'); ?></a>
+						</span>
+					</div>
+				</li>
+				<li>
+					<div class="product_rank" data="manufacturer">
+						<span>
+							<a class="rank_name"><?php echo T('生产商'); ?></a>
+						</span>
+					</div>
+				</li>
+			</ul>
+	</div>
+</div>
+<div class="content">
+	<div class="crumb padding_1">
+	<?php 
+		echo V('prod_reagent:mall/crumb', array('category' => $category, 'form' => $form));
+	?>
+	</div>
+	<div class="content_body" id="<?php echo $uid; ?>">
+		<?php  	
+			echo $pagination;
+			echo V("prod_reagent:mall/results", array('products' => $products,  'form' => $form, 'category' => $category));
+			echo $pagination;
+		?>
+	</div>
+</div>
+<script type="text/javascript">
+	jQuery(function() {
+		$(".product_rank, .product_rank_active").bind('click', function(event) {
+			var rank_name;
+			var rank_sort;
+			var current_class = $(this).attr('class');
+			if (typeof(current_class) == "undefined") return;
+			if (current_class == "product_rank") {
+				$(".product_rank_active").removeClass('product_rank_active').addClass('product_rank');
+				$('.rank_up').remove();
+				$('.rank_down').remove();
+				$(this).removeClass('product_rank').addClass('product_rank_active');
+				$(this).find('.rank_up').removeClass('rank_up').addClass('rank_down');
+				$(this).find(".rank_name").append('<span class="rank_down">&#160;</span>');
+				rank_name = $(this).attr('data');
+				rank_sort = 'desc';
+			}
+			else if (current_class == "product_rank_active") {
+				var icon_down = $(this).find(".rank_down").attr('class');
+				var icon_up = $(this).find(".rank_up").attr('class');
+				if (typeof(icon_down) != "undefined") {
+					$(this).find('.rank_down').removeClass('rank_down').addClass('rank_up');
+					rank_name = $(this).attr('data');
+					rank_sort = 'asc';
+				}
+				if (typeof(icon_up) != "undefined") {
+					$(this).find('.rank_up').removeClass('rank_up').addClass('rank_down');
+					rank_name = $(this).attr('data');
+					rank_sort = 'desc';
+				}
+			}
+
+	 		Q.trigger({
+				object: 'mall_search_rank',
+				event: 'click',
+				global: false,
+				data: {
+					keyword: '<?php echo $form["keyword"] ?>',
+					uid: '<?php echo $uid ?>',
+					rank_name : rank_name,
+					rank_sort : rank_sort,
+					type : 'reagent',
+				},
+			});
+		});
+	});
+</script>
+
+

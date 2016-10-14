@@ -1,0 +1,63 @@
+<div class="hr_1">&#160;</div>
+<div class="product_detail clearfix">
+	<table class="form flexible">
+		<tbody>
+			<tr>
+				<td class="top icon">
+					<?php echo $product->icon('128'); ?>
+				</td>
+				<td class="top flexible">
+					<div class="hgroup">
+						<h2>
+						<?php
+							if ($product->status == Product_Model::STATUS_PENDING) {
+								$status = '待审核';
+							}
+							elseif ($product->status == Product_Model::STATUS_ON_SALE) {
+								$status = '已审核';
+							}
+							elseif ($product->status == Product_Model::STATUS_FAILED) {
+								$status = '已拒绝';
+							}
+						?>
+						<span class="type"><?php echo HT($status) ?></span>
+						<?php echo URI::anchor(URI::url(), H($product->name)) ?>
+						</h2>
+						<h3>
+							<?php
+							echo HT('%manufacture %catalog_no', array(
+								'%manufacture' => $product->manufacturer,
+								'%catalog_no' => $product->catalog_no
+							));
+							?>
+						</h3>
+						<div>
+						<span class="type">
+						<?php
+							$types = [
+								'chem_reagent' => '化学试剂',
+								'bio_reagent' => '生物试剂',
+								'consumable' => '耗材'
+							];
+							echo $types[$product->type];
+						?>
+						</span>
+						</div>
+					</div>
+					<div class="hr_2"></div>
+					<div>
+					<?php
+						if ($product->status == Product_Model::STATUS_PENDING) {
+							$links = '<a class="button button_tick" q-static="id='.$product->id.'" q-event="click" q-object="approve" href="'.URI::url('!admin/product/products').'" >通过</a> <a class="button button_delete" q-static="id='.$product->id.'" q-event="click" q-object="unapprove" href="'.URI::url('!admin/product/products').'" >拒绝</a>';
+							echo $links;
+						}
+					?>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="hr_2"></div>
+	<?php echo $secondary_tabs ?>
+	<?php echo $secondary_tabs->content ?>
+</div>

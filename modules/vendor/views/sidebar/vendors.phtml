@@ -1,0 +1,24 @@
+<?php if (!$vendor_type) $vendor_type = Config::get('mall.home_default_tab');?>
+<?php $scope_name = 'product_type.'. $vendor_type;?>
+<div class="sidebar_item vendor_item ">
+	<div class="title">
+		<div class="float_right"><?php echo URI::anchor(URI::url('!mall/home/index.vendor', array('order_by' => 'rating')), T('更多 &#187;'), 'class="blue"'); ?></div>
+		<?php echo T('最佳供应商')?>
+	</div>
+	<div class="content vendor_content">
+		<table class="vendor_list middle">
+			<?php 
+				$vendors = Q("vendor_scope[name={$scope_name}][expire_date] vendor[approve_date]:limit(5)");
+				foreach ($vendors as $vid => $vendor):
+			?>
+				<tr class="<?php echo $class?>">
+					<td class="nowrap middle"><?php echo $vendor->icon('32'); ?></td>
+					<td class="left center">
+						<a class="middle" href="<?php echo $vendor->url(); ?>"><?php echo H($vendor->name); ?></a>
+					</td>
+					<td class="middle center nowrap link"><?php //echo T('查看更多 &#187;')?></td>
+				</tr>
+			<?php endforeach; ?>
+		</table>
+	</div>
+</div>

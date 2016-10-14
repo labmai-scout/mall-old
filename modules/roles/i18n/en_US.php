@@ -1,0 +1,36 @@
+<?php
+
+$lang['权限管理'] = 'Roles';
+$lang['请选择所属分组'] = 'Please select corresponding roles for this user:';
+$lang['所属分组'] = 'Roles';
+$lang['暂无分组信息。'] = 'No roles assigned';
+$lang['权限设置'] = 'Permissions';
+$lang['角色设置'] = 'Roles';
+$lang['角色 %name 删除成功!'] = 'The role %name" was deleted."';
+$lang['相关权限设置保存成功！'] = 'Permission setting saved!';
+$lang['您没有做任何修改!'] = 'No change made.';
+$lang['角色添加成功！'] = 'Added successfully!';
+$lang['新建角色'] = 'Add a New Role';
+$lang['修改权限'] = 'Edit Permissions';
+$lang['你确定要删除吗？请谨慎操作！'] = 'Are you sure to delete this item? Please proceed with caution!';
+$lang['删除'] = 'Delete';
+$lang['权限名称'] = 'Permissions';
+$lang['保存'] = 'Save';
+$lang['管理分组'] = 'Edit Roles';
+$lang['%role_name的权限设置'] = '%role_name\'s permissions';
+$lang['结算管理员'] = 'Account Admin';
+$lang['文件管理员'] = 'File system Admin';
+$lang['超级管理员'] = 'System Administrator';
+$lang['组织机构负责人'] = 'Group Admin';
+$lang['仪器管理员'] = 'Equipment Admin';
+$lang['实验室管理员'] = 'Site Manager';
+$lang['仪器送样管理员'] = 'Sample Processing Admin';
+$lang['经费管理员'] = 'Grant Admin';
+$lang['订单管理员'] = 'Order Manager';
+$lang['技术员'] = 'Technician';
+$lang['%name权限设置'] = '%name permission setting';
+$lang['角色修改成功！'] = 'Role modified!';
+$lang['目前成员'] = 'Current Members';
+$lang['过期成员'] = 'Past Members';
+$lang['访客'] = 'Visitors';
+$lang['未激活成员'] = 'Inactive Members';

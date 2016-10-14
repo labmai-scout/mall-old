@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C/DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title><?php echo HT('订单列表'); ?></title>
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+	<link type="text/css" rel="stylesheet" href="<?php echo URI::url('css', array('f'=>'core'))?>" />
+	<style>
+	a {
+		color:blue;
+		text-decoration:underline;
+	}
+	table.report {
+		
+		font-size: 14px;
+		margin:auto;
+	}
+	
+	thead{
+		border-top:2px solid  #000;
+		border-bottom:1px solid #000;
+	}
+	
+	tbody{
+		border-bottom:2px solid #000;
+	}
+	
+	thead#stat{
+		font-size: 10px;
+		border:none;
+	}
+	
+	table.report caption {
+		font-size: 150%;
+		margin-bottom: 10px;
+	}
+
+	table.report tbody td {
+		vertical-align: top;
+		border-bottom: 1px dotted #CCC;
+	}
+	table.report .referred_charge {
+		background-color: #eee;
+		border:1px dotted #CCC;
+	}
+	li {
+		list-style-type: none;
+	}
+	</style>
+	<style media="print">
+	.buttons{
+		display:none;
+	}
+	</style>
+</head>
+<body>
+	<div class="buttons">
+		<a href="#" onclick="window.print(); return false;"><?php echo HT('打印'); ?></a>
+	</div>
+	<table class="report" cellpadding="5" cellspacing="5" style="border-collapse:collapse;">
+	<caption><?php echo HT('订单列表'); ?></caption>
+	<thead id="stat">
+		<tr>
+		<td colspan="8">
+		<?php echo HT('时间范围:'); ?>
+		&#160;
+		<?php 
+			$dtstart = $from ? date('Y-m-d H:i:s', $from) : HT('最初');
+			$dtend = $to ? date('Y-m-d H:i:s', $to) : HT('最末');
+			echo $dtstart . ' ～ ' . $dtend;
+		 ?>
+		</td>
+		</tr>
+	</thead>
+	<thead>
+		<tr>
+		<td class="left nowrap"><?php echo HT('订单编号'); ?></td>
+		<td class="left nowrap"><?php echo HT('商品'); ?></td>
+		<td class="left nowrap"><?php echo HT('买方'); ?></td>
+		<td class="left nowrap"><?php echo HT('金额'); ?></td>
+		<td class="left nowrap"><?php echo HT('状态'); ?></td>
+		</tr>
+	</thead>
+	<tbody>
+        <?php foreach($orders as $order): ?>
+        <?php $inquiry = false;?>
+		<?php $order = O('order', $order->id); ?>	
+		<tr>
+		<td class="left nowrap"><?php echo H($order->order_no); ?></td>
+		<td class="left nowrap">
+			<?php 
+			$items = Q("order_item[order=$order]");
+			
+            foreach ($items as $item) { ?>
+            <?php $inquiry = $inquiry ?: ($item->unit_price<0 ? true : false); ?>
+			<?php $product = $item->product; ?>
+			<li>	
+				<span><?php echo H($product->name); ?></span>
+				<span>×</span>
+				<span><?php echo intval($item->quantity); ?></span>
+			</li>
+			<?php }?>
+		</td>
+		<td class="left nowrap"><?php echo HT($order->customer->name); ?></td>
+		<td class="left nowrap"><?php echo $inquiry ? HT('待询价') : Number::currency($order->price); ?></td>
+		<td class="left nowrap"><?php echo Order_Model::$status[$order->status]?></td>
+		</tr>
+		<?php endforeach;?>
+	</tbody>
+	</table>
+</body>
+</html>

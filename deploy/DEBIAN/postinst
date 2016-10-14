@@ -1,0 +1,134 @@
+#!/bin/bash
+
+configure_lighttpd() {
+    echo "Configuring... lighttpd"
+    lighty-enable-mod redirect rewrite magnet setenv fastcgi genee
+}
+
+configure_mall_daemon() {
+    echo "Configuring... mall daemon"
+
+    daemon_conf="/etc/mall/daemon.conf"
+    chown root:root $daemon_conf
+	
+	chmod -R g-w "/usr/share/mall/cli"
+
+    update-rc.d mall_daemon defaults
+}
+
+configure_cron() {
+    echo "Configuring... cron"
+
+    mall_cron="/etc/cron.d/mall"
+
+    # 由于 cron 配置中可写任意用户的 crontab,
+    # 所以文件必须 owned by root:root(否则会报错 WRONG FILE OWNER)
+    chown root:root $mall_cron
+	chmod 600 $mall_cron
+
+    mall_global_cron="/etc/cron.d/mall_global"
+
+    # 由于 cron 配置中可写任意用户的 crontab,
+    # 所以文件必须 owned by root:root(否则会报错 WRONG FILE OWNER)
+    chown root:root $mall_global_cron
+	chmod 600 $mall_global_cron
+
+
+}
+
+
+run_upgrade_scripts() {
+
+    upgrade_script_dir="/usr/share/mall/cli/upgrade/%BASE_VERSION%"
+
+    if [[ -d "$upgrade_script_dir" ]]; then
+        while read SITE_ID ; do
+            echo -n "==== excuting upgrade scripts under $upgrade_script_dir "
+
+            upgrade_scripts=$( find "$upgrade_script_dir/" -type f -name "*.php" | sort -n )
+            for upgrade_script in $upgrade_scripts; do
+                echo "=== $SITE_ID  $upgrade_script"
+                sudo -u www-data bash -c "SITE_ID=$SITE_ID  php $upgrade_script"
+            done
+
+            echo "=== $SITE_ID 更新数据库表结构"
+            sudo -u www-data bash -c "SITE_ID=$SITE_ID  php create_orm_tables.php"
+        done < $projlist
+    fi
+}
+
+configure_sphinx() {
+
+	# data
+    sphinx_data="/var/lib/sphinxsearch/data/"
+
+    mkdir -p $sphinx_data
+    chown -R sphinxsearch:sphinxsearch $sphinx_data
+
+    # 若索引有区别, 则重启 sphinx 后会造成服务失效, 所以不重启,
+    # 并提示需要重建索引
+    alert_echo '[ALERT] sphinx conf diffs! need to rebuild the indexes!'
+    # else 若索引无区别, 则不用重启 sphinx
+
+}
+
+alert_echo() {
+    # $@ 为参数
+    echo -e "\033[0;31m$@\033[0m"
+}
+
+# change owner and perms
+# TODO owner and group are always wrong maybe should use fakeroot(xiaopei.li@2011-12-16)
+# TODO /var/lib/mall 中 own 可能不对, 且可能还无 log/private,
+#   需想清目录和权限(xiaopei.li@2011-12-16)
+chown -R www-data:www-data /usr/share/mall /var/lib/mall /var/cache/mall
+chmod -R ug+x /usr/share/mall/cli
+
+projlist=/etc/mall/proj_list
+chown www-data:www-data $projlist
+
+while read SITE_ID ; do
+    # init db
+    # create database if not exists
+    mysql -u genee -e "CREATE DATABASE IF NOT EXISTS mall_$SITE_ID DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci"
+done < $projlist
+
+# start memcached
+service memcached restart
+configure_sphinx
+service sphinxsearch restart
+
+# upgrade db (excute some upgrade scripts)
+run_upgrade_scripts
+
+# start servers
+# configure_mall_daemon
+# service mall_daemon restart
+service php5-fpm restart
+# configure_lighttpd
+# service lighttpd restart
+service nginx restart
+# service xinetd restart
+# TODO 现在更新 mall 时, 会覆盖 lighttpd, xinetd 等配置文件, 造成配置丢失
+# 处理方法如下:
+# 1. 配置文件也应备份
+# 2. postinst中把配置文件
+#    保存在别的地方, 以防被更新
+# (xiaopei.li@2011-12-09)
+
+configure_cron
+
+
+
+# TODO 开通文件系统(需知道 mall 的 nfs root 配置,
+# 是否需要再一个 mall 初始化的 php 脚本)
+# (xiaopei.li@2011-12-09)
+if [[ ! -d "%NFS_ROOT%" ]]; then
+    mkdir -p "%NFS_ROOT%"
+fi
+
+if [[ -d "%NFS_ROOT%" ]]; then
+    chown -R www-data:www-data "%NFS_ROOT%"
+fi
+
+exit 0

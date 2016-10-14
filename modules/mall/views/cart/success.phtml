@@ -1,0 +1,27 @@
+<div class="center margin_2">
+<?php
+$links = array();
+
+foreach ($order_ids as $order_id) {
+	$order = O('order', $order_id);
+	if ($order->id) {
+		$links[] = URI::anchor($order->url(NULL, NULL, NULL, 'view'), HT('订单 #%order_no', array('%order_no'=>$order->order_no)), 'target="_blank" class="blue"');
+	}
+}
+
+if ($links):
+?>
+<h1>
+<?php
+	echo HT('以下订单已提交, 点击订单编号可查看详细信息: ');
+?>
+</h1>
+<p>
+<?php
+	echo join(', ', $links);
+?>
+</p>
+<?php
+endif;
+?>
+</div>

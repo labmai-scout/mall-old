@@ -1,0 +1,25 @@
+<?php 
+$vendors = Q("vendor_scope[name=product_type.reagent][expire_date>0] vendor:limit(6)"); 
+?>
+<div class="vendor_list left_sidebar_item">
+<h3><?php echo HT('试剂供应商'); ?></h3>
+<div class="padding_1">
+<ul class="root">
+<?php
+	$i = 1;
+	$n_show = 5; // 只显示 5 个
+	foreach ($vendors as $vendor) {
+?>
+	<li>
+		<a href="<?php echo $vendor->url(); ?>"><?php echo H($vendor->get_display_name()); ?></a>
+	</li>
+	<?php
+		if (++$i > $n_show) break;
+	}
+?>
+</ul>
+</div>
+<div class="right padding_1">
+<a class="blue" href="<?php echo URI::url('!mall/vendor', 'type=reagent'); ?>"><?php echo HT('查看全部'); ?> &#187;</a>
+</div>
+</div>

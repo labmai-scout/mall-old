@@ -1,0 +1,28 @@
+#!/bin/sh
+# prerm script for mall
+
+# big backup
+# /etc/mall/backup -a
+
+# TODO 增加删除前运行脚本的点(xiaopei.li@2011-12-18)
+
+
+service lighttpd stop
+service nginx stop
+service php5-fpm stop
+service memcached stop
+service sphinxsearch stop
+
+killall php
+
+rm -rf /var/cache/mall/*
+
+#-------------------------------------------------------------------------------
+#   备份所有内容 big backup
+#-------------------------------------------------------------------------------
+echo "=== prerm backup... $(date)"
+/etc/mall/backup
+echo "=== prerm done... $(date)"
+
+
+exit 0

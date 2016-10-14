@@ -1,0 +1,26 @@
+<div class="form clearfix cart" style="padding:0 10px 10px 10px">
+	<?php echo V('form_error', array('form'=>$form));?>
+	<form method="post"
+	autocomplete="off"
+	q-object="cart_add"
+	q-event="submit"
+	q-src="<?php echo URI::url('!mall/cart')?>"
+	q-static="<?php echo H(array('id'=>$product->id))?>">
+		<table class="form flexible">
+			<tr>
+				<td class="label left nowrap">
+					<span><?php echo T('数量')?></span>
+					<input type="text"
+						name="quantity"
+						value="1"
+						class="text number" size="8" />
+				</td>
+			</tr>
+			<tr>
+				<td class="rpadding_1">
+					<input type="submit" name="submit" value="<?php echo HT(确认)?>" class="button button_add float_right"/>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>

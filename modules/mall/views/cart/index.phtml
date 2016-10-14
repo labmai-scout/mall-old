@@ -1,0 +1,221 @@
+<div class="hr_2">&#160;</div>
+<div class="home_item">
+	<div class="title"><?php echo HT('%user的购物车', array('%user' => $user->name)); ?></div>
+	<div class="content">
+		<table class="cart_view">
+			<tbody>
+				<tr>
+					<td class="cart_icon nowrap top">
+						<img class="middle" src="images/mall/cart.png" />
+					</td>
+					<td style="width: 100%">
+						<?php
+							$cart = Cart_Model::user_cart($user);
+							$cart_items = Q("cart_item[cart=$cart]");
+
+							if ($cart_items->total_count() == 0) {
+								echo '<h3 class="description">'.T('您的购物车里还没有商品, 请 %clickhere 进行选购!', array('%clickhere'=>URI::anchor('!mall', T('回到首页'), 'class="blue"'))).'</h3>';
+							}
+							else {
+						?>
+							<div class="actions right padding_1">
+								<a class="button button_tick" href="<?php echo URI::url('!mall/cart/checkout')?>"><?php echo HT('生成订单') ?></a>
+								<a class="button button_delete" q-object="empty_cart" q-event="click"><?php echo HT('清空') ?></a>
+							</div>
+							<?php
+
+								$table = Widget::factory('table');
+								$table->name = 'cart_items';
+
+								$table->add_columns(
+									array(
+										'icon' => array(
+											'extra_class'=>'tight'
+											),
+										'product' => array(
+											'title' => T('商品'),
+											// 'nowrap' => TRUE,
+											'align' => 'left',
+											),
+										'unit_price' => array(
+											'title' => T('单价'),
+											'nowrap' => TRUE,
+											'align' => 'center',
+											),
+										'quantity' => array(
+											'title' => T('数量'),
+											'nowrap' => TRUE,
+											'align' => 'center',
+											),
+										'auto_price' => array(
+											'title' => T('金额小计'),
+											'nowrap' => TRUE,
+											'align' => 'right',
+											),
+										'rest' => array(
+											'nowrap' => TRUE,
+											'align' => 'right',
+											),
+										));
+
+								$table->empty_message = T('您的购物车还没有商品, 请选购');
+
+								$last_vendor_id=0;
+
+								$has_inquiry = FALSE;
+								foreach($cart_items as $item) {
+									$product = $item->product;
+									$vendor = $product->vendor;
+									if ($vendor->id != $last_vendor_id) {
+										$table->add_row(array(
+												'#special_view' => V('mall:cart/table/data/vendor', array('vendor'=>$vendor)),
+												'#extra_class' => 'vendor_row',
+											));
+										$last_vendor_id = $vendor->id;
+									}
+
+									$links = $item->links();
+									$item_price  = $product->get_price(NULL, $item->quantity);
+									if ($item_price < 0) {
+										$has_inquiry = TRUE;
+									}
+
+									$table->add_row(array(
+										 'icon' => array(
+											 'view' => $product->icon(48, 'style="display:block"'),
+											 'extra' => 'style="padding:.3em;"',
+											 ),
+										 'product' => V('mall:cart/table/data/product', array(
+										 		'product' => $product,
+										 		'version' => $item->version
+										 	)),
+										 'unit_price' => V('application:common/price', array('price'=>$product->unit_price,
+                                         'market_price'=>$product->market_price)),
+										 'quantity' => V('mall:cart/table/data/quantity', array('item' => $item)),
+										 'auto_price' => V('application:common/price', array('price'=>$item_price)),
+										 'rest' => Widget::factory('application:links', array('links'=>$links)),
+										 ));
+								}
+
+								$table->add_row(array(
+										'#special_view' => V('mall:cart/summary_row', array('cart' => $cart, 'has_inquiry' => $has_inquiry)),
+										'#extra_class' => 'summary_row',
+									));
+
+								echo $table;
+						} ?>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<?php /*?>
+<div id="cart_view" class="clearfix">
+	<div class="cart_icon">
+		<img class="middle" src="images/mall/cart.png" />
+	</div>
+	<div class="cart_content">
+	<h2>
+		<?php echo HT('%user的购物车', array('%user' => $user->name)); ?>
+	</h2>
+	<div class="hr_1">&#160;</div>
+	<?php
+
+	$cart = Cart_Model::user_cart($user);
+	$cart_items = Q("cart_item[cart=$cart]");
+
+	if ($cart_items->total_count() == 0) {
+		echo '<h3 class="description">'.T('您的购物车里还没有商品, 请 %clickhere 进行选购!', array('%clickhere'=>URI::anchor('!mall', T('回到首页'), 'class="blue"'))).'</h3>';
+	}
+	else {
+	?>
+	<div class="actions right">
+		<a class="button button_tick" href="<?php echo URI::url('!mall/cart/checkout')?>"><?php echo HT('生成订单') ?></a>
+		<a class="button button_delete" q-object="empty_cart" q-event="click"><?php echo HT('清空') ?></a>
+	</div>
+	<?php
+
+	$table = Widget::factory('table');
+	$table->name = 'cart_items';
+
+	$table->add_columns(
+		array(
+			'icon' => array(
+				'extra_class'=>'tight'
+				),
+			'product' => array(
+				'title' => T('商品'),
+				// 'nowrap' => TRUE,
+				'align' => 'left',
+				),
+			'unit_price' => array(
+				'title' => T('单价'),
+				'nowrap' => TRUE,
+				'align' => 'right',
+				),
+			'quantity' => array(
+				'title' => T('数量'),
+				'nowrap' => TRUE,
+				'align' => 'center',
+				),
+			'auto_price' => array(
+				'title' => T('金额小计'),
+				'nowrap' => TRUE,
+				'align' => 'right',
+				),
+			'rest' => array(
+				'nowrap' => TRUE,
+				'align' => 'right',
+				),
+			));
+
+	$table->empty_message = T('您的购物车还没有商品, 请选购');
+
+	$last_vendor_id=0;
+
+	$has_inquiry = FALSE;
+	foreach($cart_items as $item) {
+		$product = $item->product;
+		$vendor = $product->vendor;
+		if ($vendor->id != $last_vendor_id) {
+			$table->add_row(array(
+					'#special_view' => V('mall:cart/table/data/vendor', array('vendor'=>$vendor)),
+					'#extra_class' => 'vendor_row',
+				));
+			$last_vendor_id = $vendor->id;
+		}
+
+		$links = $item->links();
+		$item_price  = $product->get_price(NULL, $item->quantity);
+		if ($item_price < 0) {
+			$has_inquiry = TRUE;
+		}
+		$table->add_row(array(
+			 'icon' => array(
+				 'view' => $product->icon(48, 'style="display:block"'),
+				 'extra' => 'style="padding:.3em;"',
+				 ),
+			 'product' => V('mall:cart/table/data/product', array(
+			 		'product' => $product
+			 	)),
+			 'unit_price' => V('application:common/price', array('price'=>$product->unit_price)),
+			 'quantity' => V('mall:cart/table/data/quantity', array('item' => $item)),
+			 'auto_price' => V('application:common/price', array('price'=>$item_price)),
+			 'rest' => Widget::factory('application:links', array('links'=>$links)),
+			 ));
+	}
+
+	$table->add_row(array(
+			'#special_view' => V('mall:cart/summary_row', array('cart' => $cart, 'has_inquiry' => $has_inquiry)),
+			'#extra_class' => 'summary_row',
+		));
+
+	echo $table;
+	?>
+	</div>
+</div>
+<?php
+} */?>
+
+

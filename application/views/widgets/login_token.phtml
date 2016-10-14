@@ -1,0 +1,21 @@
+<?php 
+if (!$backend_titles) {
+	$backends = Config::get('auth.backends');
+	$backend_titles = array();
+	foreach ($backends as $key=>$values) {
+		$backend_titles[$key] = $values['title'];
+	}
+}
+$default_backend = $this->default_backend ?: Config::get('auth.default_backend');
+$name = $this->name ?: 'token';
+$size = $this->size ?: 40;
+?>
+<input name="<?php echo H($name) ?>"
+	 class="text middle <?php echo $extra_class?>" 
+	size="<?php echo H($size) ?>" value="<?php echo H($this->token) ?>" <?php echo $extra?> />
+<?php if (count($backends) > 1): ?>
+<span class="separator middle">@</span>
+<?php echo Form::dropdown($name.'_backend', $backend_titles, $this->backend?:$default_backend, 'class="dropdown middle"'); ?>
+<?php else: ?>
+<?php echo Form::hidden($name.'_backend', $this->backend ?: $default_backend); ?>
+<?php endif;

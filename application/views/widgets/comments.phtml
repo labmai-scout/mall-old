@@ -1,0 +1,43 @@
+<?php
+$list_id = 'comment_'.uniqid();
+$max_length = Config::get('comment.max_length', 450);
+$form_id = 'comment_form_'. uniqid();
+?>
+<script type="text/javascript">
+Q.comment_max_length = <?php echo $max_length?>;
+</script>
+
+<?php echo JS::load_async('comment');?>
+<div class="comments <?php echo $this->extra_class?>">
+<?php if ($object->id && L('ME')->is_allowed_to('发表评论', $object)): ?>
+<div class="form padding_1 comment_form">
+<form q-widget="comments" q-object="form" q-event="submit" id="<?php echo $form_id;?>">
+<?php 
+echo Form::hidden('oname', $object->name());
+echo Form::hidden('oid', $object->id);
+echo Form::hidden('list_id', $list_id);
+echo Form::hidden('max_length', $max_length);
+echo Form::hidden('form_id', $form_id);
+foreach ((array)$this->at_users as $user) {
+	if (!$user->id) continue;
+	echo Form::hidden('at_user[]', $user->id);
+}
+?>
+	<table width="100%">
+	<tr>
+		<td class="top">
+			<small class="left"><?php echo T('您还可以输入 %num 字', array('%num'=>V('application:widgets/comments/max_length', array('max_length'=> $max_length))))?></small>
+			<textarea name="content" class="autogrow at comment" rows="1" style="overflow:hidden;height:16px" q-at_autocomplete="<?php echo URI::url('at')?>"></textarea>
+		</td>
+		<td class="bottom" width="100%">
+			<input type="submit" name="submit" class="button button_edit" value="<?php echo HT('评论')?>" />
+		</td>
+	</tr>
+	</table>
+</form>
+</div>
+<?php endif;?>
+<div id="<?php echo $list_id?>">
+	<?php echo V('application:widgets/comments/list', array('object'=>$object, 'list_id'=>$list_id))?>
+</div>
+</div>

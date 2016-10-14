@@ -1,0 +1,94 @@
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title><?= Config::get('page.title_default') ?></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+    <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+</head>
+<body>
+    <header class="bar bar-nav">
+      <h1 class="title"><?php echo HT('结算单 #%ref_no', array('%ref_no'=>Number::fill($statement->id, 6))); ?></h1>
+    </header>
+    <div class="content">
+      <div class="content-block-title"><?= HT('结算单位') ?></div>
+      <div class="list-block">
+        <ul>
+          <li class="item-content">
+            <div class="item-media"><i class="icon icon-f7"></i></div>
+            <div class="item-inner">
+              <div class="item-title"><?= HT('供应商') ?></div>
+              <div class="item-after"><?php echo H($vendor->name); ?></div>
+            </div>
+          </li>
+          <li class="item-content">
+            <div class="item-media"><i class="icon icon-f7"></i></div>
+            <div class="item-inner">
+              <div class="item-title"><?= HT('开户行') ?></div>
+              <div class="item-after"><?php echo $vendor->bank_name; ?></div>
+            </div>
+          </li>
+          <li class="item-content">
+            <div class="item-media"><i class="icon icon-f7"></i></div>
+            <div class="item-inner">
+              <div class="item-title"><?= HT('开户行账号') ?></div>
+              <div class="item-after"><?php echo $vendor->bank_account; ?></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="content-block-title"><?= HT('结算信息') ?></div>
+      <div class="list-block">
+        <ul>
+          <li class="item-content">
+            <div class="item-inner">
+              <div class="item-title"><?= HT('状态') ?></div>
+              <div class="item-after"><?php echo Billing_Statement_Model::$status[$statement->status]; ?></div>
+            </div>
+          </li>
+          <li class="item-content">
+            <div class="item-inner">
+              <div class="item-title"><?= HT('结算时间') ?></div>
+              <div class="item-after"><?php echo Date::format($statement->ctime); ?></div>
+            </div>
+          </li>
+          <li class="item-content">
+            <div class="item-inner">
+              <div class="item-title"><?= HT('结算金额') ?></div>
+              <div class="item-after"><?php echo Number::currency($statement->balance); ?></div>
+            </div>
+          </li>
+          <li class="item-content">
+            <div class="item-inner">
+              <div class="item-title"><?= HT('相关付款单') ?></div>
+              <div class="item-after"><?php echo $statement->payment_voucher ?:'--'; ?></div>
+            </div>
+          </li>
+          <li class="item-content">
+            <div class="item-inner">
+              <div class="item-title"><?= HT('凭证单号') ?></div>
+              <div class="item-after"><?php echo $statement->voucher_no ?:'--'; ?></div>
+            </div>
+          </li>
+          <?php if ($statement->payment_voucher) { ?>
+          <li class="item-content">
+            <div class="item-inner">
+              <div class="item-title"><?= HT('相关经费') ?></div>
+              <div class="item-after">
+                <?php
+                    $voucher = $statement->payment_voucher;
+                    $transfer_statement = O('transfer_statement', ['voucher'=>$voucher]);
+                    echo H($transfer_statement->grant_no);
+                ?>
+              </div>
+            </div>
+          </li>
+          <?php } ?>
+        </ul>
+      </div>
+    </div>
+</body>

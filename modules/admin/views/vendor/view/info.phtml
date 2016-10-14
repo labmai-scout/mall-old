@@ -1,0 +1,187 @@
+<div class="padding_1">
+<?=V('admin:vendor/info/base', ['vendor'=> $vendor])?>
+<?=V('admin:vendor/info/business', ['vendor'=> $vendor])?>
+<?=V('admin:vendor/info/cert', ['vendor'=> $vendor])?>
+
+<div class="padding_2">
+<h2><?=H('申请的销售类别')?></h2>
+<?php foreach ($scopes as $key=>$scope) {?>
+    <?php if (!empty($scope['valid_period'])) {?>
+        <span class="status_tag status_tag_lable">
+            <?=H($scope['title'])?>
+            (<?=H(date('Y-m-d', strtotime($scope['valid_period'][0])))?> ~ <?=H(date('Y-m-d', strtotime($scope['valid_period'][1])))?>)
+        </span>
+    <?php } else { ?>
+        <span class="status_tag status_tag_lable">
+            <?=H($scope['title'])?>
+            (<?=H('待审核')?>)
+        </span>
+    <?php }?>
+<?php }?>
+</div>
+
+<?php if ($allowApprove) {?>
+<div class="padding_2">
+<input type="button" class="button button_save" value="<?php echo T('审核')?>"
+    q-object='approve'
+    q-event='click'
+    q-static="<?php echo H(['id'=>$vendor->id])?>" />
+</div>
+<?php }?>
+
+<?php /*
+	<table class="form vendor_info">
+		<tr>
+			<td class="tight nowrap top"><span class="status_tag status_tag_label"><?php echo HT('公司名称')?></span></td>
+			<td class="left top" colspan="3">
+				<?php echo H($vendor->name) ?>
+				<?php if ($vendor->short_name): ?>
+					<p>
+					<?php echo HT('简称: ').H($vendor->short_name); ?></p>
+				<?php endif; ?>
+				<?php if ($vendor->alt_name): ?>
+					<p>
+					<?php echo HT('曾用名: ').H($vendor->alt_name); ?></p>
+				<?php endif; ?>
+			</td>
+		</tr>
+		<tr>
+			<td class="tight nowrap"><span class="status_tag status_tag_label"><?php echo HT('法人') ?></span></td>
+			<td class="left"><?php echo H($vendor->owner_name)?></td>
+		</tr>
+		<tr>
+			<td class="tight nowrap"><span class="status_tag status_tag_label"><?php echo HT('总经理') ?></span></td>
+			<td class="left nowrap" style="padding-right:2em"><?php echo H($vendor->manager_name)?><?php if ($vendor->manager_phone) : ?> (TEL: <?php echo H($vendor->manager_phone)?>)<?php endif; ?></td>
+			<td style="width:150px"></td>
+			<td class="tight nowrap"><span class="status_tag status_tag_label"><?php echo HT('联系人') ?></span></td>
+			<td class="left nowrap"><?php echo H($vendor->contact_name)?><?php if ($vendor->contact_phone) : ?> (TEL: <?php echo H($vendor->contact_phone)?>)<?php endif; ?></td>
+		</tr>
+		<tr>
+			<td class="tight nowrap"><span class="status_tag status_tag_label"><?php echo HT('开户行账号') ?></span></td>
+			<td class="left nowrap" colspan="3"><?php echo H($vendor->bank_name)?> <?php echo H($vendor->bank_account)?></td>
+		</tr>
+		<tr>
+			<td class="tight nowrap"><span class="status_tag status_tag_label"><?php echo HT('开户行省份') ?></span></td>
+			<td class="left nowrap" colspan="3"><?php echo H($vendor->province)?> </td>
+		</tr>
+		<tr>
+			<td class="tight nowrap"><span class="status_tag status_tag_label"><?php echo HT('开户行城市') ?></span></td>
+			<td class="left nowrap" colspan="3"><?php echo H($vendor->city)?> </td>
+		</tr>
+		<tr>
+			<td class="tight nowrap top">
+				<span class="status_tag status_tag_label"><?php echo HT('经营范围')?></span>
+			</td>
+			<td class="left" colspan="3">
+				<?php echo H($vendor->scope)?>
+			</td>
+		</tr>
+		<tr>
+			<td class="tight nowrap top">
+				<span class="status_tag status_tag_label"><?php echo HT('经营商品类别')?></span>
+			</td>
+			<td class="left" colspan="3">
+				<ul class="vendor_scopes">
+					<?php
+						$types = Product_Model::get_types();
+						$available_types = $types; // TODO 筛选当前 vendor 可添加的 type(xiaopei.li@2012-03-08)
+						foreach($available_types as $type => $label) :
+							$scope_name = 'product_type.'.$type;
+							$scope = O("vendor_scope", array('vendor'=>$vendor, 'name'=>$scope_name));
+							if ($scope->id && $scope->expire_date > 0):
+						?>
+						<div>
+							<span><?php echo HT($label); ?></span>
+							<span><?php echo HT('%from_date 至 %expire_date', array(
+								'%expire_date' => Date::format($scope->expire_date, 'Y/m/d'),
+								'%from_date' => Date::format($scope->expire_date_from, 'Y/m/d')
+							)); ?></span>
+						</div>
+						<?php
+							 $sub_scope = Event::trigger("vendor.view.sub_scope.{$type}", $vendor);
+							 if ($sub_scope): ?>
+								<div class="quote">
+									<?php echo $sub_scope; ?>
+								</div>
+						<?php endif ?>
+					<?php
+							endif;
+						 endforeach;
+					 ?>
+				</ul>
+			</td>
+		</tr>
+		<tr><td class="hr_2" colspan="4">&#160;</td></tr>
+		<tr>
+			<td class="tight nowrap"><span class="status_tag status_tag_label"><?php echo HT('公司电话') ?></span></td>
+			<td class="left"><?php echo H($vendor->phone)?></td>
+			<td></td>
+			<td class="tight nowrap"><span class="status_tag status_tag_label"><?php echo HT('公司传真') ?></span></td>
+			<td class="left"><?php echo H($vendor->fax)?></td>
+		</tr>
+		<tr>
+			<td class="tight nowrap"><span class="status_tag status_tag_label"><?php echo HT('公司邮箱') ?></span></td>
+			<td class="left" colspan="3"><?php echo H($vendor->email)?></td>
+		</tr>
+		<tr>
+			<td class="tight nowrap"><span class="status_tag status_tag_label"><?php echo HT('公司网址') ?></span></td>
+			<td class="left" colspan="3"><?php echo H($vendor->homepage)?></td>
+		</tr>
+		<tr>
+			<td class="tight nowrap top"><span class="status_tag status_tag_label"><?php echo HT('公司地址') ?></span></td>
+			<td class="left top" colspan="3">
+				<?php echo H($vendor->address, TRUE)?>
+			</td>
+		</tr>
+		<tr>
+			<td class="tight nowrap"><span class="status_tag status_tag_label"><?php echo HT('邮政编码') ?></span></td>
+			<td class="left"><?php echo H($vendor->postcode)?></td>
+		</tr>
+		<tr><td class="hr_2" colspan="4">&#160;</td></tr>
+		<tr>
+			<td class="tight nowrap"><span class="status_tag status_tag_label"><?php echo HT('营业执照注册号') ?></span></td>
+			<td class="left" colspan="3"><?php echo H($vendor->license_no)?></td>
+		</tr>
+		<tr>
+			<td class="tight nowrap"><span class="status_tag status_tag_label"><?php echo HT('执照年检日期') ?></span></td>
+			<td class="left"><?php echo $vendor->license_valid_date ? Date::format($vendor->license_valid_date, 'Y/m/d') : '' ?></td>
+			<td></td>
+			<td class="tight nowrap"><span class="status_tag status_tag_label"><?php echo HT('上次年检日期') ?></span></td>
+			<td class="left"><?php echo $vendor->license_last_valid_date ? Date::format($vendor->license_last_valid_date, 'Y/m/d') : '' ?></td>
+		</tr>
+		<tr>
+			<td class="tight nowrap"><span class="status_tag status_tag_label"><?php echo HT('公司成立日期') ?></span></td>
+			<td class="left"><?php echo $vendor->establish_date ? Date::format($vendor->establish_date, 'Y/m/d') : '' ?></td>
+			<td></td>
+			<td class="tight nowrap"><span class="status_tag status_tag_label"><?php echo HT('公司经营期限至') ?></span></td>
+			<td class="left"><?php echo $vendor->operation_due ? Date::format($vendor->operation_due, 'Y/m/d') : '' ?></td>
+		</tr>
+		<tr>
+			<td class="tight nowrap"><span class="status_tag status_tag_label"><?php echo HT('注册资金') ?></span></td>
+			<td class="left"><?php echo Number::currency($vendor->capital * 10000)?></td>
+			<td></td>
+			<td class="tight nowrap"><span class="status_tag status_tag_label"><?php echo HT('员工人数') ?></span></td>
+			<td class="left">
+			<?php
+				$options = Vendor_Model::$nemployees_options;
+				echo HT($options[$vendor->nemployees]);
+			?>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4" class="hr_2">&#160;</td>
+		</tr>
+		<tr>
+			<td class="tight nowrap top">
+				<span class="status_tag status_tag_label"><?php echo HT('备注')?></span>
+			</td>
+			<td class="left" colspan="3">
+				<?php echo H($vendor->note)?>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4" class="hr_2">&#160;</td>
+		</tr>
+        </table>
+*/?>
+</div>

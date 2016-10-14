@@ -1,0 +1,34 @@
+<?php
+$root_id = $root->root->id ? $root->root->id : $root->id;
+if ($category->root->id != $root_id) {
+	$category = $root;
+}
+
+$uniqid = 'category_selector_'.uniqid();
+$name = $this->name ?: 'category_id';
+
+echo JS::load_async('application:widgets/category_selector');
+$opt = array(
+	'uniqid' => $uniqid,
+	'root_id' => $root->id,
+	'url' => $ajax_url ?: URI::url('categories'),
+	'name' => $name,
+	'ajax' => $ajax
+);
+?>
+<div class="category_selector text_like <?php echo $this->class?> <?php echo $uniqid?>">
+<?php echo V('widgets/category_selector/container',array(
+			'category'=>$category,
+			'root'=>$root,
+			'root_name' =>$root_name,
+			'name'=>$name,
+			'uniqid' => $uniqid,
+	));
+?>
+</div>
+<script>
+Q.js_ready('application:widgets/category_selector', function(){
+	var opt = <?php echo JS::quote($opt) ?>;
+	jQuery('.' + opt.uniqid).categorySelector(opt);
+});
+</script>

@@ -1,0 +1,90 @@
+<?php
+	echo CSS::load_async('customer:gapper');
+	$form_errors = $form->errors;
+?>
+<link href="<?php echo Config::get('system.base_url') ?>font-awesome/css/font-awesome.css" rel="stylesheet">
+<div class="gapper_upgrade">
+<div class="process">
+	<div>
+		<div class="proce proce_ed proce_first float_left">&#160;</div>
+		<div class="node node_ing float_left">&#160;</div>
+		<div class="proce proce_will proce_normal float_left">&#160;</div>
+		<div class="node node_will float_left">&#160;</div>
+		<div class="proce proce_will proce_normal float_left">&#160;</div>
+		<div class="node node_will float_left">&#160;</div>
+		<div class="proce proce_will proce_last float_left">&#160;</div>
+	</div>
+	<div class="clearfix"></div>
+	<div class="announce">
+		<div class="float_left center announce-slim"><b><?= T('负责人开通')?></b></div>
+		<div class="float_left center announce-fat text-grey"><?= T('分组设置')?></div>
+		<div class="float_left center announce-slim text-grey"><?= T('完成')?></div>
+	</div>
+</div>
+<div class="clearfix"></div>
+<div class="float_left gapper_img">
+	<div style="margin:40px">
+		<img src="/images/gapper.png">
+	</div>
+</div>
+<div class="gapper_content">
+    <p class="title">
+		<?php echo T('升级账户')?>
+	</p>
+	<p class="notes">
+		<?php echo T('已有Gapper账户?') ?>&#160;
+		<a href="<?= URI::url('!customer/gapper/incharge_login', ['form_token'=>$form_token])?>" class="red" ><?= T('登录')?></a>
+	</p>
+	<div style="margin:40px">
+		<form action="<?php echo URI::url('!customer/gapper/incharge_upgrade',['form_token'=>$form_token]) ?>" method="POST">
+			<?php if(isset($form_errors['*'])) {?>
+			<div class="form-control text-danger-note">
+				<?php foreach ($form_errors['*'] as $error) { ?>
+					<p>
+						<small><?= $error?></small>
+					</p>
+				<?php }?>
+			</div>
+			<?php }?>
+
+            <?php if(isset($form_errors['name'])) {?>
+			<div class="text-danger">
+                <small><?= $form_errors['name'][0]?></small>
+            </div>
+        	<?php }?>
+			<div class="form-control">
+				<span class="input-group-addon">
+				<i class="fa fa-fw fa-user text-muted"></i>
+				</span>
+				<input type="password" class="hidden">
+				<input type="text" value="<?= trim($form['name'])?>" placeholder="<?= T('姓名') ?>" class="input-text <?= $form_errors['name'] ? 'has-error' : ''?>" name="name">
+			</div>
+			<?php if(isset($form_errors['email'])) {?>
+			<div class="text-danger">
+                <small><?= $form_errors['email'][0]?></small>
+            </div>
+        	<?php }?>
+			<div class="form-control">
+				<span class="input-group-addon">
+				<i class="fa fa-fw fa-envelope text-muted"></i>
+				</span>
+				<input type="text" value="<?= trim($form['email'])?>" placeholder="<?= T('电子邮箱') ?>" class="input-text <?= $form_errors['email'] ? 'has-error' : ''?>" name="email">
+			</div>
+			<?php if(isset($form_errors['password'])) {?>
+			<div class="text-danger">
+                <small><?= $form_errors['password'][0]?></small>
+            </div>
+        	<?php }?>
+			<div class="form-control">
+				<span class="input-group-addon">
+				<i class="fa fa-fw fa-lock text-muted"></i>
+				</span>
+				<input type="password" value="" placeholder="<?= T('密码') ?>" class="input-text <?= $form_errors['password'] ? 'has-error' : ''?>" name="password">
+			</div>
+			<div style="margin: 20px 80px;">
+				<input type="submit" value="<?php echo T('升级账户') ?>" class="upgrade_button" name="submit" />
+			</div>
+		</form>
+	</div>
+</div>
+</div>

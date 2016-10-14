@@ -1,0 +1,11 @@
+<?php
+$div_uniqid = 'div_refresh_'.uniqid();
+$form_token = Session::temp_token('nfs',3600);
+?>
+<div class="form padding_2">
+		<a class="build_button"> <?php echo I18N::T('nfs', '上传附件')?></a>
+		<span class="description"> 
+			<?php echo I18N::T('nfs', ' * 上传文件的最大尺寸是20M, 支持的文件格式有: doc, docx, pdf, html, txt, ppt, docx, rtf, xls, xlsx, zip, rar, jpg, jpeg, png, gif')?>
+		</span>
+		<div id="<?php echo $div_uniqid?>" src="<?php echo URI::url('!nfs/nfs/index.'.$object->name().'.'.$object->id.'.'.$path_type,['uniqid'=>$div_uniqid, 'form_token'=>$form_token])?>" >&#160;</div>
+</div>

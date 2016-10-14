@@ -1,0 +1,45 @@
+<table class="table table-condensed" style="margin-bottom: 0">
+	<tr>
+        <td class="text-muted nowrap packed text-right"><?= HT('生产商'); ?></td>
+        <td class="packed text-left"><?= H($product->manufacturer) ?></td>
+        <td class="text-muted nowrap packed text-right"><?= HT('货号'); ?></td>
+        <td class="packed text-left"><?= H($product->catalog_no) ?></td>
+    </tr>
+    <tr>
+        <td class="text-muted nowrap packed text-right"><?= HT('型号'); ?></td>
+        <td class="packed text-left"><?= H($product->model) ?></td>
+        <td class="text-muted nowrap packed text-right"><?= HT('规格'); ?></td>
+        <td class="packed text-left"><?= H($product->spec) ?></td>
+    </tr>
+    <tr>
+        <td class="text-muted nowrap packed text-right"><?= HT('品牌'); ?></td>
+        <td class="packed text-left"><?= H($product->brand) ?></td>
+        <td class="text-muted nowrap packed text-right"><?= HT('供货时间'); ?></td>
+        <td class="packed text-left"><?= HT('%supply_time 天', array('%supply_time'=>$product->supply_time)); ?></td>
+    </tr>
+    <tr>
+        <td class="text-muted nowrap packed text-right"><?= HT('包装'); ?></td>
+        <td class="packed text-left"><?= H($product->package) ?></td>
+        <td class="text-muted nowrap packed text-right"><?= HT('关键字'); ?></td>
+        <td class="packed text-left"><?= H(join(', ', (array)json_decode($product->keywords, TRUE))) ?></td>
+    </tr>
+    <tr>
+        <td class="text-muted nowrap packed text-right"><?= HT('产地'); ?></td>
+        <td class="packed text-left"><?= H($product->origin) ?></td>
+        <td class="text-muted nowrap packed text-right"><?= HT('销量'); ?></td>
+        <td class="nowrap packed text-left" colspan="3"><?= V('mall:vendor_product/table/data/sale_volume', array('product'=>$product));?></td>
+    </tr>
+</table>
+
+<br>
+<?php if ($product->description) { ?>
+<div class="alert alert-info">
+<?= H($product->description, TRUE); ?>
+</div>
+<?php } ?>
+
+<?php if ($product->vendor_note) { ?>
+<div class="alert alert-warning">
+<?= H($product->vendor_note, TRUE); ?>
+</div>
+<?php } ?>

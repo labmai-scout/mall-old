@@ -1,0 +1,21 @@
+<?php
+	$unlisted_messages = array();
+
+
+	if(Site::$messages){ //没发生跳转
+	    $unlisted_messages += Site::$messages;
+	}
+	if ($_SESSION['system.unlisted_messages']) {//发生了跳转
+		$unlisted_messages += $_SESSION['system.unlisted_messages'];
+		unset($_SESSION['system.unlisted_messages']);
+
+	}
+
+	foreach($unlisted_messages as $type => $messages):
+		if (is_array($unlisted_messages[$type])) {
+			$messages += $unlisted_messages[$type];
+		}
+
+?>
+<div class="message message_<?php echo $type?>"><p><?php echo implode('</p><p>', $messages); ?></p></div>
+<?php endforeach; ?>

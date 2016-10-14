@@ -1,0 +1,36 @@
+<h2 class="section_title">
+		<span class="middle"><?php echo HT('常规') ?></span>
+</h2>
+<div class="padding_2" style="padding-top:5px">
+<table class="form product_info_form" style="min-width:400px">
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('型号')?></span></td>
+		<td style="padding-right:4em"><?php echo H($product->model) ?></td>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('包装')?></span></td>
+		<td><?php echo H($product->package) ?></td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('品牌')?></span></td>
+		<td style="padding-right:4em"><?php echo H($product->brand) ?></td>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('供货时间')?></span></td>
+		<td>
+			<?php echo HT('%supply_time 天', array('%supply_time'=>$product->supply_time)); ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('规格')?></span></td>
+		<td colspan="3"><?php echo H($product->spec) ?></td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('关键字')?></span></td>
+		<td colspan="3">
+		<?php
+			echo H(join(', ', (array)json_decode($product->keywords, TRUE))); // TODO 增加样式
+		?>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('说明')?></span></td>
+		<td colspan="3"><?php echo H($product->description) ?></td>
+	</tr>
+</table>
+</div>

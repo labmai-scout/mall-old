@@ -1,0 +1,14 @@
+<script>
+jQuery(function($){
+	var $center = $('#center');
+	$center.css('vertical-align', 'middle');
+	$center.find('.center_content').css({width: '600px', margin: 'auto', paddingBottom: '10em'});
+});
+</script>
+<div class="error center">
+	<h1><?php echo T('您无权访问该页面! 如有疑问请与系统管理员联系。') ?></h1>
+</div>
+<?php 
+if (!Auth::logged_in()) {
+	echo V('application:login_form');
+}

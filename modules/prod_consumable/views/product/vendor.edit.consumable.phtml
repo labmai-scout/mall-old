@@ -1,0 +1,17 @@
+<?php
+	$me = L('ME');
+	$no_error = ($form->no_error !== FALSE);
+	$require = (string) V('form_require');
+?>
+<div class="form padding_2 toggle:type show_on:consumable">
+<h4><?php echo HT('耗材') ?></h4>
+<div class="hr_1">&#160;</div>
+<table class="form">
+<tr>
+	<td class="label right middle nowrap"><?php echo HT('英文名'); ?></td>
+	<td class="middle nowrap">
+		<input name="consumable_en_name" class="text" size="20" value="<?php echo $form['consumable_en_name'] ? H($form['consumable_en_name']) : H($product->consumable_en_name); ?>" />
+	</td>
+</tr>
+</table>
+</div>

@@ -1,0 +1,29 @@
+<?php
+	$err_msg = array(
+		Account_TianCai::PAY_CALLBACK_ERROR_DATA => '数据插入异常',
+		Account_TianCai::PAY_CALLBAC__HAS_SAME_DATA => '支付数据已存在',
+		Account_TianCai::PAY_CALLBACK_DB_HAS_ERROR => '数据库操作失败',
+		Account_TianCai::PAY_CALLBACK_PERMISSION_DENLED => '您没有相应的操作权限',
+		Account_TianCai::PAY_CALLBACK_NO_SUBJECT => '您的部门编号/经费代码传值有误'
+	);
+?>
+<div class="hr_3">&#160;</div>
+<div class="hr_3">&#160;</div>
+<h1 style="vertical-align:center;text-align:left;color:#C9C9C9;font-weight:bold;font-size:10pt;margin:0 auto;width:300px;">
+	您的支付申请提交失败原因如下:
+	<ol class="left error_payment">
+		<?php foreach ($err_msg as $key => $value): ?>
+			<li class="left" <?php echo $key == $code ? 'style="color:#EF2F2F"' : ''; ?>><?php echo $value?></li>
+		<?php endforeach; ?>
+	<ol>
+	<div class="hr_3">&#160;</div>
+	<span class="" style="color:#3F3F3F">
+		请根据错误提示确定是否<a href="#" onclick="window.close(); return false;" class="blue"><?php echo T('关闭'); ?></a>该页面尝试重新支付.
+	</span>
+</h1>
+<style>
+ol.error_payment {
+    list-style-position: inside;
+    list-style-type: decimal;
+}
+</style>

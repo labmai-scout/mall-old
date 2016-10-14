@@ -1,0 +1,86 @@
+<?php 
+// echo CSS::load_async('prod_reagent:theme');
+echo CSS::load_async('mall:vendor');
+?>
+<form method="post" action="<?php echo URI::url('!mall/vendor/index'); ?>" class="clearfix">
+	<div class="vendor_search_box">
+		<table class="middle center">
+			<tr>
+				<td class="nowrap right"><?php echo HT('搜索供应商'); ?></td>
+				<td class="nowrap"><input type="text" class="text middle" size="65" name="phrase" q-hint="<?php echo HT('请输入关键字搜索') ?>" value="<?php echo H($form['phrase']); ?>" /><input type="text" class="hidden"/></td>
+				<td>
+					<input type="submit" class="button button_search middle mall_search" value="<?php echo HT('搜索'); ?>" name="search" />
+				</td>
+			</tr>
+		</table>
+	</div>
+</form>
+<div class="hr_3">&#160;</div>
+<div class="home_item" style="border: 0px;">
+	<div class="letter">
+		<ul class="az_ul">
+			<?php 
+				$words = array(
+					'A','B','C','D','E','F',
+					'G','H','I','J','K','L',
+					'M','N','O','P','Q','R',
+					'S','T','U','V','W','X',
+					'Y','Z'
+				);
+				foreach ($words as $word) : 
+					if ($word == $sort_word) {
+						echo '<li class="active">';
+					}
+					else {
+						echo '<li>';
+					}
+			?>
+					<a href="<?php echo URI::url("!mall/vendor/index.$word"); ?>" target="_self">
+						<?php echo $word ?>
+					</a>
+				</li>
+			<?php
+				endforeach;
+				if ($sort_word == 'extra') {
+					echo '<li class="active">';
+				}
+				else {
+					echo '<li>';
+				}
+			?>
+				<a href="<?php echo URI::url("!mall/vendor/index.extra"); ?>" target="_self"><?php echo T('其他') ?></a>
+			</li>
+			<?php
+				if (!$sort_word) {
+					echo '<li class="active">';
+				}
+				else {
+					echo '<li>';
+				}
+			?>
+				<a href="<?php echo URI::url("!mall/vendor/index"); ?>" target="_self"><?php echo T('默认') ?></a>
+			</li>
+		</ul>
+	</div>
+	<div class="hr_3">&#160;</div>
+	<div class="content" style="margin:0 auto; width: 644px;background-color:#F7F7F7;border: 1px solid #E0E0E0;">
+		<?php 
+			echo $pagination;
+			echo V("mall:vendor/results", array(
+					   'vendors' => $vendors,
+					   ));
+			echo $pagination;
+		?>
+</div>
+<script type="text/javascript">
+	jQuery(function() {
+		$(".az_ul>li:not(.active)").click(function(event) {
+			var url = $(this).find('a').attr('href');
+			window.location = url; 
+		}).hover(function() {
+			$(this).find('a').css('color', '#3093ea');
+		}, function() {
+			$(this).find('a').css('color', '#000000');
+		});;
+	});
+</script>

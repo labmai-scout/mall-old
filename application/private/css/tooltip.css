@@ -1,0 +1,34 @@
+.tooltip {
+	position: absolute;
+	z-index: 1000;
+	background-color: #333;
+	color: #eee;
+	box-shadow: #000 0 1px 2px;
+	filter: progid:DXImageTransform.Microsoft.Shadow (Color=#000000, Direction=135, Strength=2);
+	border-radius: 3px;
+}
+
+.tooltip_content {
+	position: relative;
+	background: transparent url(images/tooltip/tip_bottom.png) no-repeat center 100%;
+	margin-bottom: -8px;
+	padding: 4px 4px 12px;
+}
+
+.sidebar_tooltip {
+	background-color: #fbfedf;
+	color: #000;
+	/* box-shadow: #000 0 1px 4px; 
+	border-radius: 3px;*/
+	border: none;
+	border: 1px solid #6d6e66\9;
+	border-radius: 2px;
+	box-shadow: #000 0 1px 4px;
+	filter: progid:DXImageTransform.Microsoft.Shadow (Color=#000000, Direction=135, Strength=2);
+}
+
+.sidebar_tooltip .tooltip_content {
+	background-image: none;
+	padding: 2px;
+	margin: 0;
+}

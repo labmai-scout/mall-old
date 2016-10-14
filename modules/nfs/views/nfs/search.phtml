@@ -1,0 +1,35 @@
+<?php 
+$me = L('ME');
+?>
+<div class="form padding_1 clearfix">
+<form class="view" q-object="search_nfs" q-static="<?php echo H(['path_type'=>$path_type, 'path'=>$path, 'token'=>$token])?>" q-src="" q-event="submit" autocomplete="off">
+	<table class="form clearfix">
+		<tbody>
+			<tr>
+				<td class="nowrap"><?php echo T('名称'); ?></td>
+				<td><input class="text" name="file_name" value=""/></td>
+			</tr>
+			<tr>
+				<td class="nowrap"><?php echo T('更新时间'); ?></td>
+				<td  class="nowrap">
+				<?php echo Form::checkbox('dtstart_check', $this->dtstart_check, '', 'class="middle monitor"'); ?>&#160;<input name="dtstart" class="text date middle toggle_status:dtstart_check enable_on:on" value="<?php echo $this->dtstart ?>" q-date_format="<?php echo HT('$year年$month月$day日')?>"/>
+					&#160;<span class="middle description">~</span>&#160;
+					<?php echo Form::checkbox('dtend_check', $this->dtend_check, '', 'class="middle monitor"'); ?>&#160;<input name="dtend" class="text date middle toggle_status:dtend_check enable_on:on" value="<?php echo $this->dtend ?>" q-date_format="<?php echo HT('$year年$month月$day日')?>"/>
+					<input class="hidden" name="date_filter" value="1" />
+				</td>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr>
+				<td colspan="2" class="hr_1">&#160;</td>
+			</tr>
+			<tr>	
+				<td>&#160;</td>
+				<td class="right">
+					<input type="submit" name="submit" class="button button_search middle" value="<?php echo T('查询')?>" />
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</form>
+</div>

@@ -1,0 +1,24 @@
+<div class="sidebar_item">
+	<div class="title">
+		<div class="float_right"><?php echo URI::anchor(URI::url('!mall/home/index.news'), T('更多 &#187;'), 'class="blue"'); ?></div>
+		<?php echo T('新闻公告')?>
+	</div>
+	<div class="content">
+		<ul>
+		<?php 
+			//$news = Q("news:limit(6)");
+			$news = array(
+				'1' => '关于第26届天津市科技活动周南开大学',
+				'2' => '关于举办"南开2012年经济学夏令营"通知',
+				'3' => '关于2012国家公派留学人员出国行前培训',
+				'4' => '第二批国家公派研究生项目选拔通知',
+				'5' => '财务处关于网上自助报销系统试运行的通知',
+				'6' => '2012年元素有机化学国家重点实验室',
+			);
+			foreach ($news as $new) :
+		?>
+			<li><?php echo $new?></li>
+		<?php endforeach; ?>
+		</ul>
+	</div> 
+</div>

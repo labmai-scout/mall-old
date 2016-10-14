@@ -1,0 +1,15 @@
+<?php
+$vendor = $statement->vendor;
+?>
+<a href="<?php echo $vendor->url(); ?>"><strong><?php echo HT($vendor->name); ?></strong></a>
+<?php $user = $vendor->owner; ?>
+<div class="user_grid lpadding_1">
+<p style="font-size:11px">
+<?php if ($user->email): ?>
+	<strong>M</strong>: <?php echo URI::mailto($user->email, NULL) ?>
+<?php endif; ?>
+<?php if ($user->phone): ?>
+&#160;&#160;&#160;<strong>T</strong>: <?php echo H($user->phone) ?>
+<?php endif; ?>
+</p>
+</div>

@@ -1,0 +1,17 @@
+<table>
+<tbody>
+<tr>
+	<th class="left nowrap">
+		<?php echo Form::checkbox('', FALSE, NULL, 'id="'.$select_all_id.'_bottom"'); ?>
+	</th>
+	<th colspan="3" class="left nowrap padding_1">
+		<input name="mark_read" type="submit" class="button middle" value="<?php echo I18N::T('messages', '标记已读'); ?>" />
+		<input name="mark_unread" type="submit" class="button middle" value="<?php echo I18N::T('messages', '标记未读'); ?>" />
+		<input name="delete" type="submit" class="button middle" confirm="<?php echo I18N::T('messages', '您确定要删除选中的内容?'); ?>" value="<?php echo I18N::T('messages', '删除选中'); ?>" />
+	</th>
+	<th class="left nowrap">
+		<a class="blue" confirm="<?php echo I18N::T('messages', '您确定要删除所有已读信息?'); ?>" href="<?php echo URI::url('!messages/message/delete_read') ?>"><?php echo I18N::T('messages', '删除所有已读消息'); ?></a>
+	</th>
+</tr>
+</tbody>
+</table>

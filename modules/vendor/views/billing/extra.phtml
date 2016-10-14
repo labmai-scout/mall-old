@@ -1,0 +1,52 @@
+<?php
+// 初始化变量
+$me = L('ME');
+$no_error = ($form->no_error !== FALSE);
+$div_uniqid = 'div_refresh_'.uniqid();
+$form_token = Session::temp_token('billing_statement',3600);
+$_SESSION[$form_token] = '#'.$div_uniqid;
+?>
+<div class="hr_1">&#160;</div>
+<div class="padding_2 form">
+    <form method="post" q-object="extra_info" q-static="<?php echo H(array('id'=> $statement->id));?>">
+    <?php echo V('form_error', ['form'=>$form]);?>
+    <?php $require = (string) V('form_require'); ?>
+        <table class="form add_task">
+            <tbody>
+                <tr>
+                    <td class="label left nowrap"><?php echo T('凭证号')?></td>
+                    <td class="flexible"><input class="text" size="40" name="voucher_no" value="<?php echo $statement->voucher_no?:$form['voucher_no']?>"/><?php echo $require?></td>
+                </tr>
+                <tr>
+                    <td class="label left nowrap"><?php echo T('备注')?></td>
+                    <td class="top relative">
+                        <textarea name="vendor_note" class="text autogrow" cols="60" rows="10"><?php echo $statement->vendor_note?:$form['vendor_note']?></textarea>
+                    </td>
+                </tr>
+                <?php if (Module::is_installed('nfs')) : ?>
+                <tr>
+                    <td class="label left nowrap top">
+                        <?php echo T('附件')?>
+                    </td>
+                    <td class="top relative">
+                    <div class="text_like relative" style="display:block">
+                    <?php
+                        echo V('nfs:nfs_lite/view', [
+                            'object'=>$statement,
+                            'path_type'=>'attachments'
+                        ]);
+?>
+                    </div>
+                    </td>
+                </tr>
+                <?php endif;?>
+                <tr>
+                    <td>&#160;</td>
+                    <td class="nowrap">
+                        <input class="button button_save" type="submit" name="submit" value="<?php echo I18N::T('treenote', '添加')?>" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>

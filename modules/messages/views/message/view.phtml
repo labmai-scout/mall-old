@@ -1,0 +1,31 @@
+<div class="hr_1">&#160;</div>
+<div class="panel clearfix">
+	<div class="float_left padding_1">
+		<?php echo Widget::factory('application:links', array('links'=>$message->links('view'), 'separator'=>' '));?>
+	</div>
+</div>
+<div class="hr_1">&#160;</div>
+<div class="message_content padding_2">
+	<table class="form">
+	<tr>
+	<td class="right middle"><strong class="description"><?php echo I18N::HT('messages', '发件人:')?></strong></td>
+		<td class="middle"><?php echo V('messages:messages_table/data/sender', array('message'=>$message)); ?></td>
+	</tr>
+	<tr>
+		<td class="right middle"><strong class="description"><?php echo I18N::HT('messages', '标题:')?></td>
+		<td class="middle"><?php echo new Markup(H($message->title, TRUE), TRUE); ?></td>
+	</tr>
+	<tr>
+		<td class="right middle"><strong class="description"><?php echo I18N::HT('messages', '收件人:')?></td>
+		<td class="middle"><?php $message->receiver->render(); ?></td>
+	</tr>
+	</table>
+	<div><hr style="border-color:#eee" /></div>
+	<div class="message_body padding_2">
+		<?php
+			$root_url = URI::url('/');
+			echo new Markup(stripslashes($message->body), TRUE); 
+        ?>
+	</div>
+</div>
+

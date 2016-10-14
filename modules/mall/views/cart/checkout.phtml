@@ -1,0 +1,180 @@
+<?php
+$no_error = (!is_object($form) || !!$form->no_error);
+$uniqid = uniqid();
+$address_id = $uniqid.'_address';
+$div_grant_id = $uniqid.'_grant';
+$customers = Q("$user<member customer");
+$customers_id = 'customers_'. uniqid();
+$arr = [];
+foreach ($customers as $customer) {
+	if ($customer->check_app_installed('lab-orders')) {
+		continue;
+	}
+	else {
+		if (!$ret) {
+			$default_customer = $customer;
+			$ret = TRUE;
+		}
+		$arr[$customer->id] = $customer->name;
+	}
+}
+?>
+<div class="hr_3">&#160;</div>
+<div id="cart_order_view" class="clearfix">
+<h1>
+	<?php echo HT('填写核对订单信息'); ?>
+</h1>
+<div class="hr_1">&#160;</div>
+<form method="post" action="<?php echo URI::url('!mall/cart/checkout'); ?>">
+<?php echo V('form_error', array('form'=>$form));?>
+<div class="step_form">
+	<h4><?php echo HT('买方'); ?></h4>
+	<div class="step_form_content">
+<?php echo Form::dropdown('customer', $arr, $default_customer->id, "id=\"$customers_id\""); ?>
+<script type="text/javascript">
+jQuery(function($) {
+    $('#<?php echo $customers_id;?>').bind('change', function() {
+        Q.trigger({
+            object: 'customer',
+            event: 'change',
+            src: '<?php echo URI::url('!mall/cart');?>',
+            data: {
+                address_id: '<?php echo $address_id?>',
+                customer_id: $(this).val()
+            },
+        });
+    });
+});
+</script>
+
+	</div>
+</div>
+<div class="step_form">
+	<h4><?php echo HT('运送地址'); ?></h4>
+	<div class="step_form_content">
+	<?php echo V('mall:cart/address', array('customer' => $default_customer,
+											'form' => $form,
+                                            'address_id'=> $address_id
+										));?>
+	</div>
+</div>
+<div class="step_form">
+	<h4 style="display: inline"><?php echo HT('商品清单'); ?></h4>
+	<span class="blue">
+	<?php
+	echo T('( %edit_items )',
+			array('%edit_items' => URI::anchor(URI::url('!mall/cart'), HT('返回购物车修改')))); ?></span>
+	<div class="step_form_content cart_content">
+<?php
+
+$table = Widget::factory('table');
+$table->name = 'cart_items';
+
+$table->add_columns(
+	array(
+		'icon' => array(
+			'extra_class'=>'tight'
+			),
+		'product' => array(
+			'title' => T('商品'),
+			'nowrap' => TRUE,
+			'align' => 'left',
+			),
+		'unit_price' => array(
+			'title' => T('单价'),
+			'nowrap' => TRUE,
+			'align' => 'right',
+			),
+		'quantity' => array(
+			'title' => T('数量'),
+			'nowrap' => TRUE,
+			'align' => 'center',
+			),
+		'auto_price' => array(
+			'title' => T('金额小计'),
+			'nowrap' => TRUE,
+			'align' => 'right',
+			),
+		));
+
+$table->empty_message = T('您的购物车还没有商品, 请选购');
+
+$last_vendor_id=0;
+
+$cart = Cart_Model::user_cart($user);
+
+$has_inquiry = FALSE;
+foreach(Q("cart_item[cart=$cart]") as $item) {
+	$product = $item->product;
+	$version = $item->version;
+	$vendor = $product->vendor;
+	if ($vendor->id != $last_vendor_id) {
+		if ($last_vendor_id) {
+			// 订单备注
+			$table->add_row(array(
+				'#special_view' => V('mall:cart/table/data/description', array(
+										 'vendor_id' => $last_vendor_id,
+										 'content' => $no_error ? '' : $form['description'][$last_vendor_id],
+										 )),
+				'#extra_class' => 'description_row',
+			));
+		}
+
+		// 商家名称
+		$table->add_row(array(
+				'#special_view' => V('mall:cart/table/data/vendor', array('vendor'=>$vendor)),
+				'#extra_class' => 'vendor_row',
+			));
+		$last_vendor_id = $vendor->id;
+	}
+
+	$item_price  = $product->get_price($customer, $item->quantity);
+	$table->add_row(array(
+		 'icon' => array(
+			 'view' => $product->icon(48, 'style="display:block"'),
+			 'extra' => 'style="padding:.3em;"',
+			 ),
+		 'product' => V('mall:cart/table/data/product', array(
+		 		'product' => $product,
+		 		'version' => $version
+		 	)),
+		 'unit_price' => V('application:common/price', array('price'=>$product->unit_price)),
+		 'quantity' => H((int)$item->quantity),
+		 'auto_price' => V('application:common/price', array('price'=>$item_price)),
+		 ));
+
+	if ($item_price < 0) {
+		$has_inquiry = TRUE;
+	}
+
+}
+
+if ($last_vendor_id) {
+	// 订单备注
+	$table->add_row(array(
+		'#special_view' => V('mall:cart/table/data/description', array(
+								 'vendor_id'=>$last_vendor_id,
+								 'content' => $no_error ? '' : $form['description'][$last_vendor_id],
+								 )),
+		'#extra_class' => 'description_row',
+	));
+}
+
+echo $table;
+?>
+	</div>
+</div>
+<div class="step_form">
+	<h4><?php echo HT('结算信息'); ?></h4>
+	<div class="step_form_content checkout_information">
+	<?php echo HT('金额总计:');?> <span class="price"><?php echo Number::currency($cart->get_amount()); ?></span>
+		<?php if ($has_inquiry): ?>
+		<span class="description"><?php echo HT('本订单中存在询价商品, 未计入总价中.'); ?></span>
+		<?php endif; ?>
+	</div>
+</div>
+<div class="right">
+	<input type="submit" class="button button_tick" name="submit" value="<?php echo HT('提交订单'); ?>" />
+</div>
+</form>
+</div>

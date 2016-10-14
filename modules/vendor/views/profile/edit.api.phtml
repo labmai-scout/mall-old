@@ -1,0 +1,27 @@
+<?php $me = L('ME'); ?>
+<div class="form padding_2">
+	<form method="post" action="<?php echo URI::url() ?>" autocomplete="off">
+        <?php echo V('form_error', array('form'=>$form));?>
+        <table class="form">
+            <tbody>
+            <tr>
+                <td class="label right nowrap top"><?php echo HT('客户端ID') ?></td>
+                <td class="label left nowrap top" readonly="true" colspan="3"><input name="client_id" readonly="true" class="text readonly" size="60" value="<?= H($vendor_api->client_id);?>" /></td>
+            </tr>
+            <tr>
+                <td class="label right nowrap top"><?php echo T('客户端密钥')?></td>
+                <td class="label left nowrap top" colspan="3">
+                    <input name="client_secret" readonly="true" class="text readonly" size="60" value="<?= H($vendor_api->client_secret) ?>" />
+                </td>
+            </tr>
+            <tr><td class="hr_2" colspan="4">&#160;</td></tr>
+            <tr>
+                <td>&#160;</td>
+                <td colspan="3">
+                        <input type="submit" name="submit" class="button button_save middle" value="<?php echo HT('刷新') ?>" />
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>

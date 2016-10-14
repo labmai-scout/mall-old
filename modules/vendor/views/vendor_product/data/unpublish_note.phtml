@@ -1,0 +1,22 @@
+<?php
+if ($product->last_approve_date):
+	if ($product->freeze_reasons):
+?>
+		<span class="status_tag"><?php echo HT('已冻结');?></span>
+	<?php
+	else:
+	?>
+		<span class="status_tag"><?php echo HT('已下架');?></span>
+	<?php
+	endif;
+	?>
+<?php
+else:
+?>
+<span class="status_tag"><?php echo HT('未发布');?></span>
+<?php
+endif;
+
+if ($product->reject_reason) {
+	echo HT('( %reason )', array('%reason' => $product->reject_reason));
+}

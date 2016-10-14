@@ -1,0 +1,6 @@
+<?php
+$transfer_statement = Q("$order transfer_statement")->current();
+if($transfer_statement->id){
+     echo $transfer_statement->get_external_message();
+}
+

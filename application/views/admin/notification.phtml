@@ -1,0 +1,56 @@
+<div class="form padding_1"><form method="post" action="" autocomplete="off">
+<?php
+$error = FALSE;
+if($form['type']==$type){
+	$error = ($form->no_error===FALSE);
+	if($error) echo V('form_error', array('form'=>$form));
+}
+?>
+	<table class="form">
+		<tr><td colspan="2"><strong>
+			<?php echo HT($description); ?>
+		</strong></td></tr>
+		<tr>
+			<td class="top nowrap left"><?php echo I18N::T('messages', '消息标题'); ?></td>
+			<td><input type="text" name="title" size="40" class="text" value="<?php echo H($error ? $form['title'] : HT($title)) ; ?>" /></td>
+		</tr>
+		<tr>
+			<td class="top nowrap left"><?php echo I18N::T('messages', '消息内容'); ?></td>
+			<td><textarea name="body" cols="80" rows="10" class="autogrow"><?php echo H($error ? $form['body'] : HT($body)); ?></textarea></td>
+		</tr>
+		<tr><td></td><td>
+		<?php
+		 $handles = Config::get('notification.handlers');
+		 if(is_array($send_by)) foreach($send_by as $k=>$v){
+				echo Form::checkbox('send_by_'.$k, ($error ? $form['send_by_'.$k] : $v[1]), HT($v[0]), 'class="middle"', 'class="middle"');
+				echo '&#160;&#160;';
+		 }
+		?>
+		</td></tr>
+		<tr><td></td><td class="description">
+			<p><span class="red lpadding_2"><?php echo HT('消息内容中的变量名请勿修改!')?></span></p>
+			<?php
+				$descriptions = $strtr;
+				if(is_array($descriptions)):
+			?>
+				<ul>
+			<?php
+					foreach($descriptions as $k=>$v):
+			?>
+					<li><?php echo $k; ?>: <?php echo HT($v); ?></li>
+			<?php
+					endforeach;
+			?>
+				</li></ul>
+			<?php
+				endif;
+			?>
+		</td></tr>
+		<tr><td></td><td>
+			<input type="hidden" name="type" value="<?php echo $type; ?>" />
+			<input type="submit" name="submit" class="button button_save" value="<?php echo T('保存'); ?>" />
+			<input type="reset" class="button button_cancel" value="<?php echo T('取消'); ?>" />
+		</td></tr>
+	</table>
+</form></div>
+

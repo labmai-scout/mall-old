@@ -1,0 +1,14 @@
+<?php
+$me = L('ME');
+if ($me->id) {
+	if ($me->access('查看管理面板')) {
+?>
+<h4 class="description"><?php echo HT('管理方'); ?></h4>
+<ul>
+<li>
+<a href="<?php echo URI::url('!admin') ?>"><?php echo HT('管理面板') ?></a>
+</li>
+</ul>
+<?php
+	}
+}

@@ -1,0 +1,23 @@
+<?php
+//TODO: 这里希望能改成AJAX的模式 (jia.huang@2012.03.14)
+	$me = L('ME');
+	$no_error = ($form->no_error !== FALSE);
+	$require = (string) V('form_require');
+?>
+<div class="form padding_2 toggle:type show_on:biologic_reagent">
+<h4><?php echo HT('生物试剂') ?></h4>
+<div class="hr_1">&#160;</div>
+<table class="form">
+<tr>
+	<td class="label right middle nowrap"><?php echo HT('运输条件'); ?></td>
+	<td class="middle nowrap">
+		<input name="transport_cond" class="text" size="20" value="<?php echo H($form['transport_cond']); ?>" />
+	</td>
+	<td>&#160;&#160;&#160;&#160;</td>
+	<td class="label right middle nowrap"><?php echo HT('保存条件'); ?></td>
+	<td class="middle nowrap">
+		<input name="storage_cond" class="text" size="20" value="<?php echo H($form['storage_cond']); ?>" />
+	</td>
+</tr>
+</table>
+</div>

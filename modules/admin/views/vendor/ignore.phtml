@@ -1,0 +1,15 @@
+<div class="padding_2">
+	<form method="post" 
+	autocomplete="off"
+	q-object="approve_reject"
+	q-event="submit"
+    q-static="<?php echo H(array('id'=>$id))?>">
+    <h4><?=H('拒绝理由')?></h4>
+    <textarea name="reason" cols="60" rows="6"></textarea>
+    <small><?=H('* 执行此操作将导致该供应商无法在商城销售任何商品，请谨慎操作')?></small>
+    <div class="hr_2">&#160;</div>
+    <div class="right">
+        <input type="submit" class="button button_ignore" value="<?php echo T('拒绝')?>" />
+    </div>
+    </form>
+</div>

@@ -1,0 +1,26 @@
+<?php
+// echo JS::load_async('application:widgets/jquery.rateit');
+// echo CSS::load_async('application:widgets/rateit');
+
+// TODO ajax 提交后, rateit 不重新加载!!!! (xiaopei.li@2012-07-18)
+
+$min_value = 0;
+$max_value = 5;
+$step = 1;
+$resetable = FALSE;
+
+$rateit_input_uniqid = 'rateit_input_' . uniqid();
+
+?>
+<div class="hidden">
+    <select class="no_dropdown" name="<?php echo $name; ?>" id="<?php echo $rateit_input_uniqid; ?>">
+    <?php
+        for ($value = $min_value; $value <= $max_value; $value += $step):
+            echo strtr('<option value="%value">%value</option>', array(
+                           '%value' => $value,
+                        ));
+        endfor;
+    ?>
+    </select>
+</div>
+<div class="rateit" data-rateit-backingfld="<?php echo '#' . $rateit_input_uniqid; ?>" <?php if (!$resetable) echo 'data-rateit-resetable="false"'; // default TRUE ?> ></div>

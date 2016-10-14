@@ -1,0 +1,56 @@
+<div class="hr_1">&#160;</div>
+<?php
+$no_error = $form->no_error;
+$me = L('ME');
+?>
+<div class="form padding_1">
+<table class="user_grid form">
+	<tbody>
+	<tr>
+		<td class="top icon">
+			<?php echo $user->icon('64');?>
+		</td>
+		<td class="top info">
+			<form method="post" action="<?php echo URI::url() ?>" autocomplete="off">
+			<?php echo V('form_error', array('form'=>$form));?>
+			<?php $require = (string) V('form_require'); ?>
+				<table class="form flexible">
+					<tr>
+						<td class="label right nowrap"><?php echo HT('姓名')?></td>
+						<td class="middle"><input name="name" class="text" size="40" value="<?php echo H($no_error ? $user->name : $form['name']) ?>" /><?php echo $require; ?></td>
+					</tr>
+					<tr>
+						<td class="label right nowrap"><?php echo HT('电子邮箱')?></td>
+						<td class="middle"><input name="email" class="text" size="40" value="<?php echo H($no_error ? $user->email : $form['email']) ?>"/><?php echo $require; ?></td>
+					</tr>
+					<tr>
+						<td class="label right nowrap"><?php echo HT('性别')?></td>
+						<td class="middle"><?php echo Form::dropdown('gender', T(User_Model::$genders), $no_error ? $user->gender : $form['gender'] , 'class="dropdown"'); ?></td>
+					</tr>
+					<tr>
+						<td colspan="2" class="hr_1">&#160;</td>
+					</tr>
+					<tr>
+						<td class="label right nowrap middle"><?php echo T('联系电话')?></td>
+						<td class="middle"><input name="phone" class="text" size="40" value="<?php echo H($no_error ? $user->phone : $form['phone'])?>" /><?php echo $require; ?></td>
+					</tr>
+					<tr>
+						<td class="label right nowrap middle"><?php echo T('地址')?></td>
+						<td class="middle"><input name="address" class="text" size="40" value="<?php echo H($no_error ? $user->address : $form['address']) ?>" /></td>
+					</tr>
+					<tr>
+						<td colspan="2" class="hr_1">&#160;</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<input type="submit" name="submit" class="button button_save" value="<?php echo T('保存')?>" />
+						</td>
+					</tr>
+				</table>
+			</form>
+		</td>
+	</tr>
+	</tbody>
+</table>
+</div>

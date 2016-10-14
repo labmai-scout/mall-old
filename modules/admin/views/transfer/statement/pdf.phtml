@@ -1,0 +1,31 @@
+<table style="width:530px;font-size:12px;padding:4px;">
+    <tr>
+        <th style="border: 1px solid #000;text-align:center;width:65px"><?php echo H('订单编号')?></th>
+        <th style="border: 1px solid #000;text-align:center;width:190px"><?php echo H('订单商品')?></th>
+        <th style="border: 1px solid #000;text-align:center;"><?php echo H('供应商')?></th>
+        <th style="border: 1px solid #000;text-align:center;"><?php echo H('备注')?></th>
+        <th style="border: 1px solid #000;text-align:center;width:60px"><?php echo H('金额')?></th>
+    </tr>
+<?php
+$orders = Q("$statement order");
+foreach ($orders as $order) :
+    $items = Q("order_item[order=$order]");
+    $vendor_name = $order->vendor->short_name;
+?>
+    <tr>
+        <td style="border: 1px solid #000;text-align:center;"><?php echo H($order->order_no)?></td>
+        <td style="border: 1px solid #000;text-align:left"><?php foreach ($items as $item) :?><div style="line-height:12px;"><?php 
+                $product = $item->product;
+                echo H($product->name);
+                ?>×<?php 
+                echo intval($item->quantity); 
+                ?><?php 
+                $extra_content = (string)Event::trigger('order_item.product.table.extra_view', $item);
+                echo $extra_content ? '('.$extra_content.')' : null;
+                ?></div><?php endforeach;?></td>
+        <td style="border: 1px solid #000;text-align:left;"><?php echo H($vendor_name)?></td>
+        <td style="border: 1px solid #000;text-align:left;"><?php echo H($order->description)?></td>
+        <td style="border: 1px solid #000;text-align:center;"><?php echo number_format(floatval($order->price), 2) ?></td>
+    </tr>
+<?php endforeach;?>
+</table>

@@ -1,0 +1,4 @@
+# 每天检查过期
+3 0 * * * SITE_ID=$CRON_SITE_ID $CLI_PATH/expire.php
+# 每天发送订单提醒邮件
+5 6 * * * SITE_ID=$CRON_SITE_ID $CLI_PATH/order_daily_notif.php

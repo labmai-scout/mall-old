@@ -1,0 +1,116 @@
+<div class="hr_1">&#160;</div>
+<?php echo $secondary_tabs; ?>
+<div class="hr_1">&#160;</div>
+<div class="panel padding_1">
+	<div class="float_right">
+		<form method="post" action="<?php echo URI::url(''); ?>">
+			<input type="text" name="phrase" class="text" q-hint="<?php echo HT('输入公司名称搜索'); ?>" size="40" value="<?php echo H($form['phrase']); ?>" />
+			<input type="submit" class="button button_search middle" name="submit" value="<?php echo HT('搜索'); ?>" />
+        </form>
+    </div>
+    <?php
+    /*
+     * 禁止在mall-old进行供应商的添加操作
+    <a class="button button_add" href="<?php echo URI::url('!admin/vendor/add')?>"><?php echo T('添加供应商')?></a>
+    */?>
+</div>
+<?php
+echo $pagination;
+
+$table = Widget::factory('table');
+$table->name = 'vendors';
+$table->sort_asc = $sort_asc;
+$table->sort_by = $sort_by;
+
+
+$table->add_columns(array(
+	/*
+    '@'=>array(
+        'nowrap'=>TRUE
+    ),
+	*/
+	'icon' => array(
+        'nowrap'=>TRUE,
+		'extra_class' => 'tight',
+		),
+    'phrase'=>array(
+        'title'=>T('关键字'),
+        'filter'=> array(
+            'value' => $form['phrase'] ? H($form['phrase']): NULL
+        ),
+        'invisible' => TRUE,
+    ),
+    'name'=>array(
+        'title'=>T('名称'),
+        'filter'=> array(
+        	'form' => Widget::factory('table_input', array('name'=>'name', 'value'=>$form['name'])),
+        	'value' => $form['name'] ? H($form['name']): NULL
+        ),
+        'nowrap'=>TRUE,
+    ),
+    'create_date'=>array(
+        'title'=>T('创建时间'),
+        'nowrap'=>TRUE,
+    ),
+    'contact'=>array(
+        'title'=>T('联系方式'),
+        'align'=>'left',
+        'extra_class'=>'flexible'
+    ),
+    'rest'=>array(
+        'nowrap'=>TRUE
+    ),
+));
+
+$table->empty_message = T('没有符合条件的供应商!');
+
+foreach($vendors as $vendor)  {
+    $links = [];
+    $object = O('vendor', ['gapper_group'=> $vendor['id']]);
+    $vid = $object->id;
+    $rvid = $vendor['id'];
+
+    if ($type=='unapproved') {
+        $links = [
+            'unapproved'=> [
+                'url'=> URI::url('!admin/vendor/approve.'.$vid.'.'.$rvid),
+                'text'=> T('审核'),
+                'extra'=> 'class="button button_reject"'
+            ]
+        ];
+        /*
+        $links = [
+            'unapprove'=> [
+                'url'=> '#',
+                'text'=> T('审核'),
+                'extra'=> 'class="button button_approve" ' .
+                'q-object="approve_confirm" q-event="click" ' .
+                'q-static="' . H(array('id' => $vendor['id'])) . '"',
+            ]
+        ];
+         */
+    }
+
+    if ($type=='approved') {
+        $links = [
+            'approved'=> [
+                'url'=> '#',
+                'text'=> T('打回'),
+                'extra'=> 'class="button button_reject" ' .
+                'q-object="approve_reject" q-event="click" ' .
+                'q-static="' . H(array('id' => $vendor['id'])) . '"',
+            ]
+        ];
+    }
+
+    $tmp = (object)$vendor;
+    $tmp->create_date = $tmp->ctime ? strtotime($tmp->ctime) : $object->ctime;
+    $table->add_row(array(
+        'name'=> '<a href="' . URI::url('!admin/vendor/iview.' . $vid) . '.' . $rvid .'">' . $tmp->name . '</a>',
+        'create_date'=>V('vendor_table/data/create_date', array('vendor'=>$tmp)),
+        'contact'=>V('vendor_table/data/contact', array('vendor'=>$tmp)),
+        'rest'=>Widget::factory('application:links', array('links'=>$links))
+    ));
+}
+
+echo $table;

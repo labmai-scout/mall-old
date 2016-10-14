@@ -1,0 +1,129 @@
+<script>
+jQuery(function($){
+       var $center = $('#center');
+       $center.css('vertical-align', 'middle');
+       $center.find('.center_content').css({width: '600px', margin: 'auto', paddingBottom: '2em'});
+
+		var height = $('.signup_body').offset().top - $center.offset().top ;
+		$center.css('vertical-align', 'baseline');
+		$center.css('padding-top', height +'px');
+});
+</script>
+<?php 
+	$readonly = 'readonly="readonly"';
+	$require = (string) V('form_require');
+?>
+<div class="form padding_2 signup_body">
+<table class="form">
+	<tbody>
+	<tr>
+		<td class="top icon">
+			<img src="images/icons/signup_big.png" />
+		</td>
+		<td class="top">
+			<form method="post" autocomplete="off" action="<?php echo URI::url();?>">
+			<?php echo V('form_error', array('form'=>$form));?>
+			<?php $require = (string) V('form_require'); ?>
+			<?php $optional = (string) V('form_optional'); ?>
+	 		<table class="form">
+				<tbody>
+					<tr>
+					<th colspan="2" class="legend"><?php echo T('1. 登录信息') ?></td>
+					</tr>
+					<?php $token = Auth::token(); ?>
+					<tr>
+						<td class="label right nowrap middle"><?php echo T('登录帐号') ?></td>
+						<td class="middle">
+							<?php 
+								if (!$token) {
+									echo Widget::factory('login_token', array(
+											'name' => 'token',
+											'token' => $form['token'],
+											'backend' => $form['token_backend'],
+											'size' => 25
+									));
+								}
+								else {
+                                    list($token, $backend) = explode('|', $token, 2);
+                                    $auth_backends = Config::get('auth.backends');
+                                    echo H($token). '@'. H($auth_backends[$backend]['title']);
+								}
+							?>
+						</td>
+					</tr>
+					<?php if(!$token):?>
+					<tr>
+						<td class="label right nowrap"><?php echo T('密码')?></td>
+						<td class="middle"><input name="passwd" type="password" class="text" size="40" value="" /></td>
+					</tr>
+					<tr>
+						<td class="label right nowrap"><?php echo T('确认密码')?></td>
+						<td class="middle"><input name="confirm_passwd" type="password" class="text" size="40" value="" /></td>
+					</tr>
+					<?php endif;?>
+					<tr><td colspan="2" class="hr_2">&#160;</td></tr>
+					<tr>
+					  <th colspan="2" class="legend"><?php echo T('2. 个人信息') ?></td>
+					</tr>
+					<tr>
+						<td class="label right nowrap"><?php echo T('姓名')?></td>
+						<td class="middle"><input name="name" class="text" size="40" value="<?php echo H($form['name'] ?: $user_info['name'])?>" <?php if ($user_info['name']) echo $readonly;?>/><?php echo $require; ?></td>
+					</tr>
+					<tr>
+						<td class="label right nowrap"><?php echo T('性别')?></td>
+						<td class="middle">
+                            <?php echo Form::dropdown('gender', T(User_Model::$genders), isset($form['gender']) ? $form['gender']: ($user_info['gender'] ? : -1), 'class="middle dropdown"'); ?>
+                        </td>
+					</tr>
+					<tr><td colspan="2" class="hr_2">&#160;</td></tr>
+					<tr>
+					  <th colspan="2" class="legend"><?php echo T('3. 联系方式')?></td>
+					</tr> <tr>
+						<td class="label right nowrap"><?php echo T('电子邮箱')?></td>
+						<td class="middle"><input name="email" class="text" size="40" value="<?php echo H($form['email'] ?: $user_info['email'])?>" /><?php echo $require; ?></td>
+					</tr>
+					<tr>
+						<td class="label right nowrap middle"><?php echo T('联系电话')?></td>
+						<td class="middle"><input name="phone" class="text" size="40" value="<?php echo H($form['phone'] ?: $user_info['phone'])?>" /><?php echo $require; ?></td>
+					</tr>
+					<tr>
+						<td class="label right nowrap middle"><?php echo T('地址')?></td>
+						<td class="middle"><input name="address" class="text" size="40" value="<?php echo H($form['address'] ?: $user_info['address'])?>" /><?php echo $optional; ?></td>
+					</tr>
+					<tr>
+						<td colspan="2" class="hr_1">&#160;</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<?php echo Form::checkbox(
+								'registration_agreement', 
+								FALSE, 
+								T('我已阅读并接受%agreement。', array(
+									'%agreement'=>
+										URI::anchor('!people/signup/introduction', T('注册须知'), 'class="blue" target="_blank"')
+									)
+								),
+								'class="middle"', 'class="middle"'); ?> 
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" class="hr_1">&#160;</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<input type="submit" name="submit" class="button button_signup" value="<?php echo T('注册')?>" />
+							<?php if (Auth::token()):?>
+							<input type="submit" name="logout" class="button button_logout" value="<?php echo T('退出当前用户状态')?>" />
+							<?php endif;?>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			</form>
+		</td>
+	</tr>
+	</tbody>
+</table>
+</div>

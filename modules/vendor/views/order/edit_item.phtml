@@ -1,0 +1,27 @@
+<div class="form padding_2">
+<form method="post" q-object="edit_item" q-static="<?php echo H(array('id' => $item->id)); ?>">
+	<?php echo V('form_error', array('form'=>$form));?>
+
+	<label><?php echo HT('数量') ?></label>
+	<input name="quantity" class="text number" size="20"
+	<?php if (!$item->canChangeQuantity()) { ?>
+	disabled=""
+	<?php } ?>
+	value="<?php
+	$quantity = ($item->temp_quantity != NULL) ? $item->temp_quantity : $item->quantity;
+	echo H($quantity); ?>" />
+	<br/>
+
+	<label><?php echo HT('单价') ?></label>
+	<input name="unit_price" sign="<?php echo Config::get('site.currency_sign')?>" class="text currency test" size="20"
+	 value="<?php
+$unit_price = ($item->temp_unit_price != NULL) ? $item->temp_unit_price : $item->unit_price;
+echo H(max($unit_price, 0));
+?>" />
+
+	<div class="hr_1">&#160;</div>
+	<input class="button button_edit" type="submit" name="submit" value="<?php echo HT('保存'); ?>" />
+	&#160;&#160;
+	<input class="button button_delete" confirm="<?php echo HT('您确定从订单中删除此项么?'); ?>" type="submit" name="delete" value="<?php echo HT('删除'); ?>" />
+</form>
+</div>

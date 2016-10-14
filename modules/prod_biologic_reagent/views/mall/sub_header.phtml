@@ -1,0 +1,18 @@
+<form method="post" action="<?php echo URI::url('!mall/search/index.biologic_reagent'); ?>" class="clearfix">
+	<div class="product_search_box">
+		<table class="middle center">
+			<tr>
+				<td class="nowrap right">
+                    <?php echo HT('搜索生物试剂'); ?>
+                </td>
+				<td class="nowrap">
+                    <input type="text" class="text middle" size="65" name="keyword" q-hint="<?php echo HT('请输入产品名, 关键字') ?>" value="<?php echo H($form['keyword']); ?>" />
+                    <input type="text" name="group_by" class="hidden" value="group_name" />
+                </td>
+				<td>
+					<input type="submit" class="button button_search middle mall_search" value="<?php echo HT('搜索'); ?>" name="search" />
+				</td>
+			</tr>
+		</table>
+	</div>
+</form>

@@ -1,0 +1,15 @@
+<script>
+jQuery(function($){
+	var $center = $('#center');
+	$center.css('vertical-align', 'middle');
+	$center.find('.center_content').css({width: '600px', margin: 'auto', paddingBottom: '10em'});
+});
+</script>
+<div class="error center">
+	<h1><?php echo T('您的浏览器版本过低, 无法对本网站进行浏览') ?></h1>
+	<h1><?php echo T('建议您升级或使用其他浏览器的最新版本') ?></h1>
+</div>
+<?php 
+if (!Auth::logged_in()) {
+	echo V('application:login_form');
+}

@@ -1,0 +1,45 @@
+<?php
+$upload_form_uniqid = 'upload_form_'.uniqid();
+$error_msg = T('异常原因: 文件上传中止!');
+?>
+<div class="form padding_1">
+	<table class="form">
+		<tr>
+			<td class="top icon">
+				<?php echo $category->icon('64'); ?>
+			</td>
+			<td class="top">
+<form id="<?php echo $upload_form_uniqid?>" method="post" action="<?php echo URI::url('!admin/product/category/upload_icon.'.$category->id)?>" class="nowrap" style="padding:1px">
+		<input name="icon" type="file" class="middle" />
+					<p class="right" style="margin-top: 10px">
+		<a name="upload" href="#" class="button button_import middle prevent_default"><?php echo HT('上传')?></a>
+		<a class="button button_delete middle" q-object="delete_icon" q-event="click" q-src="<?php echo URI::url() ?>" q-static="<?php echo H(array('id' => $category->id)) ?>" href="#"><?php echo T('删除图片')?></a>
+					</p>
+				</form>
+			</td>
+		</tr>
+	</table>
+</div>
+<script>
+jQuery(function($){
+	var $form = $('#<?php echo $upload_form_uniqid?>');
+
+	$form
+	.find('a[name=upload]')
+	.bind('click', function(){
+
+		$form.ajaxSubmit({
+			dataType: 'json',
+			complete: function (data) {
+				if (data.error == 'aborted' || data.aborted) {
+					alert('<?php echo $error_msg?>');
+				}
+
+				Dialog.close();
+			}
+		});
+		return false;
+	});
+
+});
+</script>

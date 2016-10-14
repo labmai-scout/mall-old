@@ -1,0 +1,71 @@
+<?php
+$me = L('ME');
+$customers = Q("$me<member customer");
+$apps = Config::get('gapper.apps', []);
+$appLabOrders = 'lab-orders';
+foreach ($customers as $customer):
+    $ct_items = [];
+	if ($customer->check_app_installed($appLabOrders)) {
+		$ct_items['orders'] = array(
+			'title' => '订单管理',
+			'icon' => '!customer/icons/16/orders.png',
+			'url' => $customer->url(),
+		);
+	}
+	else {
+		$ct_items['profile'] = array(
+			'title' => '基本信息',
+			'icon' => '!customer/icons/16/profile.png',
+			'url' => $customer->url(),
+		);
+
+		$ct_items['orders'] = array(
+			'title' => '订单管理',
+			'icon' => '!customer/icons/16/orders.png',
+			'url' => $customer->url(NULL, NULL, NULL, 'orders'),
+		);
+
+	    //显示各个app
+        foreach ((array)$apps as $name => $config) {
+            if ($name==$appLabOrders) {
+                continue;
+            }
+            if ($name=='mall-vendor') {
+            	continue;
+            }
+            if ($name == 'drug-precursor-plan' && $me->id == $customer->owner_id) {
+		        $ct_items[$config['name']] = array(
+		            'title' => $config['title'],
+		            'icon' => '!customer/icons/16/gapper.png',
+		            'url' => $customer->url(NULL, ['app'=>$name], NULL, 'gapper_view'),
+		            'target' => '_blank',
+		        );
+            }
+	    }
+	}
+
+		$uniqid = 'sbmenu_'.uniqid();
+?>
+<h4>
+<?php
+    echo H($customer->name);
+?>
+</h4>
+<div class="lpadding_2">
+<div id="<?php echo $uniqid;?>" class="menu clearfix">
+<?php
+
+		$view_name = 'customer:sidebar/menu/list';
+		$content = '';
+
+		foreach ($ct_items as $id => $item) {
+			$item['i18n'] = 'customer';
+			$content .= trim((string) V($view_name, array('item'=>$item, 'class'=>$class)));
+		}
+echo V('customer:sidebar/menu/category', array('content'=>$content));
+
+?>
+</div>
+</div>
+<?php
+endforeach;

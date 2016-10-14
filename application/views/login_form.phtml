@@ -1,0 +1,46 @@
+<?php $form = $this->vars['form']?>
+<div class="form login_form padding_1 clearfix">
+<form method="post" autocomplete="off" action="<?php echo URI::url('login')?>">
+	<?php echo V('form_error', array('form'=>$form));?>
+	<table class="form" style="margin:auto">
+		<tbody>
+			<tr>
+				<td class="label right nowrap middle"><label><?php echo T('帐号')?></label></td>
+				<td class="middle" colspan="2">
+					<?php
+						echo Widget::factory('login_token', array(
+							'name' => 'token',
+							'token' => $form['token'],
+							'backend' => $form['token_backend'],
+							'size' => 30,
+						));
+					?>
+				</td>
+			</tr>
+			<tr>
+				<td class="label right nowrap middle"><?php echo T('密码')?></td>
+				<td class="middle" colspan="2">
+					<input name="password" type="password" class="text" size="30" />
+					&#160;
+					<?php /* ?>
+					<a class="blue middle" href="<?php echo URI::url('recovery')?>"><?php echo HT('忘记了密码?')?></a> 
+					<?php */?>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td class="middle nowrap">
+					<input type="submit" name="submit" class="button button_login middle" value="<?php echo T('登录')?>" />
+					&#160;
+					<?php echo Form::checkbox('persist', $form['persist'], T('记住登录'), 'class="checkbox middle"', 'class="middle"'); ?>
+					<?php if ( Config::get('mall.enable_register') ) : ?>
+					&#160;
+					<a href="<?php echo URI::url('!people/signup')?>"><?php echo HT('注册新用户')?></a>
+					<?php endif; ?>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	</form>
+</div>
+

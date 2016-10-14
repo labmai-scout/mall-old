@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<title>
+	<?php echo H($title ? T(Config::get('page.title_pattern'), array('%title'=>$title)) : Config::get('page.title_default'));
+ ?>
+</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<base href="<?php echo Config::get('system.base_url') ?>" />
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<link rel="apple-touch-icon" href="<?php echo _C('images/icon_touch.png') ?>" />
+<?php echo $this->controller->load_css(); ?>
+<?php echo $this->controller->load_js(TRUE); ?>
+<script>
+(function($){
+	Q['24hour'] = <?php echo JS::quote(!!Config::get('system.24hour')); ?>;
+})(jQuery);
+</script>
+</head>
+<body>
+<div id="wrapper">
+	<div id="header">
+		<div class="header_content">
+		</div>
+	</div>
+	<div class="wrapper_body">
+		<div id="body_header" class="clearfix">
+			<?php echo $this->body_header; ?>
+		</div>
+		<div id="body" class="clearfix">
+            <div class="title center clearfix">
+                <?php echo T('未绑定LabScout用户向导')?>
+            </div>
+            <hr />
+            <div class="article">
+                <table width="100%">
+                    <tr>
+                        <td class="summary middle">
+                            <div class="title">
+                                <?php echo T('第一步');?>
+                            </div>
+                            <ul>
+                                <li><?php echo T('如果您没有账号, 请先注册;');?></li>
+                                <li><?php echo T('如果您不是PI, 联系实验室的PI;');?></li>
+                                <li><?php echo T('如果您是PI并已注册, 请联系商城管理员, 为您添加买方并将您设置为买方负责人;');?></li>
+                            </ul>
+                        </td>
+                        <td class="image right">
+                            <img src="<?php echo _C('images/guide/1.png')?>" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="article">
+                <table width="100%">
+                    <tr>
+                        <td class="image left">
+                            <img src="<?php echo _C('images/guide/2.png')?>">
+                        </td>
+                        <td class="summary middle">
+                            <div class="title">
+                                <?php echo T('第二步');?>
+                            </div>
+                            <ul>
+                                <li><?php echo T('请进入LabScout-LIMS系统, 选择 "系统设置";');?></li>
+                                <li><?php echo T('在设置中选择 "商城绑定";');?></li>
+                                <li><?php echo T('下载制定商城的授权文件 (文件有效时间为五分钟);');?></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="article">
+                <table width="100%">
+                    <tr>
+                        <td class="summary middle">
+                            <div class="title">
+                                <?php echo T('第三步');?>
+                            </div>
+                            <ul>
+                                <li><?php echo T('返回商城, 点击账户下的买方;');?></li>
+                                <li><?php echo T('例如上图的 "清华大学生物研究院";');?></li>
+                            </ul>
+                        </td>
+                        <td class="image right">
+                            <img src="<?php echo _C('images/guide/3.png')?>" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="article">
+                <table width="100%">
+                    <tr>
+                        <td class="image left">
+                            <img src="<?php echo _C('images/guide/4.png')?>" />
+                        </td>
+                        <td class="summary middle">
+                            <div class="title">
+                                <?php echo T('第四步');?>
+                            </div>
+                            <ul>
+                                <li><?php echo T('在买方账户下, 选择 "基本信息";');?></li>
+                                <li><?php echo T('点击 "修改";');?></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="article">
+                <table width="100%">
+                    <tr>
+                        <td class="summary middle">
+                            <div class="title">
+                                <?php echo T('第五步');?>
+                            </div>
+                            <ul>
+                                <li><?php echo T('选择 "LIMS绑定";');?></li>
+                                <li><?php echo T('上传在LabScout-LIMS系统中下载的 "授权文件";');?></li>
+                                <li><?php echo T('点击 "确定";');?></li>
+                            </ul>
+                        </td>
+                        <td class="image right">
+                            <img src="<?php echo _C('images/guide/5.png')?>" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="article">
+                <table width="100%">
+                    <tr>
+                        <td class="image left">
+                            <img src="<?php echo _C('images/guide/6.png')?>" />
+                        </td>
+                        <td class="summary middle">
+                            <div class="title">
+                                <?php echo T('第六步');?>
+                            </div>
+                            <ul>
+                                <li><?php echo T('绑定成功后进入LabScount-LIMS系统, 刷新并查看;');?></li>
+                                <li><?php echo T('如果绑定成功, 显示 "已绑定";');?></li>
+                                <li><?php echo T('再进行"绑定远程用户", 同步系统中的用户信息;');?></li>
+                                <li><?php echo T('至此, LabScount-LIMS 系统和商城绑定完成;');?></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div style="height: 40px;">&#160;</div>
+		</div>
+	</div>
+	<div id="footer"><div class="footer_content clearfix">
+		<?php echo $this->footer; ?>
+	</div></div>
+</div>
+<?php echo $this->controller->load_js(FALSE); ?>
+</body>
+</html>

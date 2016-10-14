@@ -1,0 +1,57 @@
+<div class="padding_2">
+<h2>公司信息</h2>
+<table class="form vendor_info">
+    <tr>
+        <td rowspan="6" class="tight">
+            <img width="144" height="144" src="<?= $vendor->icon ?: $vendor->url(null, null, null, 'logo')?>" />
+        </td>
+    </tr>
+    <tr class="tight nowrap top">
+        <td class="tight">
+        <span class="status_tag status_tab_label"><?=H('电话')?></span>
+        </td>
+        <td>
+        <?= H($vendor->phone ?: '--') ?>
+        </td>
+    </tr>
+    <tr class="tight nowrap top">
+        <td class="tight">
+        <span class="status_tag status_tab_label"><?=H('传真')?></span>
+        </td>
+        <td>
+        <?= H($vendor->fax ?: '--') ?>
+        </td>
+    </tr>
+    <tr class="tight nowrap top">
+        <td class="tight">
+        <span class="status_tag status_tab_label"><?=H('邮箱')?></span>
+        </td>
+        <td>
+        <?= H($vendor->email ?: '--') ?>
+        </td>
+    </tr>
+    <tr class="tight nowrap top">
+        <td class="tight">
+        <span class="status_tag status_tab_label"><?=H('网址')?></span>
+        </td>
+        <td>
+        <?= H($vendor->website ?: '--') ?>
+        </td>
+    </tr>
+    <tr class="tight nowrap top">
+        <td class="tight">
+        <span class="status_tag status_tab_label"><?=H('地址')?></span>
+        </td>
+        <td>
+        <?= H($vendor->address ?: '--') ?>
+        </td>
+    </tr>
+    <?php if ($vendor->summary) {?>
+    <tr class="tight nowrap top">
+        <td colspan="3" style="white-space:normal">
+        <?= H($vendor->summary ?: '--') ?>
+        </td>
+    </tr>
+    <?php }?>
+</table>
+</div>

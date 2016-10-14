@@ -1,0 +1,281 @@
+<?php
+$customer = $order->customer;
+$vendor = $order->vendor;
+
+$uniqid = uniqid();
+$select_all_id = 'select_all_' . $uniqid;
+$batch_form_id = 'batch_form_' . $uniqid;
+?>
+<div class="hr_1">&#160;</div>
+<div id="order_view" class="clearfix">
+<h1><?php echo HT('订单 #%order', array('%order'=>$order->order_no)); ?></h1>
+<div><?php echo V('application:order/status', array('order'=>$order)); ?></div>
+<div class="hr_2">&#160;</div>
+<div class="step_form">
+	<h4><?php echo HT('买方'); ?></h4>
+	<div class="step_form_content">
+        <?php
+            $allowCredit = !!Config::get('customer.allow_credit');
+            if ($allowCredit) {
+                $tmpCName = 'customer-credit-lv' . (int) $customer->credit;
+                echo CSS::load_async('application:credit');
+            }
+        ?>
+        <a class="<?=$tmpCName?>" href="<?php echo H($customer->url(NULL, NULL, NULL, 'vendor_view')); ?>">
+            <?php echo H($customer->name); ?>&#160;(<?php echo H($customer->owner->name) ?>)
+        </a>
+	</div>
+</div>
+<div class="step_form">
+	<h4><?php echo HT('运送地址'); ?></h4>
+	<div class="step_form_content">
+	<table class="form">
+		<tr>
+			<th class="label nowrap right"><?php echo HT('地址'); ?>:</th>
+			<td><?php echo H($order->address) ?></td>
+		</tr>
+		<tr>
+			<th class="label nowrap right"><?php echo HT('邮政编码'); ?>:</th>
+			<td><?php echo H($order->postcode); ?></td>
+		</tr>
+		<tr>
+			<th class="label nowrap right"><?php echo HT('电话'); ?>:</th>
+			<td><?php echo H($order->phone); ?></td>
+		</tr>
+		<tr>
+			<th class="label nowrap right"><?php echo HT('电子邮箱'); ?>:</th>
+			<td><?php echo H($order->email); ?></td>
+		</tr>
+	</table>
+	</div>
+</div>
+<div class="step_form">
+	<?php echo V('application:order/view/vendor', array('vendor' => $vendor)); ?>
+</div>
+<div class="step_form">
+	<h4><?php echo HT('商品清单'); ?></h4>
+	<div class="step_form_content cart_content">
+<?php
+
+$table = Widget::factory('table');
+$table->name = 'order_items';
+if (Config::get('vendor.print_qrcode')){
+	$table->add_columns(array(
+		'select' => array(
+			'align' => 'center',
+			'extra_class'=>'tight'
+			),
+		));
+}
+$table->add_columns(
+	array(
+		'icon' => array(
+			'extra_class'=>'tight'
+			),
+		'product' => array(
+			'title' => T('商品'),
+			'nowrap' => TRUE,
+			'align' => 'left',
+			),
+            'manufacturer'=> array(
+                'title'=> T('生产商'),
+                'nowrap'=> TRUE,
+                'align'=> 'left'
+            ),
+            'catalog_no'=> array(
+                'title'=> T('目录号'),
+                'nowrap'=> TRUE,
+                'align'=> 'left'
+            ),
+            'package'=> array(
+                'title'=> T('包装'),
+                'nowrap'=> TRUE,
+                'align'=> 'left'
+            ),
+		'unit_price' => array(
+			'title' => T('单价'),
+			'nowrap' => TRUE,
+			'align' => 'right',
+			),
+		'quantity' => array(
+			'title' => T('数量'),
+			'nowrap' => TRUE,
+			'align' => 'center',
+			),
+		'price' => array(
+			'title' => T('金额'),
+			'nowrap' => TRUE,
+			'align' => 'right',
+			),
+		'rest' => array(
+			'align'=>'right',
+			'nowrap'=>TRUE,
+			)));
+
+$last_vendor_id=0;
+foreach(Q("order_item[order=$order]") as $item) {
+
+	$product = $item->product();
+
+	$rest = '';
+    if ($item->deliver_status == Order_Item_Model::DELIVER_STATUS_RECEIVED) {
+        $rest = T('已到货');
+    }
+    elseif ($item->deliver_status == Order_Item_Model::DELIVER_STATUS_DELIVERED) {
+        $rest = T('已发货');
+    }
+
+    $rest = $rest. '&#160;'.Widget::factory('application:links', array('links' => $item->links('vendor_view')));
+
+    if (Config::get('vendor.print_qrcode')){
+		$table->add_row(array(
+			 'select'=>V('vendor:common/table/data/select', array('object'=>$item, 'select_all_id'=>$select_all_id)),
+			 'icon' => array(
+				 'view' => $product->icon(48, 'style="display:block"'),
+				 'extra' => 'style="padding:.3em;"',
+				 ),
+			 'product' => V('vendor:order/table/data/product', array(
+			 		'product' => $product,
+			 		'item' => $item,
+			 	)),
+	         'manufacturer'=> V('admin:order/table/data/manufacturer', array('product'=> $product)),
+	         'catalog_no'=> V('admin:order/table/data/catalog_no', array('product'=> $product)),
+	         'package'=> V('admin:order/table/data/package', array('product'=> $product)),
+			 'unit_price' => V('vendor:order/item_price', array('order_item' => $item)),
+			 'quantity' => V('vendor:order/item_quantity', array('order_item' => $item)),
+			 'price' => V('vendor:order/item_auto_price', array('order_item' => $item)),
+			 'rest' => $rest,
+			 '#extra_class' => $item->temp_delete ? 'delete' : '',
+		));
+	}else {
+		$table->add_row(array(
+		 'icon' => array(
+			 'view' => $product->icon(48, 'style="display:block"'),
+			 'extra' => 'style="padding:.3em;"',
+			 ),
+		 'product' => V('vendor:order/table/data/product', array(
+		 		'product' => $product,
+		 		'item' => $item,
+		 	)),
+         'manufacturer'=> V('admin:order/table/data/manufacturer', array('product'=> $product)),
+         'catalog_no'=> V('admin:order/table/data/catalog_no', array('product'=> $product)),
+         'package'=> V('admin:order/table/data/package', array('product'=> $product)),
+		 'unit_price' => V('vendor:order/item_price', array('order_item' => $item)),
+		 'quantity' => V('vendor:order/item_quantity', array('order_item' => $item)),
+		 'price' => V('vendor:order/item_auto_price', array('order_item' => $item)),
+		 'rest' => $rest,
+		 '#extra_class' => $item->temp_delete ? 'delete' : '',
+		));
+	}
+
+
+}
+
+echo $table;
+
+if (Config::get('vendor.print_qrcode')){
+
+	echo JS::load('vendor:batch_select', array('select_all_id'=>$select_all_id, 'batch_form_id' => $batch_form_id));
+}
+?>
+	</div>
+</div>
+<?php if (Config::get('vendor.print_qrcode')){ ?>
+<div>
+    <form
+    	id="<?php echo $batch_form_id; ?>"
+    	q-object="batch_exports"
+    	q-event="submit"
+    	q-src="<?php echo URI::url('!vendor/order/item')?>"
+    	autocomplete="off"
+    	method="post">
+        <?php echo Form::checkbox('', FALSE, T('全选'), 'id="'.$select_all_id.'"') ?>&#160;
+    	<input name="batch-print" type="submit" class="button button_tick" value="<?php echo T('批量打印'); ?>"/>
+    </form>
+</div>
+<?php }?>
+<?php if ($order->extra_info) {?>
+<div class="step_form">
+	<h4><?php echo HT('附加信息'); ?></h4>
+	<div class="extra_info">
+		<div style="position:absolute;">
+			<pre><?= $order->extra_info;?></pre>
+		</div>
+	</div>
+</div>
+<?php }?>
+<?php if ($order->invoice_title) { ?>
+<div class="step_form">
+	<h4><?php echo HT('发票信息'); ?></h4>
+	<div class="step_form_content checkout_information">
+	<?php echo HT('发票抬头:');?>&#160;<?= H($order->invoice_title) ?>
+	</div>
+</div>
+<?php } ?>
+<div class="step_form">
+	<h4><?php echo HT('结算信息'); ?></h4>
+	<div class="step_form_content checkout_information">
+	<?php echo HT('商品金额:');?>&#160;
+	<?php // echo V('application:order/price', array('order' => $order, 'long' => TRUE)) ?>
+	<?php echo V('vendor:order/price', array('order' => $order, 'long' => TRUE)) ?>
+	</div>
+	<?php if ($order->description): ?>
+	<div class="message message_normal description">
+		<?php echo H($order->description, TRUE); ?>
+	</div>
+	<?php endif; ?>
+</div>
+<div class="step_form">
+	<h4><?php echo HT('订单备注信息'); ?>&#160;<span class="description small"><?php echo T('* 此处备注为个人私密信息'); ?></h4>
+	<div class="form padding_1">
+		<table class="form">
+			<tr>
+				<td><h2><?php echo H($order->vendor_note); ?></h2><td>
+				<td><a class="button button_edit nowrap" href="#" q-static="<?php echo H(array('order_id' => $order->id));?>" q-event="click" q-object="vendor_note"><?php echo T('编辑');?></a></td>
+			</tr>
+
+
+			</table>
+		</form>
+	</div>
+</div>
+<?php
+$links = $order->links('vendor_view');
+if (count($links) > 0):
+?>
+<div class="step_form">
+<?php echo Widget::factory('application:links', array('links'=>$links, 'separator'=>' ')); ?>
+</div>
+<?php
+endif;
+?>
+
+<?php if ($order->status == Order_Model::STATUS_APPROVED): ?>
+    <div class="step_form">
+        <input name="order-print" id="print" type="button" class="button button_print" value="<?php echo T('标签打印'); ?>"/>
+    </div>
+<?php endif; ?>
+
+<div class="step_form">
+	<h4><?php echo HT('留言'); ?></h4>
+	<div class="step_form_content">
+	<?php echo Widget::factory('application:comments', array('object'=>$order)) ?>
+	</div>
+</div></div>
+
+<script type="text/javascript" src="https://www.java.com/js/deployJava.js"></script>
+<script>
+    deployJava.runApplet({
+        id:'printer',code:'com.labmai.order.v1.Printer',width: 1, height:1
+    },{
+        jnlp_href: "applet/order_printer/default.jnlp"
+    }, '1.7');
+</script>
+<script>
+    $(function(){
+        var datas = <?= $datas?>;
+        $("#print").click(function(){
+            printer.print(JSON.stringify(datas));
+        });
+    });
+</script>

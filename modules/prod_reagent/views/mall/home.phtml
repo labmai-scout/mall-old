@@ -1,0 +1,93 @@
+<style type="text/css">
+.news-box { width: 600px; height: 400px; background-color: #fcfcfd; overflow: hidden; position: relative; }
+.news-list { position: absolute; }
+</style>
+<?php
+echo JS::load_async('prod_reagent:jquery.nivoSlider.pack');
+echo JS::load_async('prod_reagent:auto_scroll');
+$images = Config::get('mall.home_images');
+$slider_id = 'slider_'. uniqid();
+?>
+<?php echo V('prod_reagent:mall/sub_header'); ?>
+<div class="hr_3">&#160;</div>
+<div class="slider-wrapper">
+	<div class="nivoSlider slider" id="<?php echo $slider_id;?>">
+		<?php foreach ($images as $image) :?>
+			<?php 
+				$extra = array();
+				$extra['src'] = 'src="' . _C($image['path']) .'" ';
+				if ($image['title']) $extra['title'] = 'title="' . $image['title'] . '" ';
+				
+				$img_body = '<img ' . join(' ', $extra) . ' />';
+				
+				echo isset($image['link']) ? URI::anchor($image['link'], $img_body, ' target="_blank"') : $img_body;
+			?>
+		<?php endforeach;?>
+	</div>
+</div>
+<script type="text/javascript">
+(function($) {
+    $('#<?php echo $slider_id;?>').nivoSlider({
+       effect: 'random',
+       animSpeed: 1000,
+       pauseTime: 5000,
+       controlNav: true,
+       captionOpacity: 0.4
+    });
+    
+})(jQuery);
+</script>
+<div class="hr_2">&#160;</div>
+<div class="hr_2">&#160;</div>
+<div class="vendor_view">
+	<?php
+		$vendors = Q("vendor_scope[name=product_type.reagent][expire_date>0] vendor[approve_date>0]");
+	?>
+	<div class="title">
+		<div class="float_right"><?php echo URI::anchor(URI::url('!mall/home/index.vendor'), T('更多 &#187;'), 'class="blue"'); ?></div>
+		<?php echo HT('按供应商查看'); ?>
+	</div>
+
+	<table class="vendor_list flexible">
+		<tbody>
+			<tr>
+				<th class="nav icon"></th>
+				<th class="separator"></th>
+				<th class="nowrap left nav vendor_name"><?php echo T('供应商名称')?></th>
+				<th class="separator"></th>
+				<th class="nowrap nav center evaluate"><?php echo T('评价')?></th>
+			</tr>
+		<tbody>
+	</table>
+	<div id="J_news" class="news">
+		<div id="J_Roll_Container" class="news-box ">
+			<table class="vendor_list flexible J_Roll_Content news-list">
+				<tbody>
+					<?php
+						$num = 1;
+						foreach ($vendors as $vendor) {
+							if ($num % 2) $class = "color_row";
+							else $class = "";
+							$num ++;
+							echo V('prod_reagent:mall/home/vendor_item', array('vendor'=>$vendor, 'class' => $class));
+						}
+					?>
+				<tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+window.onload = function(){
+	var roll_jQuery, contents;
+	roll_jQuery = $.roll('.J_Roll_Content', '#J_Roll_Container', { effect: 'scrollY', duration: 30, delay: 500 }).rollRun();
+	contents = $('.J_Roll_Content');
+	contents.bind('mouseenter', function(){
+	roll_jQuery.rollStop();
+	});
+	contents.bind('mouseleave', function(){
+	roll_jQuery.rollRun();
+	});
+	};
+</script>
+</div>

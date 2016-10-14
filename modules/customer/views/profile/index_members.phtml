@@ -1,0 +1,123 @@
+<div class="hr_1">&#160;</div>
+<?php echo $secondary_tabs; ?>
+<div class="hr_1">&#160;</div>
+<?php
+$me = L('ME');
+
+if ($customer->bind_status != Customer_Model::BIND_STATUS_SUCCESS && $me->is_allowed_to('买方修改成员信息', $customer) && Q("$customer<member user")->total_count() < Config::get('customer.max_customer_members')):
+?>
+<div class="panel padding_1">
+    <a href="<?php echo $customer->url('add_member') ?>" class="button button_add middle"><?php echo T('添加成员')?></a>
+</div>
+<?php endif; ?>
+<?php
+echo $pagination;
+
+$table = Widget::factory('table');
+$table->name = 'customer_users';
+$table->form = $form;
+$table->sort_asc = $sort_asc;
+$table->sort_by = $sort_by;
+
+$table->add_columns(array(
+    '@'=>array(
+        'nowrap'=>TRUE
+    ),
+    'name'=>array(
+        'title'=>T('姓名'),
+        'filter' => array(
+        	'form' => V('customer:user_table/filters/name', array('name' => 'name', 'value' => $form['name'])),
+        	'value' => $form['name'] ? H($form['name']) : NULL
+        ),
+        'nowrap'=>TRUE,
+        'align'=>'left'
+    ),
+    'contact_info'=>array(
+        'title'=>T('联系方式'),
+        'filter' => array(
+        	'form' => V('customer:user_table/filters/contact_info', array('name' => 'contact', 'value' => $form['contact'])),
+        	'value' => H($form['contact'] ?: NULL),
+        	'field' => 'contact'
+        ),
+        'nowrap'=>TRUE,
+        'align'=>'left'
+    ),
+    'address'=>array(
+        'title'=>T('地址'),
+        'filter' => array(
+        	'form' => V('customer:user_table/filters/address', array('name' => 'address', 'value' => $form['address'])),
+        	'value' => $form['address'] ? H($form['address']) : NULL,
+            'field' => 'address'
+        ),
+        'nowrap'=>TRUE,
+        'extra_class'=>'flexible'
+    ),
+    'rest'=>array(
+        'align'=>'right',
+        'nowrap'=>TRUE
+    )
+));
+
+$table->empty_message = T('没有符合条件的用户!');
+
+foreach($users as $user)  {
+
+	$links = $user->links('customer_index');
+
+    if ($customer->bind_status != Customer_Model::BIND_STATUS_SUCCESS &&  $me->is_allowed_to('买方修改成员信息', $customer)
+        && $user->id != $customer->owner->id) {
+
+            //不可以更改其它课题组、供应商、中心管理员信息
+            if(!$user->access('管理所有内容')
+                && Q("$user vendor.member")->total_count() == 0
+                && Q("$user customer.member")->total_count() == 1) {
+
+                $links['edit'] = array(
+                    'url' => URI::url('!customer/profile/member_edit.'.$user->id.'.'.$customer->id),
+                    'text' => T('修改'),
+                    'extra' =>'class="blue"',
+                );
+            }
+
+		$links['delete'] = array(
+			'url' => '#',
+			'text' => T('移除'),
+			'extra' =>'class="blue" '.
+			'q-object="delete_customer_user" '.
+			'q-event="click" '.
+			'q-static="'.H(array('uid'=>$user->id)).'"'
+			);
+
+        if ($user->atime == 0) {
+            $links['activate'] = array(
+                'url' => '#',
+                'text' => T('激活'),
+                'extra' =>'class="blue" '.
+                'q-object="activate_customer_user" '.
+                'q-event="click" '.
+                'q-static="'.H(array('uid'=>$user->id, 'cid'=>$customer->id)).'"'
+                );
+        }
+	}
+
+
+    $table->add_row(array(
+        '@'=>array(
+            'view'=>$user->icon('32', 'style="display:block"'),
+            'extra'=>'style="padding:4px" align="right"'
+        ),
+        'name'=> array(
+        	'view' => V('customer:user_table/data/name', array('user'=>$user)),
+        	'light' => TRUE
+        ),
+        'contact_info'=>V('customer:user_table/data/contact_info', array('user'=>$user)),
+        'address'=> array(
+        	'view' => V('customer:user_table/data/address', array('user'=>$user)),
+        	'light' => TRUE
+        ),
+        'rest'=>Widget::factory('application:links', array('links'=>$links))
+    ));
+}
+
+echo $table;
+?>

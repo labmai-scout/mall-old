@@ -1,0 +1,7 @@
+<?php 
+$uniqid = 'nfs_view_'.uniqid();
+$form_token = Session::temp_token('nfs_', 600);
+$arr['uniqid'] = '#'.$uniqid;
+$_SESSION[$form_token] = $arr;
+?>
+<div id="<?php echo $uniqid?>" src="<?php echo URI::url('!nfs/nfs/index.'.$object->name().'.'.$object->id.'.'.$path_type,	['form_token'=>$form_token]) ?>" >&#160;</div>

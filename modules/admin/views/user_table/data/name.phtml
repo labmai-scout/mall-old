@@ -1,0 +1,6 @@
+<a href="<?php echo $user->url(NULL, NULL, NULL, 'admin_view')?>"><strong><?php echo H($user->name); ?></strong></a>
+<?php if(!$user->is_active()): ?>
+<div class="clearfix">
+	<span class="status_tag status_tag_error"><?php echo HT('未激活')?></span>
+</div>
+<?php endif; ?>

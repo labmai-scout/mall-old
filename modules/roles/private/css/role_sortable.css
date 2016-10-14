@@ -1,0 +1,69 @@
+.role_drag_handle{
+	background-image:url(images/icons/handle.png);
+	background-position:0 0;
+	background-repeat:repeat-y;
+	*margin-right: 2px;
+	width:8px;
+	height:25px;
+	vertical-align:middle;
+	cursor:move;
+	display: inline-block;
+}
+
+.not_role_drag_handle{
+	width:8px;
+	height:25px;
+	vertical-align:middle;
+	display: inline-block;
+	*margin-right: 2px;
+}
+
+.role_sort_placeholder {
+	position:absolute;
+}
+
+.role_sort_placeholder div{
+	background: url(images/icons/insertion.png) left center no-repeat;
+	height: 12px;
+	margin-left: -6px;
+	_margin-left:0px;
+}
+
+.role_drag_helper {
+	background-color: #fff;
+	border: 2px solid #ccc;
+	width: auto!important;
+	width: 400px;
+	min-width: 400px;
+	overflow: hidden;
+}
+
+.role_title_placeholder{
+	border: 3px solid #69F;
+	position:absolute;
+	margin: -3px;
+	border-radius: 6px;
+}
+
+.role_container {
+	padding-left: 10px;
+	margin-left: 10px;
+	border-left: 2px solid #eee;
+	color: #000;
+}
+
+.role_root_container {
+	padding-left: 0;
+	margin-left: 0;
+	border-left: none;
+}
+
+.role_hide_item {
+	position: relative;
+	background-color: #F4F4F4;
+	border: 3px solid #CDCACA;
+}
+
+.move_hanlder {
+	border: 1px solid #CDCACA;
+}

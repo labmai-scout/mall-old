@@ -1,0 +1,6 @@
+<div class="form flexform_item padding_1 clearfix">
+	<div class="float_right">
+		<a class="button button_delete flexform_button_delete <?php echo $this->no_delete_confirm?'flexform_no_delete_confirm':''?>"><?php echo HT('删除'); ?></a>
+	</div>
+	<?php echo V($this->view, (array)$this->data + (array)$this->extra_vars + array('flexform_index'=>$this->index)); ?>
+</div>

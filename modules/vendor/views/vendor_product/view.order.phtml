@@ -1,0 +1,68 @@
+<div class="hr_1">&#160;</div>
+<?php
+echo $pagination;
+
+$table = Widget::factory('table');
+$table->name = 'orders'; // 可根据 $table->name 绑定事件
+
+$table->add_columns(array(
+	'flag' => array(
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE,
+	),
+    'ref_no'=>array(
+        'title'=>T('订单编号'),
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE,
+    ),
+    'items'=>array(
+        'title'=>T('商品'),
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE
+    ),
+    'customer'=>array(
+        'title'=>T('买方'),
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE
+    ),
+    'price'=> array(
+        'title'=>T('金额'),
+        'align'=>'right',
+        'extra_class'=>'tight',
+        'nowrap' => TRUE,
+    ),
+    'status'=> array(
+        'title'=>T('状态'),
+        'align'=>'left',
+        'nowrap' => TRUE,
+    ),
+    'description'=>array(
+        'title'=>T('备注'),
+    ),
+	/*
+    'rest'=>array(
+   		'align'=>'right',
+    	'nowrap'=>TRUE,
+    )
+	*/
+));
+
+$table->empty_message = T('没有相关条件的订单信息!');
+
+foreach ($orders as $order) {
+
+	$links = $order->links('vendor_index');
+
+	$table->add_row(array(
+		'flag' => V('application:common/flag', array('flag' => $order->has_news_to($me))),
+        'ref_no'=> V('vendor:orders/table/data/ref_no', array('order'=>$order)),
+        'customer'=> V('vendor:orders/table/data/customer', array('order'=>$order)),
+        'items'=> V('vendor:orders/table/data/items_lite', array('order'=>$order)),
+        'status'=> V('vendor:orders/table/data/status', array('order'=>$order)),
+        'price'=> V('application:order/price', array('order'=>$order)),
+		'description' => V('vendor:orders/table/data/description', array('order'=>$order)),
+		// 'rest' => Widget::factory('application:links', array('links'=>$links))
+	));
+}
+
+echo $table;

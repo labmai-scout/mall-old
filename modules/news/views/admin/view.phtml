@@ -1,0 +1,11 @@
+<div class="padding_2" style="width: 600px;margin: 0px auto">
+<div class="clearfix">
+  <div style="padding: 10px; padding-left: 0; height: 300px; overflow: auto;">
+	<?php echo $news->content;?>
+  </div>
+</div>
+<div class="hr_1">&#160;</div>
+<?php if (Module::is_installed('nfs')) : ?>
+    <?php echo V('news:admin/attachments', array('news'=> $news))?>
+<?php endif;?>
+</div>

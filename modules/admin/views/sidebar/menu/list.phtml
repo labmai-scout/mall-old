@@ -1,0 +1,36 @@
+<div class="item list_item <?php echo $class?>">
+	<a class="item_content clearfix"
+	<?php if ($item['target']) { ?>
+	target="<?= $item['target'] ?>"
+	<?php } ?>
+	 href="<?php echo URI::url($item['url']) ?>">
+		<img src="<?php echo $item['icon'] ?>" width="16px" height="16px" class="pngfix middle"/>
+		<span class="middle inline_block" style="height:16px"><?php echo HT($item['title']); ?></span>
+<?php
+if ($item['notif_callback']) :
+	$number = call_user_func($item['notif_callback'], $item);
+	if ($number > 0) :
+		if ($number > 99) {
+			$number = '...';
+			$len = 2;
+		}
+		else {
+			$len = strlen($number);
+		}
+?>
+	<span class="num_notif num_notif_<?php echo $len;?> middle"><?php echo $number; ?></span>
+<?php endif;
+endif;
+?>
+<?php
+if ($item['reminder_callback']) :
+	$number = call_user_func($item['reminder_callback'], $item);
+	if ($number) {
+?>
+	&#160;<span class="num_reminder">&#160;</span>
+<?php
+	}
+endif;
+?>
+	</a>
+</div>

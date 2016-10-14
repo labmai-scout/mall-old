@@ -1,0 +1,41 @@
+<?php
+// 现在 toggle 相关的属性好像还不能用 q-toggle 指定(xiaopei.li@2012-03-18)
+// <ul q-toggle_status="echo $toggle" q-enable_on="true">
+?>
+<table class="form">
+	<?php
+	foreach ($properties as $property => $label):
+		$scope_name = 'rgt_type.' . $property;
+		$scope = O('vendor_scope', array('vendor' => $vendor, 'name' => $scope_name));
+		$scope_checkbox_name = 'scope_allowed[' . $scope_name . ']';
+	?>
+	<tr>
+		<td class="middle left nowrap">
+			<?php echo Form::checkbox($scope_checkbox_name, $scope->id && $scope->expire_date > 0, $label, 'class="monitor"', 'class="scope_check"'); ?>
+		</td>
+		<td class="middle nowrap">
+			<div class="toggle:<?php echo $scope_checkbox_name?> show_on:on clearfix middle">
+				<label><?php echo HT('经营有效期'); ?></label>
+				<input name="<?php echo 'scope_expire_date_from[' . $scope_name . ']'; ?>" class="text toggle_status:edit_reg_info enable_on:on date" q-date_format="<?php echo HT('$year年$month月$day日')?>" value="<?php echo H($scope->expire_date_from); ?>" />&#160;~&#160;<input name="<?php echo 'scope_expire_date_to[' . $scope_name . ']'; ?>" class="text toggle_status:edit_reg_info enable_on:on date" q-date_format="<?php echo HT('$year年$month月$day日')?>" value="<?php echo H($scope->expire_date); ?>" />
+			</div>
+		</td>
+		<td class="middle">
+			<div class="toggle:edit_reg_info show_on:on clearfix middle">
+				<div class="toggle:<?php echo $scope_checkbox_name?> show_on:on clearfix middle">
+		            <?php 
+		            	$full_path = $scope->get_pic_realpath();
+						if (!is_file($full_path)) :
+		            ?>
+		            <iframe frameborder="0" align="middle" height="26" width="90" src="<?php echo URI::url('cert/upload?'. H(array('vendor_id'=>$vendor->id, 'scope_name'=>$scope_name, 'scope_id'=>$scope->id)));?>"></iframe>
+		            <?php else: ?>
+		            	<span>
+		            		<a herf="#" q-object="show_pic"  q-static="<?php echo H(array('sid'=>$scope->id))?>" q-src="<?php echo URI::url('cert')?>" q-event="click" class="button button_view" /><?php echo HT('查看')?></a>
+		            		<a herf="#" q-object="delete_pic"  q-static="<?php echo H(array('sid'=>$scope->id))?>" q-src="<?php echo URI::url('cert')?>" q-event="click" class="button button_delete" /><?php echo HT('删除')?></a>
+		            	</span>
+		            <?php endif; ?>
+	            </div>
+            </div>
+		</td>
+	</tr>
+<?php endforeach; ?>
+</table>

@@ -1,0 +1,66 @@
+.status_pending_approval {
+   	background-color: #F93;
+} 
+.status_approved {
+    background-color: #6C9;
+}
+.status_canceled {
+    background-color: #888;
+}
+
+.light_panel .status_tag {
+    border: 1px solid #eee;
+}
+
+span.delete_price {
+	text-decoration: line-through;
+}
+
+span.price {
+	font-weight: bold;
+	text-shadow: 0 0 1px #cda6a6;
+}
+
+a.toggle_button_hidden {
+	background: url("images/icons/down.png") no-repeat scroll center center #EEEEEE;
+	*backgroud-color: background: url("images/icons/down.gif") no-repeat scroll center center #EEEEEE;
+	display: block;
+	height: 22px;
+	width: 22px;
+	overflow: hidden;
+}
+
+a.toggle_button_show {
+	background: url("images/icons/up.png") no-repeat scroll center center #EEEEEE;
+	*background: url("images/icons/up.gif") no-repeat scroll center center #EEEEEE;
+    display: block;
+    height: 22px;
+    width: 22px;
+    overflow: hidden;
+}
+
+a.toggle_button_hidden:hover {
+	text-decoration: none;
+}
+
+a.toggle_button_show:hover {
+	text-decoration: none;
+}
+
+.orders_container {
+	
+	width: 200px;
+	
+	.order_item_container {
+	    background-color: #EEEEEE;
+	    border-radius: 5px 5px 5px 5px;
+	    margin: 2px 15px 2px 0px;
+	    overflow: hidden;
+	    padding: 5px;
+	    text-align: center;
+	    
+	    .order_title {
+	    	line-height: 22px;
+	    }
+	}
+}

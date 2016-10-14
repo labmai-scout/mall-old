@@ -1,0 +1,111 @@
+<?php
+// TODO 显示商品的报价时, 要考虑对当前 customer 的特殊报价(xiaopei.li@2012-03-09)
+// TODO 若一个商家对某 product 有多 product, 则名字可能在供应商多次显示(xiaopei.li@2012-04-16)
+$me = L('ME');
+$ids = array();
+
+$url = $url ?: $product->url(NULL, NULL, NULL, 'view');
+$img = $img ?: $product->icon(64);
+?>
+<li class="data clearfix">
+	<table class="list clearfix">
+		<tr>
+			<td class="nowrap middle icon">
+				<?php echo URI::anchor($url, $img); ?>
+				<div class="center">
+					<?php
+						switch ($product->rgt_type) {
+							case Reagent_Type::DANGEROUS:
+								$rgt_type_class = 'rgt_type_d';
+								$rgt_type_name = '危险品';
+								break;
+							case Reagent_Type::EASYMADE_TOXIC:
+								$rgt_type_class = 'rgt_type_emt';
+								$rgt_type_name = '易制毒';
+								break;
+							case Reagent_Type::SUPER_TOXIC:
+								$rgt_type_class = 'rgt_type_st';
+								$rgt_type_name = '剧毒品';
+								break;
+							default:
+						}
+
+						$types = Config::get('reagent.types');
+						if ($rgt_type_class):
+					?>
+						<span class="status_tag <?php echo $rgt_type_class ?>"><?php echo I18N::T('prod_reagent',$rgt_type_name); ?></span>
+					<?php endif; ?>
+				</div>
+			</td>
+			<td class="left top">
+					<h4><a href="<?php echo $url; ?>" class="data_title" target="_blank"><?php echo H($product->name); ?></a></h4>
+					<table class="product_info">
+						<?php
+						// 商城 product 搜索结果按配置显示内容, 其他 prod_{$type} 模块也应该这样写!!!(xiaopei.li@2012-08-27)
+						$product_list_fileds = Product_Model::get_options($product->type, 'product_list_fields');
+	
+						if ($product_list_fileds) :
+	
+							$is_first = TRUE;
+	
+							foreach ($product_list_fileds as $field => $title): ?>
+								
+								<?php if ($is_first) :?>
+								<tr>
+								<?php endif; ?>
+								
+									<td class="nowrap half">
+										<?php echo HT($title); ?>:&#160;&#160;
+										<span class="hidden_normal">
+											<?php echo H($product->$field); ?>
+										</span>
+									</td>
+									
+								<?php if (!$is_first): ?>
+								</tr>
+								<?php endif;?>
+								
+								<?php $is_first = !$is_first; ?>
+								
+							<?php endforeach; ?>
+							
+							<?php if (!$is_first): ?>
+									<td>&#160;</td>
+								</tr>
+							<?php endif; ?>
+							
+						<?php endif; ?>
+						
+						<tr>
+							<td class="nowrap" colspan="2">
+								<?php echo HT('价格: '); ?>
+								<?php if ($me->is_allowed_to('查看价格', $product)): ?>
+									&#160;&#160;<?php echo V('application:product/price_range', array('product' => $product)) ?>
+								<?php else: ?>
+									<span class="hidden_normal">
+										&#160;&#160;<?php echo T('授权用户可见'); ?>
+									</span>
+								<?php endif; ?>
+							</td>
+						</tr>
+						<tr>
+							<td class="nowrap"  colspan="2">
+								<?php echo HT('供应商:'); ?>
+								<?php
+									$vendor = $product->vendor;
+									if ($vendor->name) {
+										echo $vendor->name;
+									}
+									else {
+								?>
+									<span class="hidden_normal">
+										&#160;&#160;<?php echo T('暂无商家供货');?>
+									</span>
+								<?php } ?>
+							</td>
+						</tr>
+					</table>
+			</td>
+		</tr>
+	</table>
+</li>

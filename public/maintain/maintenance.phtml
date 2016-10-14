@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>
+</title>
+<style type="text/css">
+* {margin:0 auto;}
+body { background-color: #EAEEF1; width:100%;}
+#container { height:100%;}
+#background { background-image: url("<?php echo $path . '/maintain/bg.png'; ?>"); background-repeat: no-repeat; color: white; width: 854px; height:733px;}
+.maintain_descrpiton{ font-size: 48px; }
+.center { text-align: center;}
+.time_descprption { font-size: 24px; text-align: center; margin-top: 39px;}
+.info { font-size: 16px;}
+</style>
+</head>
+<body>
+<div id="container">
+	<div id="background">
+		<div style="height:151px;">&nbsp;</div>
+		<div id="header" class="center"><span class="maintain_descrpiton">系统正在升级维护</span></div>
+		<div class="time_descprption">将在 <span style="color: #FA442F;"><?=$maintan_end_date ?></span> 完成, 请您稍后再来, 谢谢!</div>
+		<div style="height:140px;">&nbsp;</div>
+		<div class="company_infomation">
+			<table class="table_info">
+				<tr style="height: 25px;">
+					<td  style="width:455px;" align="right"><img align="absmiddle" src="<?php echo $path . '/maintain/phone.png'; ?>" alt="" /></td>
+					<td style="width:10px;"></td>
+					<td class="info">400-MY-GENEE (400-694-3633)</td>
+				</tr>
+				<tr style="height: 25px;">
+					<td align="right"><img align="absmiddle" src="<?php echo $path . '/maintain/email.png' ?>" alt="" /></td>
+					<td></td>
+					<td class="info">support@geneegroup.com</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	window.onload = function() {
+		var client_height = document.documentElement.clientHeight - 733;
+		if ( client_height>0 ) {
+			document.getElementById("background").style.marginTop = client_height/2 + 'px';
+		}
+	};
+</script>
+</body>
+</html>

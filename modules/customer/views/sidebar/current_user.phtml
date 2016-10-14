@@ -1,0 +1,11 @@
+<?php 
+$me = L('ME');
+if ($me->id) : 
+?>
+<div class="user_card clearfix">
+	<div class="icon float_left"><a href="<?php echo $me->url(); ?>"><?php echo $me->icon('32') ?></a></div>
+	<div class="information float_left">
+		<span class="name"><a href="<?php echo $me->url(); ?>"><?php echo $me->name ?></a></span>
+	</div>
+</div>
+<?php endif;

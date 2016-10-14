@@ -1,0 +1,9 @@
+<?php
+$customer = $order->customer;
+$allowCredit = !!Config::get('customer.allow_credit');
+if ($allowCredit) {
+    $tmpCName = 'customer-credit-lv' . (int) $customer->credit;
+    echo CSS::load_async('application:credit');
+}
+?>
+<a class="<?=$tmpCName?>" href="<?php echo $customer->url(NULL, NULL, NULL, 'vendor_view'); ?>"><strong><?php echo HT($customer->name); ?></strong>&#160;(<?php echo H($customer->owner->name) ?>)</a>

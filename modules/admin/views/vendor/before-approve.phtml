@@ -1,0 +1,19 @@
+<div class="hr_1">&#160;</div>
+<div class="padding_2 form clearfix">
+    <?=V($step, [
+        'vendor'=> $vendor
+    ])?>
+    <div class="right">
+        <?php /*
+        * 暂时不开放基本信息审核的功能
+        <input type="button" class="button button_reject" value="<?php echo T('拒绝')?>"
+            q-object='approve_reject'
+            q-event='click'
+            q-static="<?php echo H(['id'=>$vendor->id, 'step'=>$step])?>" />
+        */ ?>
+        <input type="button" class="button button_next" value="<?php echo T('下一步')?>"
+            q-object='approve_confirm'
+            q-event='click'
+            q-static="<?php echo H(['id'=>$id, 'step'=>$step])?>" />
+    </div>
+</div>

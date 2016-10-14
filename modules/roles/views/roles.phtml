@@ -1,0 +1,17 @@
+<div class="hr_1">&#160;</div>
+<form autocomplete="off" method="post" action="">
+	<?php $uniqid = 'role_'.uniqid();?>
+	<div id="<?php echo $uniqid; ?>">
+		<div class="role_container role_root_container">
+			<?php echo V('role_list', array('roles' => $roles)) ?>
+		</div>
+	</div>
+	<?php echo V('role_item', array('role' => O('role'))); ?>
+	<div class="hr_1">&#160;</div>
+	<input name="submit" type="submit" class="button button_save" value="<?php echo T('保存')?>" />
+</form>
+<script type="text/javascript">
+jQuery(function($) {
+	Q.role_sortable("<?php echo $uniqid?>", "<?php echo JS::escape(URI::url('')) ?>");
+});
+</script>

@@ -1,0 +1,9 @@
+<div style="padding:.3em 0">
+<a href="<?php echo $order->url(NULL, NULL, NULL, 'admin_view'); ?>">
+	<?php if($order->order_no) :?>
+	<span class="panel_uniqid"><?php echo H($order->order_no); ?></span>
+	<?php else : ?>
+	<span class="panel_uniqid"><?php echo H('订单未编号'); ?></span>
+<?php endif; ?>
+</a>
+</div>

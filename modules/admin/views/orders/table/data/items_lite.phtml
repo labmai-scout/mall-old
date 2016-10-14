@@ -1,0 +1,16 @@
+<?php
+
+$items = Q("order_item[order=$order]");
+
+foreach ($items as $item) {
+	$product = $item->product;
+?>
+<span>	
+	<?php echo $product->icon(16, 'class="middle"'); ?>
+	<a href="<?php echo $order->url(NULL, NULL, NULL, 'vendor_view'); ?>" class="middle"><?php echo H($product->name); ?></a>
+	<span class="middle">×</span>
+	<strong class="middle"><?php echo intval($item->quantity); ?></strong>
+</span>
+<?php 
+}
+?>

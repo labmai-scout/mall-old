@@ -1,0 +1,136 @@
+<div class="member_content">
+	<?php
+		$token_uniqid = 'user_'.uniqid();
+		$name_uniqid = 'user_'.uniqid();
+	?>
+	<div class="hr_1">&#160;</div>
+	<div class="form padding_1">
+		<form method="post" action="<?php echo URI::url() ?>" autocomplete="off">
+		<?php echo V('form_error', array('form'=>$form));?>
+		<?php $require = (string) V('form_require'); ?>
+		<table class="form">
+			<tbody class="content">
+				<tr>
+					<td class="label right nowrap"><?php echo T('登录帐号')?></td>
+					<td class="middle">
+					<?php
+					echo Widget::factory('customer:user_selector', array(
+	                    'name' => 'token',
+	                    'user_name' => $form['token'],
+	                    'uniqid' => $token_uniqid,
+	                    'autocomplete' => URI::url('!customer/autocomplete/user_token_not_in_customer.' . $customer->id),
+	                ));
+	                ?>
+		            @ <?php
+						echo Widget::factory('admin:backend_selector', array(
+							'select'=> $form['backend'] ? : Config::get('auth.default_backend'),
+							'extra_class' => 'monitor',
+						));
+					?>
+					<?php echo $require; ?>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td class="middle description"><?php echo T('登录账号必须超过2个字符长, 可使用字符: 字母, 数字, "-", "_", "." 和 "@", 开头必须是数字或字母'); ?></td>
+				</tr>
+				<?php echo Widget::factory('customer:add_pwd', array('form'=>$form, 'require'=>$require, 'name'=>'backend'))?>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('姓名')?></td>
+					<td class="middle">
+					<?php
+					echo Widget::factory('customer:user_selector', array(
+	                    'name' => 'name',
+	                    'user_name' => $form['name'],
+	                    'uniqid' => $name_uniqid,
+	                    'autocomplete' => URI::url('!customer/autocomplete/user_not_in_customer.' . $customer->id),
+	                ));
+	                ?>
+	                <?php echo $require; ?>
+	                </td>
+				</tr>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('电子邮箱')?></td>
+					<td class="middle"><input name="email" class="text" size="40" style="font-size:10px" value="<?php echo H($form['email']) ?>" /><?php echo $require; ?></td>
+				</tr>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('性别')?></td>
+					<td class="middle"><?php echo Form::dropdown('gender', T(User_Model::$genders), isset($form['gender']) ? $form['gender'] : -1 , 'class="dropdown"'); ?></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="hr_1">&#160;</td>
+				</tr>
+
+				<tr>
+					<td class="label right nowrap middle"><?php echo T('联系电话')?></td>
+					<td class="middle"><input name="phone" class="text" size="40" style="font-size:10px" value="<?php echo H($form['phone'])?>" /><?php echo $require; ?></td>
+				</tr>
+				<tr>
+					<td class="label right nowrap middle"><?php echo T('地址')?></td>
+					<td class="middle"><input name="address" class="text" size="40" style="font-size:10px" value="<?php echo H($form['address']) ?>" /></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="hr_1">&#160;</td>
+				</tr>
+				<tr>
+					<td class="label right nowrap"><?php echo T('立即激活')?></td>
+					<td class="middle">
+					    <?php echo Form::radio('activate', 1, isset($form['activate']) ? $form['activate'] : 1, T('是'), ' class="middle"', 'class="middle"'); ?>
+					    <?php echo Form::radio('activate', 0, isset($form['activate']) ? $form['activate'] : 1, T('否'), ' class="middle"', 'class="middle"'); ?>
+					</td>
+				</tr>
+			</tbody>
+			<tbody>
+				<tr>
+					<td></td>
+					<td>
+						<input type="submit" name="submit" class="button button_save" value="<?php echo T('提交')?>" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+jQuery(function() {
+	var token_uniqid = '<?php echo $token_uniqid?>';
+	var name_uniqid = '<?php echo $name_uniqid?>';
+	var customer_id = '<?php echo $customer->id?>';
+	var $input = $('#' + token_uniqid + ',#' + name_uniqid);
+	//显示选择的用户信息
+	$input.bind('autoactivate.autocomplete', function(e, item) {
+		get_user({'uid': item.alt,'cid': customer_id});
+	});
+
+	$('#' + token_uniqid).blur(function(){
+		var token = $(this).val();
+		var backend = $("select[name='backend']").val();
+
+		if(token) {
+			get_user({'token': token,'backend': backend, 'cid': customer_id});
+		}
+	});
+
+	//选择backends的时候
+	$("select[name='backend']").change(function(){
+		var token = $('#' + token_uniqid).val();
+		var backend = $("select[name='backend']").val();
+
+		if(token) {
+			get_user({'token': token,'backend': backend, 'cid': customer_id});
+		}
+	});
+
+	function get_user(value) {
+		Q.trigger({
+			object: "get_user",
+			event: "click",
+			data: value,
+			url: "<?php echo URI::url('!customer/profile'); ?>",
+		});
+	}
+
+});
+</script>

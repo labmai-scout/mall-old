@@ -1,0 +1,27 @@
+<?php
+
+if (!Auth::logged_in()):
+	foreach (OAuth_Client::get_oauth_login_links() as $key => $opts):
+	?>
+		<div class="padding_1 center">
+			<h1>
+				<a href="#" q-src="<?php echo URI::url('!oauth/consumer')?>"
+			q-static="href=<?php echo $opts['link']?>"
+			q-object="oauth_login"
+			q-event="click">
+				<?php echo H($opts['title']); ?>
+			</a>
+			</h1>
+		</div>
+	<?php
+	endforeach;
+
+
+	if ($_SESSION['logout_oauth_provider']) {
+		?>
+			<iframe style="display:none;" src="<?php echo $_SESSION['logout_oauth_provider']; ?>"></iframe>
+		<?php
+		unset($_SESSION['logout_oauth_provider']);
+	}
+
+endif;

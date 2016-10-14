@@ -1,0 +1,180 @@
+input.button, button, a.button {
+	text-decoration: none;
+	cursor: hand;
+	cursor: pointer;
+	margin:0;
+	display: inline-block;
+
+	height:14px;
+	line-height:1.231;
+	padding:4px;
+	text-align: left;
+	text-decoration: none !important;
+	-moz-user-select: none;
+	*white-space:nowrap;
+
+	font-size: 12px;
+	font-weight: normal;
+
+	background-color: #f4f4f4;
+
+	border-width:1px;
+	border-style:solid;
+	border-color:#fff #999 #999 #fff;
+
+	color: #000;
+
+	text-transform: capitalize;
+}
+
+input.button, button{
+	padding:0 4px;
+	height:24px;
+	line-height:24px;
+	_padding:0;
+	*width:auto;
+	_line-height:20px;
+	*overflow:hidden;
+}
+
+input.button:hover, button:hover, a.button:hover {
+	background-color: #ddd;
+}
+
+input.button:active, button:active, a.button:active {
+	border-color: #999 #fff #fff #999;
+}
+
+
+.remove_button {
+	background: url("images/buttons/remove.png") no-repeat scroll 0 0 transparent;
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+	text-decoration: none;
+}
+
+.remove_button:hover, .delete_button.checked{
+	background-position: -16px 0px;
+	text-decoration: none;
+}
+
+@css-define actions: ["add", "delete", "refresh", "save", "print", "edit", "attach", "export", "import", "cancel", "search", "setting", "list", "list_focus", "grid", "grid_focus", "logout", "login", "signup", "view", "help", "bucket", "follow", "unfollow", "mark_read", "mark_unread", "talk", "fullscreen", "tick", "stat_close", "calculate", "remote"];
+
+@css-foreach(action in actions) {
+
+	input.button_$action, a.button_$action {
+		padding-left: 24px;
+		background-image: url(images/buttons/$action.png);
+		background-repeat: no-repeat;
+		background-position: 4px center;
+		_background-image: url(images/buttons/$action.gif); 
+	}
+	
+}
+
+input.button_empty, a.button_empty {
+	width: 14px;
+	height: 14px;
+	*width: 22px;
+	*height: 14px;
+	background-position: center center;
+	padding: 4px;
+}
+
+.toggle_button {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	overflow:hidden;
+	line-height: 16px;
+	border:none;
+}
+
+#sidebar .sidebar_menu div.menu {
+	
+	.toggle_button {
+		background: url(images/icons/minus.png) no-repeat center center;
+		_background-image: url(images/icons/minus.gif);
+	}
+
+	.toggle_button_collapsed {
+		background: url(images/icons/plus.png) no-repeat center center;
+		_background-image: url(images/icons/plus.gif);
+	}
+
+	a.toggle_button {
+		text-decoration: none;
+	}
+
+	a.toggle_button_hidden {
+		display: block;
+		height: 22px;
+		overflow:hidden;
+		line-height: 22px;
+		background: #eee url(images/icons/up.png) no-repeat center center;
+		_background-image: url(images/icons/up.gif);
+	}
+
+	a.toggle_button_hidden:hover {
+		background-color: #ddd;
+	}
+
+	a.toggle_button_show_hidden{
+		background: #eee url(images/icons/down.png) no-repeat center center;
+		*background-image: url(images/icons/down.gif);
+		text-decoration: none;
+	}
+
+}
+
+
+.toggle_collapse {
+	background: url(images/icons/collapse.png) no-repeat center center;
+	_background-image: url(images/icons/collapse.gif);
+}
+
+.toggle_expand {
+	background: url(images/icons/expand.png) no-repeat center center;
+	_background-image: url(images/icons/expand.gif);
+}
+
+.find_button {
+	background: url(images/icons/search.png) no-repeat center center;
+	display: inline-block;
+	width: 22px;
+	height: 22px;
+	overflow:hidden;
+	border: none;
+	border-radius: 4px;
+}
+
+.panel_button {
+	-moz-border-radius : 2px 2px 2px 2px;
+	background-color : #999999;
+	color : #FFFFFF !important;
+	cursor : pointer;
+	display : -moz-inline-box;
+	font-size : 12px;
+	font-weight : normal;
+	line-height : 1.231;
+	margin-right : 2px;
+	padding : 2px 4px;
+	text-decoration : none !important;
+	white-space : nowrap;
+}
+
+.find_button:hover {
+	text-decoration:none;
+	background-color: #ccc;
+}
+
+/* iPad */
+@media screen and (max-device-width: 800px) {
+	input.button, button {
+		-webkit-appearance: none;
+		line-height: 22px;
+		border-radius: 0;
+	}
+}
+

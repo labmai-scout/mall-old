@@ -1,0 +1,15 @@
+<?php
+/*
+  TODO::token_verify:true should be assigned outside this template
+ */
+?>
+<input
+	type="text" 
+	name="<?php echo H($this->name); ?>"
+    class="text token middle <?php if (!$this->allow_creating) echo 'token_verify'; ?> <?php if($this->allow_merge) echo 'autocomplete_box';?>"
+	q-token_autocomplete="<?php echo H($this->autocomplete); ?>" 
+	 <?php echo $this->token_tip ? 'q-token_tip="'.H($this->token_tip) .'"': ''?>
+	size="<?php echo $this->size ? : 60; ?>"
+	value="<?php echo H($this->value); ?>"
+	<?php echo $this->extra; ?>
+/>

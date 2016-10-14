@@ -1,0 +1,17 @@
+
+<?php
+$me = L('ME');
+$messages = Q("message[receiver={$me}][!is_read]:sort(mtime D)");
+if($messages->count()): ?>
+<div class="clearfix message_error padding_2">
+<?php
+endif;
+foreach($messages as $message):
+?>
+<h4>
+	<a href="<?php echo $message->url(); ?>"><?php echo new Markup($message->title) ?></a>
+</h4>
+<?php endforeach; ?>
+<?php if($messages->count()): ?>
+</div>
+<?php endif; ?>

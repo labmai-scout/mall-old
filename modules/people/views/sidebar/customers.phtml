@@ -1,0 +1,18 @@
+<?php
+$me = L('ME');
+if ($me->id) {
+	$customers = Q("$me<member customer");
+	if ($customers->count() > 0) {
+?>
+<h4 class="description"><?php echo HT('买方'); ?></h4>
+<ul>
+<?php foreach($customers as $customer) { ?>
+<li>
+<a href="<?php echo $customer->url(); ?>"><?php echo H($customer->name); ?></a>
+</li>
+<?php } ?>
+</ul>
+<?php
+	}
+}
+

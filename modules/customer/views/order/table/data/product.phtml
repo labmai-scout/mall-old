@@ -1,0 +1,14 @@
+<a href="<?php echo H($product->new_url()); ?>"><?php echo H($product->name); ?></a>
+<?php
+$sale_info = is_array($sale_info) ? $sale_info : json_decode($product->sale_info, true);
+?>
+<?php if ($info = $sale_info['info']) {?>
+<br/>
+<span class="status_tag" style="background-color:#F05568">
+	<?php echo $info;?>
+</span>
+<?php
+}
+$extra_content = Event::trigger('order_item.product.table.extra_view', $item);
+echo $extra_content;
+?>

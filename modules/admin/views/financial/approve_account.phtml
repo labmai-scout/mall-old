@@ -1,0 +1,8 @@
+<div class="padding_3" style="width:300px;">
+	<p class="description"><?php echo T('结算完成前，请不要关闭此结算验证窗口') ?></p>
+	<p class="description"><?php echo T('结算完成后，请根据您网上财务结算的情况点击以下按钮') ?></p>
+	<p class="description"><?php echo T('如结算遇到问题，请联系管理员') ?></p>
+	<div class="hr_3">&#160;</div>
+	<a class="button button_tick" q-object="complete_approve" q-event="click" q-static="<?php echo H(array('sid'=>$statement->id))?>"><?php echo T('完成结算')?></a>
+	<a class="button button_cancel" q-object="fail_approve" q-event="click" q-static="<?php echo H(array('sid'=>$statement->id))?>"><?php echo T('结算遇到问题')?></a>
+</div>

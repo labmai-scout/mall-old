@@ -1,0 +1,27 @@
+<?php
+    list($token,$backend) = explode('|', $user->token);
+?>
+<h2>
+	<a href="<?php echo $user->url(NULL, NULL, NULL, 'view')?>"><?php echo H($user->name) ?></a>
+	<small class="description normal">(<?php echo $token; ?>)</small>	
+</h2>
+<div class="hr_1">&#160;</div>
+<?php if (!$user->is_active()): ?>
+	<p><span class="status_tag status_tag_error"><?php echo HT('未激活')?></span></p>
+	<div class="hr_1">&#160;</div>
+<?php endif; ?>
+<p><span class="email"><?php echo URI::mailto($user->email) ?></span><br/>  </p>
+<div class="hr_1">&#160;</div>
+<p><span class="phone"><?php echo HT($user->phone)?></span></p>
+<div class="hr_3">&#160;</div>
+<?php 
+	$rang = time() - $user->ctime;
+	$days = Date::format_interval($rang, 'd');
+	$days = "<span class='red'>$days[0]</span>";
+?>
+<span class="register"><?php echo T('您已经注册了 %day 天', array('%day' => $days))?></span>
+<div class="hr_3">&#160;</div>
+
+<?php $links = $user->links('view'); ?>
+<?php echo Widget::factory('application:links', array('links'=>$links)); ?>
+<div class="hr_1">&#160;</div>

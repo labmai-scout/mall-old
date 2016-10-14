@@ -1,0 +1,44 @@
+<?php
+
+$links = (array)$links;
+if (count($links)>0) {
+	//根据weight排序
+	
+	usort($links, function($a, $b) {
+		$aw = (int) $a['weight'];
+		$bw = (int) $b['weight'];
+		if ($aw == $bw) {
+			return 0;
+		}
+		elseif ($aw < $bw) {
+			return 1;
+		}
+		else
+			return -1;
+	});
+
+	$links = array_reverse($links);
+	
+	$separator = isset($separator) ? $separator : ' <span class="separator">•</span> ';
+	
+	$str_links = array();
+	foreach($links as $link) {
+		if ($link['html']) {
+			$str_link = $link['html'];
+		}
+		else {
+			$str_link = '';
+			if ($link['prefix']) $str_link .= $link['prefix'];
+			$extra = $link['extra'];
+			if ($link['tip']) $extra .= 'title="'.H($link['tip']).'"';
+			$str_link .= $link['url'] ? URI::anchor($link['url'], $link['text'], $extra) 
+							: '<a href="#"'.$extra.'>'.$link['text'].'</a>';
+			if ($link['suffix']) $str_link .= $link['suffix'];
+		}
+		
+		$str_links[] = $str_link;
+	}	
+
+	echo implode($separator, $str_links);		
+
+}

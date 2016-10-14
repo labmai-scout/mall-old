@@ -1,0 +1,16 @@
+<div class="item icon_item <?php echo $class?>">
+	<?php $tooltip = H(T($item['title'])); ?>
+	<div class="item_content" q-tooltip="<?php echo $tooltip?>" q-tooltip_offsetY="8" q-tooltip_class="sidebar_tooltip">
+		<a href="<?php echo URI::url($item['url']) ?>" class="icon center clearfix">
+			<img width="32px" height="32px" src="<?php echo $item['icon'] ?>" class="icon pngfix"/>
+		<?php 
+		if ($item['notif_callback']) :
+			$number = call_user_func($item['notif_callback'], $item);
+			if ($number > 0): $len = strlen($number); ?>
+			<span class="num_notif num_notif_<?php echo $len;?> middle"><?php echo $number; ?></span>
+		<?php endif;
+		endif;
+		?>
+		</a>
+	</div>
+</div>

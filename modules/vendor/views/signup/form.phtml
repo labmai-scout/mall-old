@@ -1,0 +1,97 @@
+<?php
+// TODO vendor 应可上传附件, 如营业执照等(xiaopei.li@2012-03-12)
+$me = L('ME');
+$no_error = (!is_object($form) || !!$form->no_error);
+$show_owner = !$me->id;
+?>
+<script>
+jQuery(function($){
+       var $center = $('#center');
+       $center.css('vertical-align', 'middle');
+       $center.find('.center_content').css({width: '750px', margin: 'auto', paddingBottom: '2em'});
+		var height = $('.signup_body').offset().top - $center.offset().top ;
+		$center.css('vertical-align', 'baseline');
+		$center.css('padding-top', height +'px');
+});
+</script>
+<div class="signup_form">
+<h1 class="center"><?php echo HT('供应商注册'); ?></h1>
+<div class="form padding_2 signup_body">
+<form method="post" action="<?php echo URI::url() ?>" autocomplete="off">
+<?php echo V('form_error', array('form'=>$form));?>
+<?php $require = (string) V('form_require'); ?>
+	<table class="form">
+		<tr>
+			<td class="top icon" style="padding-right: 10px;">
+				<img src="images/icons/signup_vendor_big.png" />
+			</td>
+			<td>
+<table>
+	<tr><th colspan="2" class="legend"><?php echo $show_owner ? HT('1. 基本信息') : HT('基本信息')?></th></tr>
+	<tr>
+		<td class="label right nowrap"><?php echo HT('公司名称')?></td>
+		<td class="left" colspan="3"><input name="name" class="text" size="40" value="<?php echo H($form['name']); ?>" /></td>
+	</tr>
+	<tr>
+		<td class="label right nowrap"><?php echo HT('营业执照注册号') ?></td>
+		<td class="left"><input name="license_no" class="text" size="20" value="<?php echo H($form['license_no'])?>" /></td>
+	</tr>
+	<tr>
+		<td class="label right nowrap top">
+			<?php echo HT('经营范围')?>
+		</td>
+		<td class="left" colspan="3">
+			<textarea name="scope" class="text autogrow" cols="60" rows="5"><?php echo H($form['scope'])?></textarea>
+			<div class="description">* <?php echo HT('请按照营业执照内容如实填写.')?></div>
+		</td>
+	</tr>
+    <?php if ($show_owner) :?>
+	<tr><th colspan="2" class="legend"><?php echo HT('2. 管理员信息') ?></th></tr>
+	<tr>
+		<td class="label right nowrap middle"><?php echo HT('姓名') ?></td>
+		<td class="middle"><input class="text" name="vendor_admin_name" value="<?php echo H($form['vendor_admin_name'])?>" size="40" /></td>
+	</tr>
+	<tr>
+		<td class="label right nowrap top"><?php echo HT('帐号') ?></td>
+		<td class="top">
+			<input class="text" name="vendor_admin_token" value="<?php echo H($form['vendor_admin_token'])?>" size="40" />
+			<div class="description">* <?php echo HT('帐号只能使用字母数字或_.-@, 且需为字母或数字开头!')?></div>
+		</td>
+	</tr>
+	<tr>
+		<td class="label right nowrap middle"><?php echo HT('邮箱') ?></td>
+		<td class="middle">
+			<input class="text" name="vendor_admin_email" value="<?php echo H($form['vendor_admin_email'])?>" size="40" />
+		</td>
+	</tr>
+	<tr>
+		<td class="label right nowrap middle"><?php echo HT('电话') ?></td>
+		<td class="middle">
+			<input class="text" name="vendor_admin_phone" value="<?php echo H($form['vendor_admin_phone'])?>" size="40" />
+		</td>
+	</tr>
+	<tr>
+		<td class="label right nowrap"><?php echo I18N::T('labs', '密码')?></td>
+		<td class="middle"><input name="password" type="password" class="text" size="40" value="" /></td>
+	</tr>
+	<tr>
+		<td class="label right nowrap"><?php echo I18N::T('labs', '确认密码')?></td>
+		<td class="middle"><input name="confirm_password" type="password" class="text" size="40" value="" /></td>
+	</tr>
+    <?php endif;?>
+	<tr>
+		<td colspan="4" class="hr_2">&#160;</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<input type="submit" name="submit" class="button button_edit middle" value="<?php echo HT('提交')?>" />
+		</td>
+	</tr>
+</table>
+			</td>
+	</tr>
+</table>
+</form>
+</div>
+</div>

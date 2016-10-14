@@ -1,0 +1,13 @@
+1. nankai-lab-orders gini doctoer
+2. mall-old SITE_ID=nankai php doctor/diagnose.php
+3. 在mall-old中升级orm table，为customer对象增加unable_upgrade字段 以及 product_revision增加product_id的索引
+4. 在lims2执行`SITE_ID=lab LAB_ID=nankai_admin php mall_upgrade/mark_mall_customer_setup.php` 买方ID 195 1218 也不能升级 因为都是这些买方下面都是本地用户
+5. mall-old执行一卡通用户升级 SITE_ID=nankai php mall_upgrade/user.php
+6. mall-old执行买方升级 SITE_ID=nankai php mall_upgrade/customer.php 确保对应lab-orders已注册在gapper server中
+7. mall-old执行订单数据修复 SITE_ID=nankai php mall_upgrade/fix_order_data.php
+8. mall-old执行订单数据调整 SITE_ID=nankai php mall_upgrade/order.php
+9. lab-orders同步mall-old买方信息和成员权限信息: gini mall upgrade customer start
+10. lab-orders同步mall-old远程订单信息: gini mall upgrade order remote
+11. lab-orders对同步过来的订单的版本信息进行同步: gini mall order rebuild
+12. lab-orders同步lims自购订单: gini mall upgrade order Limslocal
+13. lims 将升级转换为使用lab-orders的lims站点废弃 SITE_ID=nankai_admin php mall_upgrade/lims_diable.php

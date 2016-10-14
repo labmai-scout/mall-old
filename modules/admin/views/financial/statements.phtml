@@ -1,0 +1,117 @@
+<div class="hr_1">&#160;</div>
+<?php echo $status_tabs; ?>
+<div class="hr_1">&#160;</div>
+<div class="panel padding_1">
+    <?php
+    $is_pending_check = !!(Billing_Statement_Model::$status_label[Billing_Statement_Model::STATUS_PENDING_CHECK] == $status_tabs->selected);
+    if ($is_pending_check) {
+        $uniqid = uniqid();
+        $select_all_id = 'select_all_' . $uniqid;
+        $batch_form_id = 'batch_form_' . $uniqid;
+        echo V('admin:financial/statements/export', array(
+            'select_all_id'=>$select_all_id,
+            'batch_form_id'=>$batch_form_id
+            ));
+    }
+    ?>
+	<?php if (count($panel_buttons)) :?>
+		<?php echo Widget::factory('application:links', array('links'=>$panel_buttons, 'separator'=>'&#160;'));?>
+	<?php endif;?>
+    <div class="float_right">
+        <form method="post" action="<?php echo URI::url(''); ?>">
+           <input type="text" name="ref_no" class="text middle" q-hint="<?php echo HT('输入结算单号'); ?>" size="20" value="<?php echo H($form['ref_no']); ?>" />
+           <input type="submit" class="button button_search middle" name="submit" value="<?php echo HT('转到'); ?>" />
+        </form>
+    </div>
+</div>
+<?php
+
+echo $pagination; 
+
+$me = L('ME');
+$table = Widget::factory('table');
+
+$table->name = 'vendor_statements';
+$table->form = $form;
+
+$columns = array();
+
+if ($is_pending_check) {
+    $columns['select'] = array(
+        'align' => 'center',
+        'extra_class' => 'tight',
+    );
+}
+
+$columns += array(
+    'ref_no'=>array(
+        'title'=>T('结算单号'),
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE
+    ),
+	'vendor'=>array(
+		'title'=>T('供应商'),
+        'nowrap' => TRUE,
+        'extra_class'=>'tight',
+    ),
+    'balance'=>array(
+        'title'=>T('金额'),
+        'align'=>'left',
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE,
+    ),  
+    'items'=>array(
+        'title'=>T('订单列表'),
+    ),    
+    'date'=>array(
+        'title'=>T('生成时间'),
+        'align'=>'left',
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE,
+    ),  
+    'rest'=>array(
+        'align' => 'right',
+        'nowrap' => TRUE,
+    ),
+);
+$table->add_columns($columns);
+
+$table->empty_message = T('无符合条件的结算单!');
+
+foreach ($statements as $statement) {
+	
+    $links = $statement->links('admin_index');
+	
+	$table->add_row(array(
+        'select'=>$statement->can_print_pdf() ? V('admin:common/table/data/select', array('object'=>$statement, 'select_all_id'=>$select_all_id)) : null,
+        'ref_no'=> V('admin:financial/statements/ref_no', array('statement'=>$statement)),
+        'vendor'=> V('admin:financial/statements/vendor', array('statement'=>$statement)),
+        'items'=> V('admin:financial/statements/items', array('statement'=>$statement)),
+        'date'=> V('admin:financial/statements/date', array('statement'=>$statement)),
+        'status'=> V('admin:financial/statements/status', array('statement'=>$statement)),
+        'balance'=> V('admin:financial/statements/balance', array('statement'=>$statement)),
+        'rest'=>Widget::factory('application:links', array('links'=>$links)),
+	));
+}
+
+echo $table;
+
+echo JS::load('admin:batch_select', array('select_all_id'=>$select_all_id, 'batch_form_id' => $batch_form_id));
+?>
+<script>
+    jQuery(function($){
+        var message = "<?php echo T('请选择要打印的结算单')?>";
+        var batch_form_id = "<?php echo $batch_form_id?>";
+        $('#batch_print').click(function(){
+            var $select = $(':checked');
+            if($select.length >= 1){
+                 var $form = $('#' + batch_form_id);
+                $form.submit();
+            }
+            else{
+                alert(message);
+                return;
+            }
+        });
+    });
+</script>

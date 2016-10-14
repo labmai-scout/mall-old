@@ -1,0 +1,84 @@
+<div class="hr_1">&#160;</div>
+<div class="form padding_1">
+<form method="post" action="<?php echo URI::url() ?>" autocomplete="off">
+<?php echo V('form_error', array('form'=>$form));?>
+<?php $require = (string) V('form_require'); ?>
+	<table class="form flexible">
+		<tr>
+			<td class="label right nowrap"><?php echo I18N::T('people', '登录帐号')?></td>
+			<td class="middle"><input name="token" class="text" value="<?php echo H($form['token']) ?>" />
+            @
+			<?php
+				echo Widget::factory('admin:backend_selector', array(
+					'select'=> $form['backend'] ? : Config::get('auth.default_backend'),
+					'extra_class' => 'monitor'
+				));
+			?>
+			<?php echo $require; ?>
+			</td>
+		</tr>
+		<?php /*
+		<tr>
+			<td class="label right nowrap"><?php echo T('登录帐号')?></td>
+			<td class="middle"><input name="token" class="text" size="40" value="<?php echo H($form['token']) ?>" /><?php echo $require; ?>
+			</td>
+		</tr>
+		*/ ?>
+		<tr>
+			<td></td>
+			<td class="middle description"><?php echo T('登录账号必须超过2个字符长, 可使用字符: 字母, 数字, "-", "_", "." 和 "@", 开头必须是数字或字母'); ?></td>
+		</tr>
+		<?php echo Widget::factory('admin:add_pwd', array('form'=>$form, 'require'=>$require, 'name'=>'backend'));?>
+		<tr>
+			<td class="label right nowrap"><?php echo HT('姓名')?></td>
+			<td class="middle"><input name="name" class="text" size="40" value="<?php echo H($form['name']) ?>" /><?php echo $require; ?></td>
+		</tr>
+		<tr>
+			<td class="label right nowrap"><?php echo HT('电子邮箱')?></td>
+			<td class="middle"><input name="email" class="text" size="40" value="<?php echo H($form['email']) ?>" /><?php echo $require; ?></td>
+		</tr>
+		<tr>
+			<td class="label right nowrap"><?php echo HT('性别')?></td>
+			<td class="middle"><?php echo Form::dropdown('gender', T(User_Model::$genders), isset($form['gender']) ? $form['gender'] : -1 , 'class="dropdown"'); ?></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="hr_1">&#160;</td>
+		</tr>
+		
+		<tr>
+			<td class="label right nowrap middle"><?php echo T('联系电话')?></td>
+			<td class="middle"><input name="phone" class="text" size="40" value="<?php echo H($form['phone'])?>" /><?php echo $require; ?></td>
+		</tr>
+		<tr>
+			<td class="label right nowrap middle"><?php echo T('地址')?></td>
+			<td class="middle"><input name="address" class="text" size="40" value="<?php echo H($form['address']) ?>" /></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="hr_1">&#160;</td>
+		</tr>
+		<tr>
+			<td class="label right nowrap"><?php echo T('立即激活')?></td>
+			<td class="middle">
+			    <?php echo Form::radio('activate', 1, $form['activate'], T('是'), ' class="middle"', 'class="middle"'); ?>
+			    <?php echo Form::radio('activate', 0, $form['activate'], T('否'), ' class="middle"', 'class="middle"'); ?>
+			</td>
+		</tr>
+		<tr>
+			<td class="label middle right nowrap"><?php echo T('是否隐藏')?></td>
+			<td class="middle">
+				<?php echo Form::radio('hidden', 1, $form['hidden'], T('是'), ' class="middle"', 'class="middle"'); ?>
+				<?php echo Form::radio('hidden', 0, $form['hidden'], T('否'), ' class="middle"', 'class="middle"'); ?>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" class="hr_1">&#160;</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<input type="submit" name="submit" class="button button_add" value="<?php echo T('添加')?>" />
+			</td>
+		</tr>
+	</table>
+</form>
+</div>

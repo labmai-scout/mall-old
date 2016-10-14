@@ -1,0 +1,20 @@
+<?php
+if ($file['type']) {
+	$file_class = 'file_'.$file['type'];
+}
+$user = L('ME'); 
+?>
+<div class="left nowrap <?php echo $class?>">
+	<span class="file <?php echo $file_class?>">
+		<?php if($file['dir']): ?>
+			<a href="<?php echo URI::url('', ['path'=>$file['path'], 'form_token'=>$form_token, 'url'=>$url])?>">
+		<?php endif;?>
+		<?php if($file['file'] && NFS::user_access($user, '下载文件', $object, ['type'=>$path_type,'path'=>$file['path']])):?>
+		<a href="<?php echo URI::url('!nfs/nfs/index.'.$object->name().'.'.$object->id.'.'.$path_type, ['path'=>$file['path'], 'form_token'=>$form_token])?>" class='prevent_default'>
+			<?php echo H($file['name']); ?>	
+		</a>
+		<?php else: ?>
+			<?php echo H($file['name']); ?>	
+		<?php endif;?>
+	</span>
+</div>

@@ -1,0 +1,19 @@
+<div class="form padding_2">
+<form method="post" q-static="id=<?= $order->id?>" q-src="<?= $order->url(NULL,NULL,NULL,'admin_view') ?>" q-event="submit" q-object="set_paid">
+	<p> <?= HT('备注') ?></p>
+	<table class="form">
+	<tr>
+		<td>
+			<textarea name="set_paid_note" class="text autogrow" cols="60" rows="5"><?=  H($form['set_paid_note']?:($order->set_paid_note?:'')) ?></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td class="label nowrap">
+			<div class="padding_1">
+			<input type="submit" name="submit" class="button button_save" value="<?= T('确定')?>">
+			</div>
+		</td>
+	</tr>
+	</table>
+</form>
+</div>

@@ -1,0 +1,12 @@
+<?php
+$product = $order_item->product;
+$snapshot = O('product_revision', ['product'=>$product, 'version'=>$order_item->version]);
+if ($snapshot->id) {
+	$old_price = $snapshot->orig_price ?: $snapshot->unit_price;
+}
+else {
+	$old_price = $product->orig_price?:$product->unit_price;
+}
+$current_price = ($order_item->temp_unit_price != NULL) ? $order_item->temp_unit_price : $order_item->unit_price;
+
+echo V('application:common/two_price', array('old_price' => $old_price, 'current_price' => $current_price));

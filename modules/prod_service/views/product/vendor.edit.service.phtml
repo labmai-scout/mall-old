@@ -1,0 +1,22 @@
+<?php
+	$me = L('ME');
+	$no_error = ($form->no_error !== FALSE);
+	$require = (string) V('form_require');
+?>
+<div class="form padding_2 toggle:type show_on:service">
+<h4><?php echo HT('服务') ?></h4>
+<div class="hr_1">&#160;</div>
+<table class="form">
+<tr>
+	<td class="label right middle nowrap"><?php echo HT('client id'); ?></td>
+	<td class="middle nowrap">
+		<input name="client_id" class="text" size="20" value="<?php echo H($form['client_id']); ?>" /><?php echo $require?>
+	</td>
+	<td>&#160;&#160;&#160;&#160;</td>
+	<td class="label right middle nowrap"><?php echo HT('链接模板'); ?></td>
+	<td class="middle nowrap">
+		<input name="template_link" class="text" size="20" value="<?php echo H($form['template_link']); ?>" /><?php echo $require?>
+	</td>
+</tr>
+</table>
+</div>

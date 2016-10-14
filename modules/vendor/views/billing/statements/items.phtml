@@ -1,0 +1,9 @@
+<?php
+
+foreach (Q("$statement order") as $order) {
+	$links[] = URI::anchor($order->url(NULL, NULL, NULL, 'vendor_view'), HT('#%ref_no', array('%ref_no'=>$order->order_no)), 'class="blue"');
+}
+echo implode(', ', $links);
+if($statement->status == Billing_Statement_Model::STATUS_REJECTED):?>
+<div class="message_normal margin_1 description content_wrap" style="max-width:500px"><?php echo $statement->reject_reason?></div>
+<?php endif;?>

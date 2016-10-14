@@ -1,0 +1,26 @@
+<?php 
+	$file = $scope->get_pic();
+	if (is_file($file)) :
+		$info = getimagesize($file);
+		
+		/* 处理长宽高反转格式 */
+		
+		if ($info[0] < $info[1]) {
+			$width = $info[1];
+			$height = $info[0];
+		}
+		else {
+			$width = $info[0];
+			$height = $info[1];
+		}
+		
+		$width = $width > 800 ? 800 : $width;
+		$height = $width > 800 ? (int)($height * 800 / $width) : $height;
+		
+?>
+	<image src="<?php echo $file?>" height="<?php echo $height?>" width="<?php echo $width?>" />
+<?php else: ?>
+	<div class="padding_3">
+		<span class="description middle center nowrap"><?php echo HT('该供应商未上传相关证书!')?></span>
+	</div>
+<?php endif; ?>

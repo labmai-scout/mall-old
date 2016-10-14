@@ -1,0 +1,9 @@
+<?php
+
+$grants = Q("customer_grant[customer=$customer]");
+
+if (!is_object($grant)) {
+	$grant = O('customer_grant', $grant);
+}
+
+echo Form::dropdown('grant', $grants->to_assoc('id', 'project_no'), $grant->id?:$grants->current()->id, $this->extra); ?>

@@ -1,0 +1,55 @@
+<?php
+
+$categories = array();
+$t = $category;
+while ($t->id && $t->id != $root->id) {
+	array_unshift($categories, $t);
+	$t = $t->parent;
+}
+$real_root = $root->root->id ? $root->root : $root;
+
+if ($root->id) {
+	$children = Q("product_category[root=$real_root][parent=$category]");
+	$has_children = $children->length() > 0;
+	if (!$has_children) {
+		array_pop($categories);
+	}
+} 
+
+?>
+<?php echo Form::hidden('root_id', $root->id); ?>
+<?php echo Form::hidden($name, $category->id); ?>
+<div class="nowrap">
+	<?php if ($category->id == $root->id && !$has_children) {
+		$root_class = 'category_selector_last';
+	}
+	else {
+		$root_class = 'category_selector_first';
+	}?>
+	<div class="category_selector_link <?php echo $root_class?>">
+		   <?php echo (string) Widget::factory('category_selector/link', array(
+				   'name'=>$root_name ?: ($root->root->id ? $root->name : T('全部')),
+				   'id'=>0
+		   )); ?>
+	</div><?php 
+	foreach($categories as $t):
+	?><div class="category_selector_link">
+	<?php echo (string) Widget::factory('category_selector/link', array(
+		   'name'=>$t->name,
+		   'id'=>$t->id
+	)); ?>
+	</div><?php
+ endforeach; ?>
+<?php if ($has_children): 
+	?><div class="category_selector_link category_selector_more tooltip:<?php echo HT('请点击');?> tooltip_position:left">&#160;</div><?php 
+else: 
+	if ($category->id != $root->id) :
+		?><div class="category_selector_link category_selector_last">
+		<?php echo (string) Widget::factory('category_selector/link', array(
+			   'name'=>$category->name,
+			   'id'=>$category->id
+		)); ?>
+		</div><?php 
+	endif;?>
+<?php endif; ?>
+</div>

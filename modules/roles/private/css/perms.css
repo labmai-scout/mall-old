@@ -1,0 +1,40 @@
+div.perms_container {
+	margin-bottom:10px;
+	
+	div.perms_title {
+		span {
+			font-size:14px;
+			font-weight:bold;
+		}
+	}
+	
+	div.perms_group {
+		background-color:#F4F4F4;
+		padding:10px 10px 5px;
+			
+		div.perms_item {
+			display: block;
+			float: left;
+			white-space: nowrap;
+			width:250px;
+			vertical-align: top;
+			padding-bottom: 5px;
+
+			input {
+				vertical-align: top;
+				line-height: 1.231;
+			}
+
+			label {
+				display: inline-block;
+				white-space: normal;
+				line-height: 1.231;
+				/*IE6\7 默认label的line-height是24px*/
+				*line-height: 24px;
+				vertical-align: top;
+			}
+
+		}
+		
+	}
+}

@@ -1,0 +1,39 @@
+<?php
+
+echo CSS::load_async('nfs:common');
+
+$user = L('ME');
+$path = '';
+$full_path = NFS::get_path($object, $path, $path_type, TRUE);
+
+if (is_dir($full_path) && NFS::user_access($user, '列表文件', $object, ['path'=>$path.'/foo', 'type'=>$path_type])):
+	$files = NFS::file_list($full_path, $path);
+
+	echo '<ul class="files">';
+	foreach ((array) $files as $file):
+		if ($file['dir']) continue;
+		if ($file['type']) {
+			$file_class = 'file_'.$file['type'];
+		}
+		else {
+			$file_class = '';
+		}
+?>
+	<li>
+	<span class="file <?php echo $file_class?>">
+	<?php if($file['file'] && NFS::user_access($user, '下载文件', $object, ['type'=>$path_type,'path'=>$file['path']])):?>
+	<a href="<?php echo URI::url('!nfs/nfs_lite/index.'.$object->name().'.'.$object->id.'.'.$path_type, ['path'=>$file['path'], 'form_token'=>$form_token])?>" class='prevent_default'>
+		<?php echo H($file['name']); ?>	
+	</a>
+	<?php else: ?>
+		<?php echo H($file['name']); ?>	
+	<?php endif;?>
+	</span>
+	</li>
+<?php
+	endforeach;
+?>
+</ul>
+<div class="hr_1">&#160;</div>
+<?php
+endif;

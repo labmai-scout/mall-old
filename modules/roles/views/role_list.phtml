@@ -1,0 +1,7 @@
+<?php
+$default_roles = Config::get('roles.default_roles');
+foreach ($roles as $role) {
+	$class = 'role_item';
+	if (array_key_exists($role->id, $default_roles)) $class = 'default_role_item';
+	echo V('role_item', array('role' => $role, 'class' => $class));
+}

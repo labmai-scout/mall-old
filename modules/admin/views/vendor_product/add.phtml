@@ -1,0 +1,59 @@
+<?php
+// 初始化变量
+$me = L('ME');
+$no_error = ($form->no_error !== FALSE);
+?>
+<div class="hr_1">&#160;</div>
+<div class="form padding_1">
+
+	<form method="post" autocomplete="off" action="<?php echo URI::url() ?>">
+	<?php echo V('form_error', array('form'=>$form));?>
+	<?php $require = (string) V('form_require'); ?>
+		<table class="form">
+			<tbody>
+				<tr>
+					<td class="label right nowrap top"><?php echo T('名称')?></td>
+					<td class="top">
+						<input name="name" class="text" size="40" value="<?php echo H($form['name']); ?>" /><?php echo $require?>
+					</td>
+				</tr>
+				<tr>
+					<td class="label right nowrap middle"><?php echo T('生产商')?></td>
+					<td class="middle">
+						<input name="manufacturer" class="text" size="40" value="<?php echo H($form['manufacturer']); ?>" /><?php echo $require?>
+					</td>
+				</tr>
+				<tr>
+					<td class="label right nowrap middle"><?php echo T('目录号')?></td>
+					<td class="middle">
+						<input name="no" class="text" size="40" value="<?php echo H($form['no']); ?>" /><?php echo $require?>
+					</td>
+				</tr>
+				<tr>
+					<td class="label right nowrap middle"><?php echo T('型号')?></td>
+					<td class="middle">
+						<input name="model" class="text" size="40" value="<?php echo H($form['model']); ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td class="label right nowrap middle"><?php echo T('规格')?></td>
+					<td class="middle">
+						<input name="spec" class="text" size="40" value="<?php echo H($form['spec']); ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td class="label right nowrap middle"><?php echo T('单价')?></td>
+					<td class="middle">
+						<input name="unit_price" sign="<?php echo Config::get('site.currency_sign')?>" class="text currency" size="40" value="<?php echo H($form['unit_price']); ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td>&#160;</td>
+					<td>
+						<input type="submit" name="submit" class="button button_save" value="<?php echo T('保存')?>" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>

@@ -1,0 +1,29 @@
+<?php
+//TODO: 这里希望能改成AJAX的模式 (jia.huang@2012.03.14)
+	$me = L('ME');
+	$no_error = ($form->no_error !== FALSE);
+	$require = (string) V('form_require');
+?>
+<div class="form padding_2 toggle:type show_on:small_device">
+<h4><?php echo HT('小型仪器') ?></h4>
+<div class="hr_1">&#160;</div>
+<table class="form">
+<tr>
+	<td class="label right middle nowrap"><?php echo HT('产地'); ?></td>
+	<td class="middle nowrap">
+		<input name="origin" class="text" size="20" value="<?php echo H($no_error ? $product->origin : $form['origin']); ?>" />
+	</td>
+	<td>&#160;&#160;&#160;&#160;</td>
+	<td class="label right middle nowrap"><?php echo HT('质保期'); ?></td>
+	<td class="middle nowrap">
+		<input name="warranty_period" class="text" size="20" value="<?php echo H($no_error ? $product->warranty_period : $form['warranty_period']); ?>" />
+	</td>
+</tr>
+<tr>
+	<td class="label right middle nowrap"><?php echo HT('服务电话'); ?></td>
+	<td class="middle nowrap">
+		<input name="service_no" class="text" size="20" value="<?php echo H($no_error ? $product->service_no : $form['service_no']); ?>" />
+	</td>
+</tr>
+</table>
+</div>

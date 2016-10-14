@@ -1,0 +1,87 @@
+<div class="hr_1">&#160;</div>
+<div class="panel padding_1 clearfix">
+	<?php echo Widget::factory('application:links', array('links'=>$panel_buttons, 'separator'=>'&#160;'));?>
+</div>
+<?php
+$table = Widget::factory('table');
+$table->name = 'financials';
+$table->sort_asc = $sort_asc;
+$table->sort_by = $sort_by;
+
+$table->add_columns(array(
+
+    '@'=>array(
+        'nowrap'=>TRUE
+    ),
+    'name'=>array(
+        'title'=>T('名称'),
+        'nowrap'=>TRUE,
+        'align'=>'center'
+    ),
+    'unit_price'=>array(
+        'title'=>T('报价'),
+        'nowrap'=>TRUE,
+        'align'=>'center'
+    ),
+    'manufacturer'=>array(
+        'title'=>T('生产商'),
+        'nowrap'=>TRUE,
+        'align'=>'center'
+    ),
+    'catalog_no'=>array(
+        'title'=>T('目录号'),
+        'nowrap'=>TRUE,
+        'align'=>'center'
+    ),
+    'model'=>array(
+        'title'=>T('型号'),
+        'nowrap'=>TRUE,
+        'align'=>'center'
+    ),
+    'spec'=>array(
+        'title'=>T('规格'),
+        'nowrap'=>TRUE,
+        'align'=>'center'
+    ),
+    'vendor'=>array(
+        'title'=>T('供应商'),
+        'nowrap'=>TRUE,
+        'align'=>'center'
+    ),
+    'status'=>array(
+        'title'=>T('状态'),
+        'nowrap'=>TRUE,
+        'align'=>'center'
+    ),
+    'rest'=>array(
+        'align'=>'right',
+        'nowrap'=>TRUE
+    )
+));
+
+$table->empty_message = T('没有符合条件的商品');
+
+foreach($financials as $financial)  {
+
+    $links = $financial->links('admin_index');
+
+    $table->add_row(array(
+        '@'=>array(
+            'view'=>$financial->icon('32', 'style="display:block"'),
+            'extra'=>'style="padding:4px" align="right"'
+        ),
+        'name'=>V('financial_table/data/name', array('financial'=>$financial)),
+        'unit_price'=>V('financial_table/data/unit_price', array('financial'=>$financial)),
+        'manufacturer'=>V('financial_table/data/manufacturer', array('financial'=>$financial)),
+        'catalog_no'=>V('financial_table/data/catalog_no', array('financial'=>$financial)),
+        'model'=>V('financial_table/data/model', array('financial'=>$financial)),
+        'spec'=>V('financial_table/data/spec', array('financial'=>$financial)),
+        'vendor'=>V('financial_table/data/vendor', array('financial'=>$financial)),
+        'status'=>V('financial_table/data/status', array('financial'=>$financial)),
+        'rest'=>Widget::factory('application:links', array('links'=>$links))
+    ));
+}
+
+echo $table;
+?>
+

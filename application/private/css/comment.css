@@ -1,0 +1,55 @@
+.comments {
+
+	width: 520px;
+
+	table tr td {
+		padding: 2px;
+	}
+		
+	form {
+		display: block;
+		margin: 0;
+		padding: 3px;
+	}
+
+	.form {
+		background-color: #F0F5F8;
+	}
+
+	textarea {
+		display: block;
+		width: 420px;
+	}
+
+	a.more {
+		display: block;
+		background-color: #F0F5F8;
+		font-size: 14px;
+		font-weight: bold;
+		color: #666;
+		
+		&:hover {
+			background-color: #69f;
+			color: #fff;
+			text-decoration: none;
+		}
+	}
+
+    span.max_length {
+        color: #F00;
+    }
+}
+
+
+.mini_comments {
+
+	.comment_form {
+		padding: 2px;
+	}
+
+}
+
+.comment_content {
+	word-wrap:break-word;
+	max-width:360px;
+}

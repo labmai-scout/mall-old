@@ -1,0 +1,98 @@
+<div class="hr_1">&#160;</div>
+<div class="form padding_1">
+    <form action="<?php echo URI::url()?>" method="post" enctype="multipart/form-data">
+    <table class="form">
+        <tbody>
+            <tr>
+                <?php $data = $customer->lims_data;?>
+                <?php if ($customer->bind_status == Customer_Model::BIND_STATUS_NOT_YET) :?>
+                <td>
+                    <input name="file" type="file" class="file" />
+                </td>
+                <td>
+                    <input type="submit" class="button button_import" name="submit" value="绑定" />
+                <?php elseif ($customer->bind_status == Customer_Model::BIND_STATUS_PADDING) :?>
+                <td>
+                    <span>
+                        <?php echo T('等待确认绑定 %name', array('%name' => URI::anchor($data['base_url'], $data['site_name'], 'class="blue" target="_blank"')))?>
+                    </span>
+                </td>
+                <td>
+                    <a class="button button_remote" id="rebind_lims"><?php echo T('再次确认绑定')?></a>
+                    <span><input class="button button_delete" type="submit" id="unbind_lims" value="<?php echo T('解绑定');?>" /></span>
+                </td>
+                <?php else:?>
+                <td>
+                    <span class="rmargin_1"><?php echo T('当前已绑定 %name', array('%name'=> URI::anchor($data['base_url'], $data['site_name'], 'class="blue" target="_blank"'))); ?></span>
+                </td>
+                <td>
+                    <span><input class="button button_delete" type="submit" value="<?php echo T('解绑定');?>" id="unbind_lims"/></span>
+                </td>
+                <?php endif;?>
+            </tr>
+        </tbody>
+    </table>
+    </form>
+</div>
+<script>
+    jQuery(function(){
+
+        var sync_status = '<?= ($customer->bind_status == Customer_Model::BIND_STATUS_PADDING) ? true : false?>';
+        var unbind_success = "<?= HT('解除绑定成功!');?>";
+        var bind_success = "<?= HT('绑定成功!');?>";
+        var bind_fail = "<?= HT('请到LIMS确认绑定!')?>";
+        var bind_url = "<?= URI::url($customer->lims_data['bind_url'], ['source' => Config::get('mall.name')])?>";
+        var unbind_url = "<?= URI::url($customer->lims_data['unbind_url'], ['source' => Config::get('mall.name')])?>";
+
+        //如果是绑定中则触发一下同步
+        if(sync_status) {
+            $.ajax({
+                url: bind_url,
+                dataType:'jsonp',
+                jsonp: 'jsonp_callback',
+            }).success(function(data) {
+                location.replace(location);
+            });
+        }
+
+        //再次绑定lims
+        $('#rebind_lims').click(function(){
+            $.ajax({
+                url: bind_url,
+                dataType:'jsonp',
+                jsonp: 'jsonp_callback',
+            }).success(function(data) {
+                alert(bind_success);
+                location.replace(location);
+            }).error(function(){
+                 alert(bind_fail);
+            });
+        });
+
+        //解绑定lims
+        $('#unbind_lims').click(function(){
+            Q.trigger({
+                object:'unbind_lims',
+                event:'click',
+                url: "<?= URI::url('!customer/profile')?>",
+                data:{
+                    customer_id: '<?= $customer->id?>',
+                },
+                success: function(data) {
+                    if(data.success) {
+                        alert(unbind_success);
+                        $.ajax({
+                            url: unbind_url,
+                            dataType:'jsonp',
+                            jsonp: 'jsonp_callback',
+                        }).complete(function(data) {
+                            location.replace(location);
+                        });
+                    }
+                }
+            });
+            return false;
+        });
+
+    });
+</script>

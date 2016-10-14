@@ -1,0 +1,8 @@
+<?php
+    $allowCredit = !!Config::get('customer.allow_credit');
+    if ($allowCredit) {
+        $tmpCName = 'customer-credit-lv' . (int) $customer->credit;
+    }
+    echo CSS::load_async('application:credit');
+?>
+<a class="<?=$tmpCName?>" href="<?php echo $customer->url(NULL, NULL, NULL, 'admin_view')?>"><strong><?php echo H($customer->name);?></strong></a>

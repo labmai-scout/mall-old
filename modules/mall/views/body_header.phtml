@@ -1,0 +1,23 @@
+<?php $me = L('ME'); ?>
+<div class="logo">
+	<a href="<?php echo URI::url('/')?>">
+		<img src="<?php echo _C('images/mall_logo.png') ?>"/>
+	</a>
+</div>
+<div class="menu">
+	<?php
+		if ($me->id && Q("$me<member customer")->total_count() > 0) :
+	?>
+	<a class="sub_cart item" href="<?php echo URI::url('!mall/cart')?>" title="<?php echo HT('购物车'); ?>">&#160;
+		<?php
+			$cart = Q("cart[user={$me}]")->current();
+			if ($cart->id) :
+				$number = Q("cart_item[cart_id={$cart->id}]")->total_count();
+                echo V('mall:cart/item_count', array('cart'=>$cart));
+		?>
+		<?php endif; ?>
+	</a>
+<?php endif; ?>
+	<a class="sub_chat item" href="<?php echo URI::url('!mall/home/index.news')?>" title="<?php echo HT('新闻公告'); ?>">&#160;</a>
+	<a class="sub_phone item" href="<?php echo URI::url('!mall/home/index.contact')?>" title="<?php echo HT('联系我们'); ?>">&#160;</a>
+</div>

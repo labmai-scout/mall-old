@@ -1,0 +1,38 @@
+<div class="hr_1">&#160;</div>
+<div class="clearfix">
+	<table class="user_grid form flexible">
+	<tr>
+		<td class="top icon tight">
+			<div class="padding_1 short_container">
+				<div><?php echo $user->icon('64');?></div>
+			</div>
+		</td>
+		<td class="top nowrap info flexible">
+			<?php
+			    list($token,$backend) = explode('|', $user->token);
+			?>
+			<h2>
+				<a href="<?php echo $user->url(NULL, NULL, NULL, 'view_info')?>"><?php echo H($user->name) ?></a>
+				<small class="description normal">(<?php echo $token; ?>)</small>
+			</h2>
+			<div class="hr_1">&#160;</div>
+			<?php if (!$user->is_active()): ?>
+				<p><span class="status_tag status_tag_error"><?php echo HT('未激活')?></span></p>
+				<div class="hr_1">&#160;</div>
+			<?php endif; ?>
+			<p><span class="email"><?php echo URI::mailto($user->email) ?></span><br/>  </p>
+			<div class="hr_1">&#160;</div>
+			<p><span class="phone"><?php echo HT($user->phone)?></span></p>
+			<div class="hr_3">&#160;</div>
+			<?php
+				$rang = time() - $user->ctime;
+				$days = Date::format_interval($rang, 'd');
+				$days = "<span class='red'>$days[0]</span>";
+			?>
+			<span class="register"><?php echo T('该用户已经注册了 %day 天', array('%day' => $days))?></span>
+			<div class="hr_3">&#160;</div>
+		</td>
+	</tr>
+	</table>
+</div>
+<div class="hr_1">&#160;</div>

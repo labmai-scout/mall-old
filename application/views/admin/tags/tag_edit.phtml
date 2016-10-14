@@ -1,0 +1,19 @@
+<div class="form padding_1">
+<form class="view object:tag_edit event:submit static:<?php echo H(array('id'=>$tag->id, 'parent'=>$parent, 'uniqid'=>$uniqid, 'parent_uniqid'=>$parent_uniqid, 'is_root'=>$is_root, 'collapsed'=>$collapsed)) ?>">
+	<?php echo V('form_error', array('form'=>$form));?>
+	<table class="form">
+		<tbody>
+			<tr>
+				<td class="right nowrap middle"><?php echo T('标签')?></td>
+				<td class="middle">
+					<input type="text" class="text" name="name" value="<?php echo H($tag->name) ?>" />
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="submit" name="submit" class="button button_save middle" value="<?php echo T('提交')?>" /> </td>
+			</tr>
+		</tbody>
+	</table>
+</form>
+</div>

@@ -1,0 +1,141 @@
+<?php
+$me = L('ME');
+
+$is_pending_approval = !!('unapproved' == $secondary_tabs->selected);
+if ($is_pending_approval) {
+	$uniqid = uniqid();
+	$select_all_id = 'select_all_' . $uniqid;
+	$batch_form_id = 'batch_form_' . $uniqid;
+}
+
+
+?>
+<div class="hr_1">&#160;</div>
+<table class="flexible">
+    <tr>
+        <td>
+            <?php echo $secondary_tabs;?>
+        </td>
+    </tr>
+</table>
+<div class="hr_1">&#160;</div>
+<div class="panel clearfix padding_1">
+    <div class="float_right">
+        <form method="post" action="<?php echo URI::url(''); ?>">
+           <input type="text" name="phrase" class="text" q-hint="<?php echo HT('输入关键字搜索'); ?>" size="40" value="<?php echo H($form['phrase']); ?>" />
+           <input type="submit" class="button button_search middle" name="submit" value="<?php echo HT('搜索'); ?>" />
+        </form>
+    </div>
+	<?php if ($is_pending_approval): ?>
+        <form
+        	id="<?php echo $batch_form_id ?>"
+        	q-object="batch_approve"
+        	q-event="submit"
+        	q-src="<?php echo URI::url('!admin/product/products')?>"
+        	autocomplete="off"
+        	method="post">
+            <?php echo Form::checkbox('', FALSE, T('全选'), 'id="'.$select_all_id.'"') ?>&#160;
+        	<input name="approve" type="submit" class="button button_tick" value="<?php echo T('批量审批'); ?>"/>
+        </form>
+	<?php endif; ?>
+</div>
+<?php
+echo $pagination;
+
+$table = Widget::factory('table');
+$table->name = 'admin_products';
+
+$columns = array();
+
+if ($is_pending_approval) {
+	$columns['select'] = array(
+		'align' => 'center',
+		'extra_class' => 'tight',
+		);
+}
+
+$columns += array(
+    // 'icon'=>array(
+    //     'nowrap'=>TRUE,
+    //     'extra_class'=>'tight',
+    // ),
+    'name'=>array(
+        'title'=>T('名称'),
+        'nowrap'=>TRUE,
+        'align'=>'left'
+    ),
+    'unit_price'=>array(
+        'title'=>T('价格'),
+        'nowrap'=>TRUE,
+        'align'=>'center'
+    ),
+    'manufacturer'=>array(
+        'title'=>T('生产商'),
+        'nowrap'=>TRUE,
+        'align'=>'left'
+    ),
+    'brand'=>array(
+        'title'=>T('品牌'),
+        'nowrap'=>TRUE,
+        'align'=>'left'
+    ),
+    'catalog_no'=>array(
+        'title'=>T('目录号'),
+        'nowrap'=>TRUE,
+        'align'=>'left'
+    ),
+    'spec'=>array(
+        'title'=>T('规格'),
+        'nowrap'=>TRUE,
+        'align'=>'left'
+    ),
+    'package'=>array(
+        'title'=>T('包装'),
+        'nowrap'=>TRUE,
+        'align'=>'left'
+    ),
+    'vendor'=>array(
+        'title'=>T('供应商'),
+        'nowrap'=>TRUE,
+        'align'=>'left'
+    ),
+    'rest'=>array(
+        'align'=>'right',
+        'nowrap'=>TRUE
+    )
+);
+
+
+$table->add_columns($columns);
+
+$table->empty_message = T('没有符合条件的商品');
+
+foreach($products as $product)  {
+    if ($product->status == Product_Model::STATUS_PENDING) {
+        $links = '<a class="blue" q-static="id='.$product->id.'" q-event="click" q-object="approve" href="'.URI::url().'" >通过</a><span class="separator">•</span><a class="blue" q-static="id='.$product->id.'" q-event="click" q-object="unapprove" href="'.URI::url().'" >拒绝</a>';
+    }
+    elseif ($product->status == Product_Model::STATUS_ON_SALE) {
+        $links = '<a class="blue" q-static="id='.$product->id.'" q-event="click" q-object="soldout" href="'.URI::url().'" >下架</a>';
+    }
+    $table->add_row(array(
+		'select'=>V('admin:common/table/data/select', array('object'=>$product, 'select_all_id'=>$select_all_id)),
+        // 'icon'=>array(
+        //     'view'=>$product->icon('32', 'style="display:block"'),
+        //     'extra'=>'style="padding:4px" align="right"'
+        // ),
+        'icon'=>[],
+        'name'=>V('vendor_product_table/data/name', array('product'=>$product)),
+        'unit_price'=>V('application:common/price', array('price' => $product->unit_price, 'market_price'=>$product->market_price)),
+        'manufacturer'=>V('vendor_product_table/data/manufacturer', array('product'=>$product)),
+        'catalog_no'=>V('vendor_product_table/data/catalog_no', array('product'=>$product)),
+        'brand'=>H($product->brand),
+        'package'=>V('vendor_product_table/data/package', array('product'=>$product)),
+        'spec'=>V('vendor_product_table/data/spec', array('product'=>$product)),
+        'vendor'=>V('vendor_product_table/data/vendor', array('product'=>$product)),
+        'rest'=>$links?:'',
+    ));
+}
+
+echo $table;
+
+echo JS::load('admin:batch_select', array('select_all_id'=>$select_all_id, 'batch_form_id' => $batch_form_id));

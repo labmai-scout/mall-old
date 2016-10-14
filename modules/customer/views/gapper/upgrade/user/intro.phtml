@@ -1,0 +1,57 @@
+<!-- //这个地方之后要换成图片 -->
+<?php
+	echo CSS::load_async('customer:gapper');
+?>
+
+<div class="gapper_content">
+	<?php if(count($app)) {?>
+		<div class="float_left gapper_img">
+			<?php if ($app['icon_url']): ?>
+				<div class="app_img">
+               		<img src="<?php echo $app['icon_url'] ?>">
+                </div>
+            <?php else: ?>
+            <div class="gapper_icon">
+                <div class="icon_text">
+                    <p class="icon_font"><b><?php echo $app['title'] ?></b></p>
+                </div>
+            </div>
+            <?php endif; ?>
+		</div>
+		<p class="title">
+			<?php echo $app['title'] ?>
+		</p>
+		<div class="hr_1"></div>
+		<p class="intro">
+			<?php echo $app['intro']; ?>
+		</p>
+		<hr style="margin:30px 120px;width:80%">
+	<?php }else{?>
+	<div class="float_left gapper_img">
+		<div>
+			<img src="/images/gapper.png">
+		</div>
+	</div>
+	<?php }?>
+	<div class="description">
+		<p><?php echo T('为了使用系统内的Gapper应用(边栏菜单中存在"G"标志的应用)'); ?></p>
+		<p><?php echo T('您的账户需要首先升级为Gapper用户.'); ?></p>
+		<?php if(!$customer->gapper_group) {?>
+		<p>
+			<?php
+				$incharge = URI::anchor($customer->owner->url(NULL,NULL,NULL,'view_info'),'课题组负责人','style="color:#1d5392"');
+				echo T('请联系%incharge进行升级', array('%incharge'=>$incharge));
+			?>
+		</p>
+		<?php } ?>
+		<div class="hr_2"></div>
+		<a class="blue faq" target="_blank" href="<?= URI::url('!customer/gapper/help') ?>"><?php echo T('什么是Gapper?'); ?></a>
+		<div class="action">
+			<?php if($customer->gapper_group) {?>
+			<a href="<?php echo URI::url('!customer/gapper/upgrade', ['form_token'=>$form_token]) ?>" type="submit" class="upgrade" name="upgrade" ><?php echo T('升级账户') ?></a>
+			&#160;&#160;
+			<?php }?>
+			<a class="cancel" name="cancel" href="<?php echo $cancel_url ?>"><?php echo T('暂不升级') ?></a>
+		</div>
+	</div>
+</div>

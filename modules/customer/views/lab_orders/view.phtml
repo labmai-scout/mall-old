@@ -1,0 +1,25 @@
+<?php
+	echo CSS::load_async('customer:gapper');
+?>
+<div class="gapper_content">
+	<div class="float_left gapper_img">
+		<div>
+			<img src="/images/gapper.png">
+		</div>
+	</div>
+	<div class="lab-orders">
+		<p class="title"><?= T('Lab-Orders'); ?></p>
+		<p>
+			<?php echo T('欢迎使用新版订单管理'); ?>
+		</p>
+		<hr>
+		<p class="description" style="margin:20px 0">
+			<?= T('新版订单管理为基于新架构开发的独立订单管理应用, 集课题组自购订单与商城采购订单管理于一身，界面简洁, 使用方便。') ?>
+		</p>
+		<div class="hr_2"></div>
+		<div class="action">
+			<a href="<?php echo $customer->url(NULL, ['app'=>'lab-orders'], NULL, 'gapper_view') ?>" type="submit" class="upgrade" name="upgrade" ><?php echo T('登 录') ?></a>
+			&#160;&#160;
+		</div>
+	</div>
+</div>

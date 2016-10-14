@@ -1,0 +1,271 @@
+<?php
+	$me = L('ME');
+	$no_error = ($form->no_error !== FALSE);
+	$require = (string) V('form_require');
+	$revision_count = Q("product_revision[product=$product]")->total_count();
+	//如果商品没有历史版本，没有dirty，且已经下架则可以修改
+	$can_edit = (!$product->id || (!$revision_count && !$product->approve_date && !$product->dirty));
+?>
+<div class="hr_1">&#160;</div>
+<form method="post" autocomplete="off" action="<?php echo URI::url() ?>">
+<div class="form padding_2">
+	<?php echo V('form_error', array('form'=>$form));?>
+	<?php if ($product->publish_date): ?>
+	<table class="form">
+		<tbody>
+		<tr>
+			<td class="label right nowrap"></td>
+			<td class="left" colspan="3">
+			<?php echo Form::checkbox('edit_info', $form['edit_info'], HT('修改商品信息'), 'class="monitor"'); ?>
+			<span class="description">* <?php echo HT('信息修改后, 商品将会重新进入待审核状态')?></span>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+	<?php endif; ?>
+	<h4><?php echo HT('常规信息'); ?></h4>
+	<div class="hr_1">&#160;</div>
+	<table class="form toggle_status:edit_info enable_on:on">
+		<tbody>
+			<tr>
+				<td class="label right nowrap middle"><?php echo T('类别')?></td>
+				<td class="middle nowrap" colspan="4">
+				<?php
+					$types = Product_Model::get_types();
+					if ($can_edit) {
+						$available_types = $types; // TODO 筛选当前 vendor 可添加的 type(xiaopei.li@2012-03-08)
+
+						$sel_type = $form['type'];
+						if (!isset($available_types[$sel_type])) $sel_type = key($available_types);
+						echo Form::dropdown('type', $available_types, $sel_type, 'class="monitor"');
+					}
+					else {
+						$available_types[$product->type] = $types[$product->type];
+						echo $types[$product->type];
+					}
+
+					$input_type = $form['type']? :$product->type;
+					foreach ($available_types as $type => $type_name): ?>
+					<span class="toggle:type show_on:<?php echo H($type) ?> ">
+					<?php
+						$input_category_name = "category_{$type}"; // category[$type] will cause js selector error, so here uses category_{$type} (xiaopei.li@2012-03-16)
+						if ($type == $input_type) {
+							$input_category = O('product_category', $form[$input_category_name]);
+						}
+
+						$root = Product_Category_Model::root($type);
+						echo Widget::factory('application:category_selector', array(
+							'category'=> $input_category,
+							'root'=>$root,
+							'name'=>$input_category_name,
+							'ajax'=>true,
+						));
+					?>
+					</span>
+				<?php endforeach; ?>
+				</td>
+			</tr>
+			<tr>
+				<td class="label right nowrap middle"><?php echo T('名称')?></td>
+				<td class="middle nowrap" colspan="4">
+					<input name="name" class="text" size="60" value="<?php echo H($form['name']); ?>"
+						<?php echo (!$can_edit && in_array('name', $merge_keys)) ? 'disabled' : ''; ?> />
+					<?php echo $require?>
+				</td>
+			</tr>
+			<tr>
+				<td class="label right nowrap middle"><?php echo T('生产商')?></td>
+				<td class="middle tight nowrap">
+					<?php if (!$can_edit && in_array('manufacturer', $merge_keys)): ?>
+					<input name="manufacturer_name" class="text" size="20" value="<?php echo H($form['manufacturer_name']?:$product->manufacturer); ?>" <?php echo 'disabled'; ?> />
+					<?php else : ?>
+					<?php
+						$manufacturer_uniqid = uniqid();
+						echo Widget::factory('manufacturer_selector', array(
+					        'name' => 'manufacturer',
+					        'autocomplete' => URI::url('!vendor/autocomplete/manufacturer'),
+					        'size' => 20,
+					        'manufacturer'=> O('manufacturer',$form['manufacturer']),
+					        'manufacturer_name'=>$form['manufacturer_name'],
+					        'uniqid' => $manufacturer_uniqid,
+					    ));
+					?>
+					<?php endif; ?>
+					<?php echo $require?>
+				</td>
+				<td class="label right nowrap middle"><?php echo T('型号')?></td>
+				<td class="middle">
+					<input name="model" class="text" size="20" value="<?php echo H($form['model']); ?>"
+						<?php echo (!$can_edit && in_array('model', $merge_keys)) ? 'disabled' : ''; ?> />
+				</td>
+            </tr>
+            <tr>
+				<td class="label right nowrap middle"><?php echo T('目录号')?></td>
+				<td class="middle">
+					<input name="catalog_no" class="text" size="20" value="<?php echo H($form['catalog_no']?:$product->catalog_no); ?>"
+						<?php echo (!$can_edit && in_array('catalog_no', $merge_keys)) ? 'disabled' : ''; ?> />
+					<?php echo $require?>
+				</td>
+                <td colspan="2">
+                    <span class="description small"><?php echo T('产品货号');?></span>
+                </td>
+			</tr>
+			<tr>
+				<td class="label right nowrap middle"><?php echo T('包装')?></td>
+				<td class="middle">
+					<input name="package" class="text" size="20" value="<?php echo H($form['package']?:$product->package); ?>"
+							<?php echo (!$can_edit && in_array('package', $merge_keys)) ? 'disabled' : ''; ?> />
+					<?php echo $require?>
+				</td>
+                <td colspan="2">
+                </td>
+			</tr>
+			<tr>
+				<td class="label right nowrap middle"><?php echo T('品牌')?></td>
+				<td class="middle">
+					<?php if (!$can_edit && in_array('brand', $merge_keys)):?>
+					<input name="brand_name" id="<?= $brand_uniqid?>" class="text" size="20" value="<?php echo H($form['brand_name']); ?>"
+					<?php echo 'disabled'; ?> />
+					<?php else: ?>
+					<?php
+						$brand_uniqid = uniqid();
+						$autocomplete = URI::url('!vendor/autocomplete/brand');
+						if(!$can_edit) $autocomplete .= '.'.$product->manufacturer;
+						echo Widget::factory('brand_selector', array(
+					        'name' => 'brand',
+					        'autocomplete' => $autocomplete,
+					        'size' => 20,
+					        'brand_name'=>$form['brand_name'],
+					        'uniqid' => $brand_uniqid,
+					    ));
+					?>
+					<?php endif; ?>
+					<?php echo $require?>
+				</td>
+				<td class="label right nowrap middle"><?php echo T('供货时间')?></td>
+				<td class="middle">
+					<input name="supply_time" class="text number" size="20" value="<?php echo H($form['supply_time']); ?>"
+						<?php echo (!$can_edit && in_array('supply_time', $merge_keys)) ? 'disabled' : ''; ?> />
+						<?php echo $require?>
+				</td>
+			</tr>
+			<tr>
+				<td class="label right nowrap middle"><?php echo T('规格')?></td>
+				<td class="middle" colspan="4">
+					<input name="spec" class="text" size="60" value="<?php echo H($form['spec']); ?>"
+						<?php echo (!$can_edit && in_array('spec', $merge_keys)) ? 'disabled' : ''; ?> />
+					<?php echo $require?>
+				</td>
+			</tr>
+			<tr>
+				<td class="label right middle nowrap"><?php echo HT('关键字'); ?></td>
+				<td class="middle nowrap" colspan="4">
+					<?php
+						$root = Tag_Model::root('product_keyword');
+						echo Widget::factory('application:multi_tag_selector',
+										array(
+											// TODO 'autocomplete'=> URI::url("autocomplete/tags.$root->id"),
+											'name'=>'keywords',
+											'value'=> $form['keywords'] ? : $product->keywords,
+											'size'=>'60',
+											'allow_creating'=>TRUE,
+											'token_tip' => T('输入每个关键字后请按回车键')
+											));
+					?>
+				</td>
+			</tr>
+			<tr>
+				<td class="label right nowrap top"><?php echo T('说明')?></td>
+				<td class="middle" colspan="4">
+					<textarea name="description" class="text autogrow" cols="60" rows="5"><?php echo H($form['description']); ?></textarea>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div class="toggle_status:edit_info enable_on:on">
+<?php
+$sections = new ArrayIterator;
+$ret =  Event::trigger('form[vendor.product].sections', $product, $form, $sections);
+echo implode('', (array)$sections);
+?>
+</div>
+<div class="form padding_2">
+	<h4><?php echo HT('销售信息'); ?></h4>
+	<div class="hr_1">&#160;</div>
+	<table class="form toggle_status:edit_info enable_on:on">
+		<tbody>
+			<tr>
+				<td class="label right nowrap middle"><?php echo T('单价')?></td>
+				<td class="middle nowrap">
+					<?php
+					$price_inquiry = $form['price_inquiry'] || !isset($form['unit_price']) || ($form['unit_price'] < 0);
+					?>
+					<?php echo Form::radio('price_inquiry', 1, $price_inquiry ? 1 : 0, HT('待询价'), 'class="monitor"'); ?>
+					&#160;
+					<?php echo Form::radio('price_inquiry', 0, $price_inquiry ? 1 : 0, NULL, 'class="monitor"'); ?>
+					<input name="unit_price" class="text currency toggle_status:price_inquiry enable_on:0" size="15" sign="<?php echo Config::get('site.currency_sign')?>" value="<?php echo H(max(0, $form['unit_price'])); ?>" /><span class="toggle:price_inquiry show_on:0"><?php echo $require?></span>
+				</td>
+			<?php if(Config::get('product.show_market_price')):?>
+				<td class="label right nowrap middle"><?php echo T('市场价')?></td>
+				<td><input name="market_price" class="text currency" size="15" sign="<?php echo Config::get('site.currency_sign')?>" value="<?php echo H($form['market_price']); ?>" /></td>
+			<?php endif;?>
+				<td class="label right nowrap middle"><?php echo T('库存状态')?></td>
+				<td class="middle nowrap">
+				<?php
+				$options = Product_Model::$stock_status;
+				echo Form::dropdown('stock_status', $options, isset($form['stock_status']) ? $form['stock_status'] : Product_Model::STOCK_STATUS_IN_STOCK);
+				echo $require;
+				?>
+				</td>
+			</tr>
+
+			<tr>
+				<td class="label right nowrap top"><?php echo T('商家备注')?></td>
+				<td class="middle" colspan="4">
+					<textarea name="vendor_note" class="text autogrow" cols="60" rows="5"><?php echo H($form['vendor_note']); ?></textarea>
+				</td>
+			</tr>
+            <tr>
+                <td class="label right nowrap top">&#160;</td>
+                <td colspan="3">
+                    <span class="red small"><?php echo T('请正确完善商品信息以便于用户检索!')?></span>
+                </td>
+            </tr>
+		</tbody>
+	</table>
+</div>
+<div class="form padding_2">
+	<input type="submit" name="submit" class="button button_edit" value="<?php echo HT('存为草稿')?>" />
+	<input type="submit" name="publish" class="button button_add" value="<?php echo HT('发布')?>" />
+    <?php if($product->can_delete()) {?>
+	    <a class="button button_delete" style="position:relative;top:1px" href="<?php echo $product->url(NULL, NULL, NULL, 'vendor_delete')?>" confirm="<?php echo T('您确认删除该产品吗？')?>" class="button button_delete"><?php echo HT('删除')?></a>
+    <?php }?>
+</div>
+</form>
+<script>
+jQuery(function(){
+	var can_edit = '<?php echo $can_edit ?>';
+	var brand = '<?php echo $brand_uniqid?>_brand_id';
+	var brand_autocomplete = '<?php echo $brand_uniqid?>_brand_name';
+	var manufacturer = '<?php echo $manufacturer_uniqid?>_manufacturer_id';
+	var manufacturer_autocomplete = '<?php echo $manufacturer_uniqid?>_manufacturer_name';
+
+	//如果商品没有上过架，则修改品牌的时候同时修改供应商
+	if(can_edit) {
+		$('#' + brand_autocomplete).bind('autoactivate.autocomplete', function(e, item) {
+			if(item.manufacturer) {
+				$('#'+ manufacturer).val(item.manufacturer);
+				$('#'+ manufacturer_autocomplete).val(item.manufacturer);
+			}
+		});
+	}
+
+	$('#'+manufacturer_autocomplete).bind('autoactivate.autocomplete', function(e, item) {
+		if(item.brand) {
+			$('#'+ brand).val(item.brand);
+			$('#'+ brand_autocomplete).val(item.brand);
+		}
+	});
+})
+</script>

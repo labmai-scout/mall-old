@@ -1,0 +1,14 @@
+<a href="<?php echo $vendor->url(NULL, NULL, NULL, 'admin_view')?>"><strong class="name"><?php echo H($vendor->name); ?></strong></a>
+<?php if (!$vendor->approve_date): // 未激活时需要标注状态标签 ?>
+<div class="clearfix">
+	<?php if ($vendor->publish_date): ?>
+		<span class="status_tag status_tag_error"><?php echo HT('待审核')?></span>
+	<?php else: ?>
+		<?php if ($vendor->last_approve_date): ?>
+			<span class="status_tag status_tag_error"><?php echo HT('暂停中')?></span>
+		<?php else: ?>
+			<span class="status_tag status_tag_error"><?php echo HT('未发布')?></span>
+		<?php endif; ?>
+	<?php endif; ?>
+</div>
+<?php endif; ?>

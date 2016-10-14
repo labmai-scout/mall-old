@@ -1,0 +1,20 @@
+<h2 class="section_title">
+		<span class="middle"><?php echo HT('服务') ?></span>
+</h2>
+<div class="padding_2" style="padding-top:5px">
+<table class="form product_info_form" style="min-width:400px">
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('client_id')?></span></td>
+		<td colspan="3">
+			<?php 
+				$gapper_app_product = O('gapper_app_product',['product'=>$product]);
+				echo H($gapper_app_product->client_id);
+			?>
+		</td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('模板链接')?></span></td>
+		<td colspan="3"><?php echo H($product->template_link) ?></td>
+	</tr>
+</table>
+</div>

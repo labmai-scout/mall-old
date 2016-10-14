@@ -1,0 +1,19 @@
+<div class="hr_1">&#160;</div>
+<div class="clearfix">
+<table class="user_grid form flexible">
+<tr>
+	<td class="top icon tight">
+		<?php echo $customer->icon(128); ?>
+	</td>
+	<td class="top nowrap info flexible">
+		<h2>
+			<a href="<?php echo $customer->url(NULL, NULL, NULL, 'vendor_view')?>"><?php echo H($customer->name) ?></a>
+		</h2>
+		<div class="hr_1">&#160;</div>
+		<p>
+		<?php echo T('详细描述')?>: <span class="description"><?php echo H($customer->description, TRUE); ?></span>  
+		</p>
+	</td>
+</tr>
+</table>
+</div>

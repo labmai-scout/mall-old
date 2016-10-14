@@ -1,0 +1,6 @@
+<?php
+if ($auto_price != $price):
+?>
+<span class="deleted"><?php echo H(Number::currency($auto_price)); ?></span>
+<?php endif; ?>
+<span class="price"><?php echo H(Number::currency($price)); ?></span>

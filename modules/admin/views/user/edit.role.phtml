@@ -1,0 +1,65 @@
+<?php
+
+$user_roles = $user->roles();
+$roles = L('ROLES');
+$me = L('ME');
+$my_perms = $me->perms();
+$legal_perms = (array) L('PERMS');
+
+$is_admin = $me->access('管理所有内容') || $me->access('管理分组');
+?>
+<div class="hr_1">&#160;</div>
+<div class="form padding_1">
+<table class="form">
+	<tbody>
+	<tr>
+		<td class="top icon">
+			<img src="<?php echo $user->icon_url('64')?>" /></a>
+		</td>
+		<td class="top">
+			<?php if(!$uneditable): ?>
+			<form method="post" action="<?php echo URI::url() ?>" autocomplete="off">
+				<p><?php echo T('请选择所属分组'); ?></p>
+				<?php foreach($roles as $role):
+					/*此处不应该将默认的角色屏蔽掉，不让管理员能够查看，暂时将默认的角色disable掉*/
+					$role_perms = array_intersect_key((array)$role->perms, $legal_perms);
+					if (!$is_admin && count(array_diff_key($role_perms, $my_perms)) > 0) continue;
+					/*
+					 * TASK #1510::LIMS-CF-未激活用户应该清除所有角色(kai.wu@2011.10.12)
+					 * enable checkboxes if activated.
+					 */
+					$disable = ($role->id >= 1 && $user->atime) ? '' : 'disabled="disabled"';
+					?>
+					<p>
+					<?php echo Form::checkbox("roles[{$role->id}]", isset($user_roles[$role->id]), HT($role->name),'class="middle" '. $disable, 'class="middle"');?>
+					</p>
+				<?php endforeach; ?>
+				<div class="hr_1">&#160;</div>
+
+				<input type="submit" confirm="<?php echo HT('你确定要更新此用户的分组信息吗?请谨慎操作!'); ?>" name="submit" class="button button_save" value="<?php echo HT('更新')?>" />
+				<input type="reset" name="reset" class="button button_cancel" value="<?php echo HT('取消') ?>"/>
+
+			</form>
+			<?php else: ?>
+			<p><?php echo T('所属分组'); ?>:</p>
+			<ul>
+				<?php
+				if ( count($user_roles) > 0) {
+					foreach ($user_roles as $rid) {
+						if ($roles[$rid]) {
+							$role = $roles[$rid];
+							echo '<li>'. H($role->name).'</li>';
+						}
+					}
+				}
+				else {
+					echo '<li>'.T('暂无分组信息。').'</li>';
+				}
+				?>
+			</ul>
+			<?php endif; ?>
+		</td>
+	</tr>
+	</tbody>
+</table>
+</div>

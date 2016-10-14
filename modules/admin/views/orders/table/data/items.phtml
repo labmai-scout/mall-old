@@ -1,0 +1,30 @@
+<ul class="order_items">
+<?php
+
+$items = Q("order_item[order=$order]");
+
+foreach ($items as $item) :
+	$product = $item->product();
+?>
+<li style="padding:5px 0px 0px 0px">
+	<?php echo $product->icon(16, 'class="middle"'); ?>
+	<a href="<?php echo $order->url(NULL, NULL, NULL, 'admin_view'); ?>" class="middle"><?php echo H($product->name); ?></a>
+	<span class="middle">×</span>
+	<strong class="middle"><?php echo intval($item->quantity); ?></strong>
+	<?php
+    $sale_info = is_array($product->sale_info) ? $product->sale_info : json_decode($product->sale_info, true);
+	if ($types = $sale_info['types']) {?>
+		<span class="sale_types nowrap" q-tooltip="<?= $sale_info['info'] ?>"><?php echo join(' + ', $types)?></span>
+	<?php }?>
+	<?php
+	$extra_content = Event::trigger('order_item.product.table.extra_view', $item);
+	echo $extra_content;
+	?>
+</li>
+<?php
+endforeach;
+?>
+</ul>
+<?php if ($order->description): ?>
+	<div class="message_normal lpadding_1 rpadding_2 description content_wrap" style="max-width:500px;margin:5px 0px"><?php echo H($order->description, TRUE); ?></div>
+<?php endif; ?>

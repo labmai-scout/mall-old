@@ -1,0 +1,38 @@
+#body {
+    background-color: #FFF;
+    div.title {
+        padding: 20px;
+        font-size: 18px;
+    }
+
+    div.article {
+
+        margin-top: 20px;
+        padding-left: 80px;
+        padding-right: 80px;
+
+        .summary {
+            text-align: left;
+
+            .title {
+                font-size: 14px;
+            }
+
+            ul {
+                margin: 10px auto 0px 30px;
+                list-style: circle;
+            }
+
+            width: 40%;
+            padding: 10px;
+        }
+        .image {
+            width: 60%;
+            padding: 10px;
+        }
+    }
+
+    img {
+        border: 1px solid #CCC;
+    }
+}

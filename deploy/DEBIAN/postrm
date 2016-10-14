@@ -1,0 +1,14 @@
+#!/bin/sh
+# post script for mall
+
+
+# purge 肯定(?)不会是在 upgrade 中, 所以可以在 postrm 中进一步清理目录(xiaopei.li@2011-12-18)
+# 参考了 lighttpd 的打包脚本
+if [ "$1" = "purge" ]; then
+	rm -rf /usr/share/mall /var/lib/mall /var/cache/mall /etc/mall
+fi
+
+# nfs is left
+# 若要删除 nfs, 需在 prerm 中 config 读取 nfs 路径
+
+exit 0

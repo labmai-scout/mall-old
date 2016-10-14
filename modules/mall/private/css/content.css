@@ -1,0 +1,69 @@
+#content {
+
+	.home_item {
+
+		.title {
+			padding: 0 1em;
+			font-weight: bold;
+			font-size: 14px;
+			background-color: #fff;
+		}
+
+		.content {
+
+			color: #000;
+
+			.panel {
+				background-color: #666;
+			}
+
+			.nav {
+				margin-left: 10px;
+				padding: 10px 0px;
+				color: #3093EA;
+				text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+				font-size: 16px;
+				font-style: italic;
+			}
+
+			ul {
+				list-style: square;
+				padding-left: 35px;
+
+				li {
+					margin: 10px 5px;
+				}
+			}
+		}
+	}
+
+	.vendors_list {
+        margin: 0px auto;
+		color: #144C83;
+
+        .no_result {
+            margin: 10px auto;
+        }
+
+		.item {
+			padding: 0 1em;
+			border-bottom: 1px dotted #ddd;
+		}
+
+		.vendor_view {
+			margin: 10px 0px;
+
+			td.icon {
+				width: 80px;
+			}
+
+			td {
+				font-size: 12px;
+			}
+
+			.name {
+				font-size: 14px;
+			}
+		}
+	}
+}

@@ -1,0 +1,46 @@
+.user_card .icon {
+	display: inline-block;
+}
+
+.user_card .icon img {
+	display: block;
+}
+
+.user_card .information {
+	display: block;
+	padding-left: 4px;
+}
+
+.user_card span.name {
+	font-weight:bold;
+	font-size: 14px;
+}
+
+.user_card span.email {
+	color: #666;
+	font-size:12px;
+}
+
+span.email {
+	padding-left:18px;
+	background: url(images/icons/mail.gif) no-repeat 0 center;
+	color: #666;
+	font-size:12px;
+}
+
+span.phone {
+	padding-left:18px;
+	background: url(images/icons/phone.png) no-repeat 0 center;
+	color: #666;
+	font-size: 12px;
+}
+
+.user_grid span.date {
+	font-size: 95%;
+}
+
+span.register {
+	background-color: #E0E7EF;
+	padding: 5px 10px;
+	border-radius: 5px;
+}

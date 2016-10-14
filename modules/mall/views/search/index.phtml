@@ -1,0 +1,17 @@
+<?php echo $sub_header; ?>
+
+<div class="hr_3">&#160;</div>
+
+<div class="content">
+	<div class="crumb <?php if (!$has_children) echo 'flexible'?>">
+		<?php echo V("mall:search/crumb", array('tab'=>$tab, 'category' => $category, 'form' => $form));?>
+	</div>
+	<div class="content_body <?php if (!$has_children) echo 'flexible'?>">
+		<?php
+			echo $pagination;
+			echo V("mall:search/results", array('products' => $products, 'keyword' => $keyword));
+			echo $pagination;
+		?>
+	</div>
+</div>
+

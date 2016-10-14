@@ -1,0 +1,8 @@
+<div class="clearfix" style="line-height:1; margin-bottom:3px;">
+<?php foreach ((array) $modes as $mode => $title): ?>
+<a class="push_button middle push_button_<?php echo $mode ?><?php echo $curr_mode == $mode ?' push_button_checked':''?>" href="#" q-object="sbmenu_mode" q-event="click" 
+		q-static="<?php echo H(array('uniqid'=>$container_id, 'mode'=>$mode));?>" 
+		q-src="<?php echo URI::url('!admin')?>" 
+		title="<?php echo HT($title)?>">&#160;</a> 
+<?php endforeach ?>
+</div>

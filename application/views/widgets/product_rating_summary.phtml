@@ -1,0 +1,31 @@
+<?php
+$rating_summary = Order_Item_Rating_Model::get_rating_summary($product);
+$rating_subjects = Order_Item_Rating_Model::get_product_rating_subjects();
+
+foreach ($rating_subjects as $subject => $label):
+
+	if ($rating_summary[$subject]['count']):
+		echo HT($label);
+		?>
+		<br/>
+		<?php
+		echo Widget::factory('rateit_show', array(
+				'value' => $rating_summary[$subject]['value'],
+				'readonly' => TRUE,
+				));
+		?>
+		<br/>
+		<?php
+		echo HT('(共 %n 条)', array(
+				'%n' => $rating_summary[$subject]['count'],
+				));
+
+		?>
+		<br/>
+	<?php
+	else:
+		echo HT('暂无');
+	endif;
+
+endforeach;
+?>

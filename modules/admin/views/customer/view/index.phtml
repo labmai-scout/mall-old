@@ -1,0 +1,55 @@
+<div class="hr_1">&#160;</div>
+<div class="clearfix">
+<table class="user_grid form flexible">
+<tr>
+	<td class="top icon tight">
+		<div class="padding_1 short_container">
+			<div><?php echo $customer->icon('128');?></div>
+		</div>
+	</td>
+	<td class="top nowrap info flexible">
+        <h2>
+        <?php
+            $allowCredit = !!Config::get('customer.allow_credit');
+            if ($allowCredit) {
+                $tmpCName = 'customer-credit-lv' . (int) $customer->credit;
+                echo CSS::load_async('application:credit');
+            }
+        ?>
+            <a class="<?=$tmpCName?>" href="<?php echo $customer->url(NULL, NULL, NULL, 'admin_view')?>"><?php echo H($customer->name) ?></a>
+		</h2>
+		<?php echo HT('负责人') ?>:
+			<?php
+			if ($customer->owner->id) {
+				echo URI::anchor($customer->owner->url(NULL, NULL, NULL, 'admin_view'), $customer->owner->name);
+			}
+			else {
+				echo HT('--');
+			}
+			?>
+		</span>
+		<div class="hr_1">&#160;</div>
+		<p>
+			<?php echo H($customer->description, TRUE)?>
+		</p>
+		<div class="hr_3">&#160;</div>
+		<?php
+			$rang = Date::time() - $customer->ctime;
+			$days = Date::format_interval($rang, 'd');
+			$days = "<span class='red'>$days[0]</span>";
+		?>
+		<span class="register"><?php echo T('注册周期: %day 天', array('%day' => $days))?></span>
+		<div class="hr_3">&#160;</div>
+
+		<?php $links = $customer->links('admin_view'); ?>
+		<?php echo Widget::factory('application:links', array('links'=>$links)); ?>
+		<div class="hr_1">&#160;</div>
+	</td>
+</tr>
+</table>
+</div>
+<div class="hr_3">&#160;</div>
+<?php
+
+echo $secondary_tabs;
+echo $secondary_tabs->content;

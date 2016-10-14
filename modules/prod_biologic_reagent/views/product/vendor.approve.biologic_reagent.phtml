@@ -1,0 +1,32 @@
+<?php
+	$me = L('ME');
+	$no_error = ($form->no_error !== FALSE);
+	$require = (string) V('form_require');
+?>
+<div class="form padding_2 toggle:
+type show_on:biologic_reagent">
+<h4><?php echo HT('生物试剂') ?></h4>
+<div class="hr_1">&#160;</div>
+<table class="form">
+<tr>
+	<td class="label right top nowrap"><?php echo HT('运输条件'); ?></td>
+	<td class="middle nowrap" colspan="3">
+		<?php echo Form::radio('n_transport_cond', 0, $form['n_transport_cond'], H($template_product->transport_cond), 'class="monitor"') ?>
+		<br/>
+		<?php echo Form::radio('n_transport_cond', 1, $form['n_transport_cond'], NULL, 'class="monitor"') ?>
+		<input name="transport_cond" class="text" size="60" value="<?php echo H($form['transport_cond']); ?>" />
+		<?php echo $require; ?>
+	</td>
+</tr>
+<tr>
+	<td class="label right top nowrap"><?php echo HT('保存条件'); ?></td>
+	<td class="middle nowrap" colspan="3">
+		<?php echo Form::radio('n_storage_cond', 0, $form['n_storage_cond'], H($template_product->storage_cond), 'class="monitor"') ?>
+		<br/>
+		<?php echo Form::radio('n_storage_cond', 1, $form['n_storage_cond'], NULL, 'class="monitor"') ?>
+		<input name="storage_cond" class="text" size="60" value="<?php echo H($form['storage_cond']); ?>" />
+		<?php echo $require; ?>
+	</td>
+</tr>
+</table>
+</div>

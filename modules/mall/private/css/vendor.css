@@ -1,0 +1,121 @@
+#wrapper #body #sub_body #content {
+
+	.vendor_search_box {
+		height: 51px;
+		background-color: #F0F0F0;
+		line-height: 51px;
+		padding: 0px 35px;
+		border-bottom: 1px solid #E0E0E0;
+
+		table td {
+				padding: 0 2px;
+		}
+	}
+
+	.vendor_view {
+		width: 620px;
+	}
+}
+.letter {
+	width: 644px;
+	overflow: hidden;
+	border-top: 1px solid #E8E8E8;
+	border-left: 1px solid #E8E8E8;
+	margin-bottom: 5px;
+	margin-left: 37px;
+	a:hover {
+		color: #3093ea;
+		text-decoration:inherit;
+	}
+  	.active {
+		background-color: #3093ea;
+		a {
+			color:#FFF;
+		}
+	}
+	ul li {
+		border-right: 1px solid #E8E8E8;
+		border-bottom: 1px solid #E8E8E8;
+    	color: #666666;
+    	float: left;
+    	height: 21px;
+    	background-color: #fff;
+    	line-height: 23px;
+    	overflow: hidden;
+    	text-align: center;
+    	width: 45px;
+    	cursor: pointer;
+	}
+}
+
+.vendors_list {
+	background-color: #fff;
+	.item {
+		padding: 1em;
+	}
+}
+#content {
+
+	.panel {
+		background-color: #666666;
+	}
+
+	.vendor_profile {
+		width: 664px;
+		margin: 0 auto;
+
+		.normal_info {
+			margin: 20px;
+			margin-left: 0px;
+
+			.vendor_title {
+				font-weight: bold;
+				color: #144C83;
+				padding:3px 10px;
+				border-bottom: 1px dashed #0983CE;
+			}
+
+			table {
+				margin-left: 10px;
+			}
+
+			td.icon{
+				padding-right: 20px;
+				width: 20%;
+			}
+
+			th, td {
+				padding: 2px 4px;
+			}
+
+			th {
+				color: #3093EA;
+			}
+
+			td {
+				color: #999999;
+			}
+		}
+	}
+}
+
+.status_tag_label {
+	display: block;
+	min-width: 40px;
+}
+
+.product_list {
+	min-width:40px;
+	
+	.product_name {
+		max-width:220px;
+		min-width:30px;
+	}
+
+}
+
+.brief_info{
+    width:450px;    
+    white-space:normal;
+    word-wrap:break-word;
+}

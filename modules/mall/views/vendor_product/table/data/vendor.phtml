@@ -1,0 +1,3 @@
+<div q-preview="<?php echo URI::url('!mall/product'); ?>" q-static="<?php echo H(array('id' => $product->id)); ?>">
+	<?php echo URI::anchor($product->url(), $product->vendor->get_display_name()); ?></a>
+</div>

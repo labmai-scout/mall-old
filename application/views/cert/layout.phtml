@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<title>
+	<?php echo H($title ? T(Config::get('page.title_pattern'), array('%title'=>$title)) : Config::get('page.title_default'));
+ ?>
+</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<base href="<?php echo Config::get('system.base_url') ?>" />
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<link rel="apple-touch-icon" href="<?php echo _C('images/icon_touch.png') ?>" />
+<?php echo $this->controller->load_css(); ?>
+<?php echo $this->controller->load_js(TRUE); ?>
+<script>
+(function($){
+	Q['24hour'] = <?php echo JS::quote(!!Config::get('system.24hour')); ?>;
+})(jQuery);
+</script>
+</head>
+<body>
+<div id="wrapper" style="height:100%;">
+	<?php echo $this->body; ?>
+</div>
+	<?php echo $this->controller->load_js(FALSE); ?>
+</body>
+</html>

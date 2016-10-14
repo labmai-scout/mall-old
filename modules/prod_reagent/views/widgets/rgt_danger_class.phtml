@@ -1,0 +1,10 @@
+<?php
+$classes = Config::get('reagent.danger_classes');
+
+foreach ($classes as $abstract_class => $actual_classes) {
+	if (in_array($class, array_keys((array)$actual_classes))) {
+		$class_name = $actual_classes[$class];
+	}
+}
+
+echo $class_name;

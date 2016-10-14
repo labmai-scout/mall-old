@@ -1,0 +1,17 @@
+<h2 class="section_title">
+		<span class="middle"><?php echo HT('小型仪器') ?></span>
+</h2>
+<div class="padding_2" style="padding-top:5px">
+<table class="form product_info_form" style="min-width:400px">
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('产地')?></span></td>
+		<td style="padding-right:12em"><?php echo H($product->origin) ?></td>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('质保期')?></span></td>
+		<td><?php echo H($product->warranty_period) ?></td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('服务电话')?></span></td>
+		<td colspan="3"><?php echo H($product->service_no) ?></td>
+	</tr>
+</table>
+</div>

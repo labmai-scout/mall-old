@@ -1,0 +1,21 @@
+<?php 
+$years = array();
+foreach($news as $new) {
+    if (!in_array(Date('Y', $new->ctime), $years)) {
+        $years[] = Date('Y', $new->ctime);
+    }    
+}
+foreach($years as $y) {
+        $year_start = mktime(0, 0, 0, 1, 1, $y);
+        $year_end = mktime(23, 59, 59, 12, 31, $y);
+        $news = Q("news[ctime={$year_start}~{$year_end}]:sort(ctime D)");
+?>
+<span class="nav"><?php echo $y;?></span>
+<ul>
+<?php 
+    foreach ($news as $n) :
+?>
+    <li><a href="<?php echo $n->url(NULL, NULL, NULL, 'view');?>"><?php echo H($n->title);?></a>&#160;&#160;&#160;<span class="description"><?php echo Date::format($n->ctime, 'Y/m/d H:i')?></span></li>
+<?php endforeach; ?>
+</ul>
+<?php };?>

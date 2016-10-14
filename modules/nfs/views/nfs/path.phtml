@@ -1,0 +1,15 @@
+<a class="button middle path" href="<?php echo URI::url('!nfs/nfs/index.'.$object->name().'.'.$object->id.'.'.$path_type, ['form_token'=>$form_token]) ?>" data=""><?php echo I18N::T('nfs', '根目录')?></a>
+<?php if ($path) :?>
+<?php 
+	$folder_arr = explode('/', rawurldecode($path));
+	$p = '';
+	foreach ($folder_arr as $folder):
+		if ($p) {
+			$p .= '/';
+		}
+		$p .= $folder;
+?>
+<a class="button middle path" href="<?php echo URI::url('!nfs/nfs/index.'.$object->name().'.'.$object->id.'.'.$path_type, ['path'=>rawurlencode($p), 'form_token'=>$form_token])?>" data="<?php echo rawurlencode($p) ?>"><?php echo H($folder)?></a>
+	<?php endforeach;?>
+<?php endif;?>
+

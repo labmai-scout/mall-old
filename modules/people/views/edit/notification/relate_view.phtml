@@ -1,0 +1,53 @@
+<?php
+$message_uniqid = uniqid();
+$me = L('ME');
+$types = Config::get('notification.types');
+?>
+<div class="relate_view">
+<form method="POST" autocomplete="off"
+	q-object="edit_notification_types"
+	q-event="submit"
+	q-static="<?php echo H(array('key'=>$key, 'message_uniqid'=>$message_uniqid))?>"
+	q-src="<?php URI::url('admin')?>">
+	<div id="<?php echo $message_uniqid?>"></div>
+	<div class="form padding_1">
+	<h2><?php echo T('请勾选作为 %role 愿意接收的提醒', array(
+						 '%role' => $types[$key]['#name'],
+						 )); ?></h2>
+		<div class="hr_1">&nbsp;</div>
+		<div class="user_box">
+			<?php
+				foreach($types[$key] as $title => $notification_key) :
+					//过滤掉预先设定的#开头的系统辅助key
+					if ($title[0] == '#') continue;
+				?>
+				<h5 class="types_title"><?php echo $title;?></h5>
+				<?php
+					$sends = array();
+					$handlers = (array)Config::get('notification.handlers');
+					foreach( $handlers as $handler_key => $handler ){
+						$sends[$handler_key][] = $handler['text'];
+						$sends[$handler_key][] = $send_by[$handler_key] ?:$send_by['*'];
+
+					}
+
+					foreach($sends as $k=>$v){
+						// echo "<br/>receive.notification.$notification_key.$k.$me->id<br/>";
+
+						echo Form::checkbox("checks[$notification_key.$k]", $form["$notification_key.$k"] ?  : Site::get("receive.notification.$notification_key.$k.$me->id", TRUE) , T($v[0]), 'class="middle"', 'class="middle"');
+						echo '&#160;&#160;';
+					}
+				?>
+					<?php /* <input type="text" class="hidden" name="titles[<?php echo $title;?>]" value="on" /> */?>
+					<div class="hr_1">&nbsp;</div>
+			<?php
+				endforeach;
+
+			?>
+		</div>
+	</div>
+	<div class="form padding_1">
+		<input name="submit" type="submit" class="button button_save" value="<?php echo T('更新')?>" />
+	</div>
+</form>
+</div>

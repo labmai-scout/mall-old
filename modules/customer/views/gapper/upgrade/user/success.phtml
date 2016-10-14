@@ -1,0 +1,65 @@
+<?php
+	echo CSS::load_async('customer:gapper');
+?>
+<div class="gapper_upgrade">
+<div class="process">
+	<div>
+		<div class="proce proce_ed proce_first float_left">&#160;</div>
+		<div class="node node_ing float_left">&#160;</div>
+		<div class="proce proce_ed proce_normal float_left">&#160;</div>
+		<div class="node node_ing float_left">&#160;</div>
+		<div class="proce proce_ed proce_normal float_left">&#160;</div>
+		<div class="node node_ing float_left">&#160;</div>
+		<div class="proce proce_ed proce_last float_left">&#160;</div>
+	</div>
+	<div class="clearfix"></div>
+	<div class="announce">
+		<div class="float_left center announce-slim"><b><?= T('负责人开通')?></b></div>
+		<div class="float_left center announce-fat"><b><?= T('个人账号绑定')?></b></div>
+		<div class="float_left center announce-slim"><b><?= T('完成')?></b></div>
+	</div>
+</div>
+<div class="clearfix"></div>
+<div class="float_left gapper_img">
+	<div style="margin:40px">
+		<img src="/images/gapper.png">
+	</div>
+</div>
+<div class="gapper_content">
+    <p class="title">
+		<?php echo T('升级完成')?>
+	</p>
+	<p class="notes">
+		<?php echo T('恭喜您升级成功') ?>
+	</p>
+	<p class="notes">
+		<?php echo T('%customer_name下的成员可以通过绑定使用系统内的Gapper应用啦!', ['%customer_name'=>$customer->name]) ?>
+	</p>
+
+	<div style="margin:40px 120px;">
+		<?php
+			$apps = Config::get('gapper.apps');
+			foreach ($apps as $app_name =>$app) {
+			try {
+				$rpc = Gapper::get_RPC();
+				if(!$rpc) throw new Exception;
+
+				$app_info = $rpc->gapper->app->getInfo($app['client_id']);
+				if ($app_info['icon_url']) {
+					$app['icon_url'] = $app_info['icon_url'];
+				}
+			}
+			catch(Exception $e) {}
+		?>
+			<div class="float_left center group_img gapper_img">
+				<a href="<?= $customer->url(NULL, ['app'=>$app_name], NULL, 'gapper_view')?>">
+					<div class="app_img">
+						<img src="<?= $app['icon_url']?>">
+					</div>
+				</a>
+				<p class="icon_font"><b><?= $app['title'] ?></b></p>
+			</div>
+		<?php }?>
+	</div>
+</div>
+</div>

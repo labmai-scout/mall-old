@@ -1,0 +1,38 @@
+<?php
+$config['product_small_device']['fields']['name'] = array('type' => 'rt_field');
+$config['product_small_device']['fields']['group_name'] = array('type' => 'rt_attr_string');
+$config['product_small_device']['fields']['spec'] = array('type'=> 'rt_field');
+$config['product_small_device']['fields']['package'] = array('type'=> 'rt_field');
+$config['product_small_device']['fields']['catalog_no'] = array('type' => 'rt_field');
+$config['product_small_device']['fields']['group_search'] = array('type' => 'rt_attr_string');
+$config['product_small_device']['fields']['description'] = array('type' => 'rt_field');
+$config['product_small_device']['fields']['keywords'] = array('type' => 'rt_field');
+$config['product_small_device']['fields']['vendor_name'] = array('type'=> 'rt_field');
+$config['product_small_device']['fields']['category'] = array('type' => 'rt_attr_multi_64');
+$config['product_small_device']['fields']['vendor_id'] = array('type' => 'rt_attr_bigint');
+$config['product_small_device']['fields']['is_frozen'] = array('type'=> 'rt_attr_uint');
+$config['product_small_device']['fields']['is_sale'] = array('type'=> 'rt_attr_uint');
+$config['product_small_device']['fields']['supply_time'] = array('type' => 'rt_attr_uint');
+$config['product_small_device']['fields']['stock_status'] = array('type' => 'rt_attr_uint');
+$config['product_small_device']['fields']['vendor_note'] = array('type'=> 'rt_field');
+$config['product_small_device']['fields']['price'] = array('type'=> 'rt_attr_float');
+$config['product_small_device']['fields']['publish_date'] = array('type'=> 'rt_attr_bigint');
+$config['product_small_device']['fields']['approve_date'] = array('type'=> 'rt_attr_bigint');
+$config['product_small_device']['fields']['ctime'] = array('type' => 'rt_attr_bigint');
+$config['product_small_device']['fields']['vendor_short_name'] = array('type' => 'rt_field');
+$config['product_small_device']['fields']['vendor_short_name_abbr'] = array('type' => 'rt_attr_string');
+$config['product_small_device']['fields']['manufacturer'] = array('type'=> 'rt_field');
+$config['product_small_device']['fields']['manufacturer_abbr'] = array('type' => 'rt_attr_string');
+$config['product_small_device']['fields']['brand'] = array('type' => 'rt_field');
+$config['product_small_device']['fields']['group_brand'] = array('type' => 'rt_attr_string');
+$config['product_small_device']['fields']['price_range'] = array('type'=> 'rt_attr_bigint');
+$config['product_small_device']['fields']['sales'] = array('type'=>'rt_attr_bigint');
+$config['product_small_device']['fields']['weight'] = array('type' => 'rt_attr_bigint');
+$config['product_small_device']['fields']['vendor_weight'] = array('type' => 'rt_attr_bigint');
+$config['product_small_device']['fields']['expire_date'] = array('type'=>'rt_attr_bigint');
+$config['product_small_device']['fields']['valid_fields'] = array('type'=>'rt_attr_bigint');
+/* extra */
+$config['product_small_device']['fields']['origin'] = array('type' => 'rt_field');
+$config['product_small_device']['fields']['warranty_period'] = array('type' => 'rt_field');
+$config['product_small_device']['fields']['service_no'] = array('type' => 'rt_field');
+$config['product_small_device']['fields']['ept_type'] = array('type' => 'rt_attr_uint');

@@ -1,0 +1,37 @@
+<?php
+	$me = L('ME');
+	$no_error = ($form->no_error !== FALSE);
+?>
+<div class="hr_1">&#160;</div>
+<div class="form padding_1">
+
+	<form method="post" autocomplete="off" action="<?php echo URI::url() ?>">
+	<?php echo V('form_error', array('form'=>$form));?>
+	<?php $require = (string) V('form_require'); ?>
+		<table class="form flexible">
+			<tbody>
+				<tr>
+					<td class="">
+						<div class="padding clearfix">
+							<?php echo Widget::factory('flexform', array(
+								'title' => T('添加货品'),
+								'template_data' => array('disabled'=>TRUE),
+								'existing_data' => array_values($form),
+								'item_view' => '',
+								'extra_vars' => array(
+									'form' => $form,
+								),
+							));?>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="submit" name="submit" class="button button_save" value="<?php echo T('保存')?>" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>
+

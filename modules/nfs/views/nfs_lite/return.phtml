@@ -1,0 +1,40 @@
+<?php
+if ($path) :
+	// 如果不是根目录，则应显示返回链接(只为处理遗留数据，实际不应出现)(xiaopei.li@2011.08.24)
+
+	if (strpos($path, '/')) {
+		$parts = explode('/', $path);
+		$parent_path = join('/', array_slice($parts, 0, -1));
+	}
+	else {
+		$parent_path = '';
+	}
+
+	$full_path = NFS::get_path($object, $parent_path, $path_type, TRUE) . '/';
+	$file = NFS::file_info($full_path);
+	$file['name'] = I18N::T('nfs', '返回');
+	$file['path'] = $parent_path;
+
+	if ($file['type']) {
+		$file_class = 'file_'.$file['type'];
+	}
+	$user = L("ME");
+	$class = ' row_even';
+?>
+<tr>
+	<td class="left nowrap <?php echo $class?>">
+		<span class="file <?php echo $file_class?>">
+			<a href="<?php echo URI::url('', ['path'=>$file['path'], 'form_token'=>$form_token])?>">
+				<?php echo $file['name']; ?>
+			</a>
+		</span>
+	</td>
+	<td class="<?php echo $class?>">
+	</td>
+	<td class="<?php echo $class?>">
+	</td>
+	<td class="<?php echo $class?>">
+	</td>
+</tr>
+<?php
+endif;

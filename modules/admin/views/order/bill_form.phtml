@@ -1,0 +1,38 @@
+<div class="form padding_2">
+<form method="post" q-static="id=<?= $order->id?>" q-src="<?= $order->url(NULL,NULL,NULL,'admin_view') ?>" q-event="submit" q-object="bill_post">
+	<?php echo V('form_error', array('form'=>$form));?>
+	<table class="form">
+	<tr>
+		<td>
+			<?php echo HT('快递单号*') ?>
+		</td>
+		<td>
+			<input name='post_no' value="<?= H($form['post_no']?:($order->post_no?:'')) ?>"></input>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php echo HT('快递公司*') ?>
+		</td>
+		<td>
+			<input name='post_company' value="<?= H($form['post_company']?:($order->post_company?:'')) ?>"></input>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php echo HT('备注') ?>
+		</td>
+		<td>
+			<textarea name="post_note" class="text autogrow" cols="60" rows="5"><?=  H($form['post_note']?:($order->post_note?:'')) ?></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td class="label nowrap">
+			<div class="padding_1">
+			<input type="submit" name="submit" class="button button_save" value="<?= T('确定')?>">
+			</div>
+		</td>
+	</tr>
+	</table>
+</form>
+</div>

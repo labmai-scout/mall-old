@@ -1,0 +1,15 @@
+<?php
+
+	$links = array();
+
+	$links['delete'] = array(
+	    'url' => '#',
+	    'text' => T('移除'),
+	    'extra' =>'class="blue" '.
+	    		'q-object="'.$this->object.'" '.
+	    		'q-event="click" '.
+	    		'q-url="'.$this->url ?: URI::url('').'" '.
+	    		'q-static="'.H($this->static).'"'
+	);
+
+	echo Widget::factory('application:links', array('links'=>$links, 'separator'=>' '));	

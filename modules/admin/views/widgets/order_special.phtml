@@ -1,0 +1,45 @@
+<div class="float_right">
+<?php
+	$buttons = array();
+
+	if ($order->status == Order_Model::STATUS_PENDING_APPROVAL) {
+		$approved_class = $this->approved_class ? "button {$this->approved_class}" : 'blue';
+		$buttons['APPROVED'] = array(
+		    'url' => '#',
+		    'text' => T('审核'),
+		    'extra' =>'class="'.$approved_class.'" '.
+		    		'q-object="approved_order" '.
+		    		'q-event="click" '.
+		    		'q-url="'.URI::url('!admin/orders/index').'" '.
+		    		'q-static="'.H(array('order_id'=>$order->id)).'"'
+		);
+	}
+	
+
+	if ($order->status != Order_Model::STATUS_CANCELED) {
+		$cancel_class = $this->cancel_class ? "button {$this->cancel_class}" : 'blue';	
+		$buttons['CANCELED'] = array(
+		    'url' => '#',
+		    'text' => T('取消'),
+		    'extra' =>'class="'.$cancel_class.'" '.
+		    		'q-object="cancel_order" '.
+		    		'q-event="click" '.
+		    		'q-url="'.URI::url('!admin/orders/index').'" '.
+		    		'q-static="'.H(array('order_id'=>$order->id)).'"'
+		);
+	}
+
+	$delete_class = $this->delete_class ? "button {$this->delete_class}" : 'blue';
+	$buttons['DELETE'] = array(
+	    'url' => '#',
+	    'text' => T('删除'),
+	    'extra' =>'class="'.$delete_class.'" '.
+	    		'q-object="delete_order" '.
+	    		'q-event="click" '.
+	    		'q-url="'.URI::url('!admin/orders/index').'" '.
+	    		'q-static="'.H(array('order_id'=>$order->id)).'"'
+	);
+	
+	echo Widget::factory('application:links', array('links'=>$buttons, 'separator'=>' '));	
+?>
+</div>

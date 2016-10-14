@@ -1,0 +1,83 @@
+<div class="padding_1 clearfix">
+<table class="form">
+<tbody>
+<tr>
+	<td class="top icon">
+		<?php echo $product->icon('64'); ?>
+	</td>
+	<td class="top">
+		<h2>
+		<a href="<?php echo $product->url() ?>"><?php echo H($product->name); ?></a>
+		<small>(<?php echo T($product->vendor->get_display_name('short')); ?>)</small>
+		</h2>
+	</td>
+</tr>
+</tbody>
+</table>
+<table class="form product_info_form">
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('单价')?></span></td>
+		<td class="nowrap">
+			<?php if (L('ME')->is_allowed_to('查看价格', $product)): ?>
+				<?php echo V('application:common/price', array('price' => $product->unit_price, 'market_price' => $product->market_price)); ?>
+			<?php else: ?>
+				<span class="hidden_price">
+					<?php echo HT('授权用户可见'); ?>
+				</span>
+			<?php endif; ?>
+		</td>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('库存状态')?></span></td>
+		<td>
+			<?php
+				$options = Product_Model::$stock_status;
+				echo HT($options[$product->stock_status]);
+			?>
+		</td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('型号')?></span></td>
+		<td class="nowrap"><?php echo H($product->model) ?></td>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('规格')?></span></td>
+		<td><?php echo H($product->spec) ?></td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('包装')?></span></td>
+		<td class="nowrap"><?php echo H($product->package) ?></td>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('品牌')?></span></td>
+		<td class="nowrap"><?php echo H($product->brand) ?></td>
+		
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('供货时间')?></span></td>
+		<td><?php echo HT('%supply_time 天', array('%supply_time'=>$product->supply_time)); ?></td>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('关键字')?></span></td>
+		<td><?php echo H(join(', ', (array)json_decode($product->keywords, TRUE))) ?></td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('试剂性质')?></span></td>
+		<td class="nowrap"><?php echo Widget::factory('prod_reagent:rgt_type', array('type' => $product->rgt_type)); ?></td>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('CAS 号')?></span></td>
+		<td><?php echo H($product->cas_no) ?></td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('英文名')?></span></td>
+		<td class=""><?php echo H($product->rgt_en_name) ?></td>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('别名')?></span></td>
+		<td><?php echo H(join(', ', (array)json_decode($product->rgt_aliases, TRUE))) ?></td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('分子式')?></span></td>
+		<td class="nowrap"><?php echo H($product->reagent_formula) ?></td>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('分子量')?></span></td>
+		<td><?php echo H($product->reagent_mw) ?></td>
+	</tr>
+	<tr>
+		<td class="nowrap tight top"><span class="status_tag status_tag_label"><?php echo T('商家备注')?></span></td>
+		<td colspan="3"><?php echo $product->vendor_note; ?></td>
+	</tr>
+	<tr>
+		<td class="nowrap tight top"><span class="status_tag status_tag_label"><?php echo T('说明')?></span></td>
+		<td colspan="3"><?php echo $product->description; ?></td>
+	</tr>
+</table>
+</div>

@@ -1,0 +1,6 @@
+<?php
+foreach($orders as $order) {
+	echo V('mall:order/ready_order', array('order' => $order));
+}
+?>
+<div class="order_batch_actions"><a class="button button_tick" href="<?php echo URI::url('!mall/order/submit') ?>">全部确认</a></div>

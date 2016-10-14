@@ -1,0 +1,38 @@
+<div>
+	<h1 style="text-align:center;color:#ccc;font-weight:bold;font-size:15pt"><?php echo HT("%consumer 请求您验证", array('%consumer' => $consumer_title)); ?></h1>
+</div>
+<div class="hr_1">&#160;</div>
+<div class="form login_form padding_1 clearfix">
+	<form method="post" autocomplete="off">
+	<?php echo V('form_error', array('form'=>$form));?>
+	<table class="form" style="margin:0 auto">
+		<tbody>
+			<tr>
+				<td class="label right nowrap middle"><label><?php echo I18N::T('oauth', '帐号')?></label></td>
+				<td class="middle" colspan="2">
+					<?php
+						echo Widget::factory('login_token', array(
+							'name' => 'token',
+							'token' => $form['token'],
+                                'backend' => $form['token_backend'],
+							'size' => 30,
+						));
+					?>
+				</td>
+			</tr>
+			<tr>
+				<td class="label right nowrap middle"><?php echo I18N::T('oauth', '密码')?></td>
+				<td class="middle" colspan="2">
+					<input name="password" type="password" class="text" size="30" tabindex="2"/>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td class="middle nowrap" colspan="2">
+					<input type="submit" name="submit" class="button button_login middle" value="<?php echo I18N::T('oauth', '授权并登陆')?>" />
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	</form>
+</div>

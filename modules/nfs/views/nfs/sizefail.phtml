@@ -1,0 +1,12 @@
+<tr class="virus">
+	<td class="center nowrap" colspan="5">
+		<div class="message message_error"><?php echo $this->msg ?: I18N::T('nfs', '您的个⼈分区剩余空间不足, 无法上传⽂文件! 具体情况请联系管理员!'); ?></div>
+	</td>
+</tr>
+<script type="text/javascript">
+(function ($) {
+	setTimeout(function() {
+        $('.virus').hide('slow');
+    }, 5000);
+})(jQuery);
+</script>

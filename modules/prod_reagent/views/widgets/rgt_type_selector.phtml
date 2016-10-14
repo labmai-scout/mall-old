@@ -1,0 +1,7 @@
+<?php
+$types = Config::get('reagent.types');
+$translated_types = array();
+foreach ($types as $k => $v) {
+	$translated_types[$k] = T($v);
+}
+echo Form::dropdown($name ? : 'rgt_type', array(NULL => T('--')) + $translated_types, H($value));

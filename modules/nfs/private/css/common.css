@@ -1,0 +1,134 @@
+.swfupload {
+	vertical-align: middle;
+	margin-top:-3px;
+}
+
+.file {
+	height: 16px;
+	display: inline-block;
+	padding-left: 22px;
+	line-height: 16px;
+	white-space: nowrap;
+}
+
+.file_dir {
+	background: url('images/mime/folder.png') no-repeat 2px 0;
+}
+
+.file_default {
+	background: url('images/mime/file.png') no-repeat 2px 0;
+}
+
+.file_image {
+	background: url('images/mime/image.png') no-repeat 2px 0;
+}
+
+.file_excel {
+	background: url('images/mime/excel.png') no-repeat 2px 0;
+}
+
+.file_pdf {
+	background: url('images/mime/pdf.png') no-repeat 2px 0;
+}
+
+.path_bar {
+	color: #ccc;
+}
+
+.path_bar a {
+	color: #fff;
+}
+
+.nfs_bar {
+	/* 此类为了解决 BUG #894::调整浏览器的尺寸，我的个人分区的导航按钮逐个会换行 */
+	/* TODO min-width: IE不兼容 */
+	/* min-width: 800px */
+	/* by Jia Huang, 用white-space nowrap来代替 */
+	white-space: nowrap;
+
+    a.button_export {
+        span {
+            display: inline-block;
+            width: 16px;
+            height: 14px;
+            background-image: url(images/icons/dropdown.png);
+            background-repeat: no-repeat;
+            _background-image: url(images/icons/dropdown.gif);
+        }
+    }
+}
+
+table.sticky td.nfs_search_filters{
+	
+	border-bottom: 1px solid #CCCCCC;
+    line-height: 1.231;
+    padding: 4px;
+    text-align: left;
+}
+
+table.sticky td.nfs_search_filters .tag {
+
+	background-color: #EFF2F7;
+	border: 1px solid #CCD5E4;
+	cursor: default;
+	margin-right: 2px;
+	padding: 2px;
+	text-decoration: none;
+
+	.remove {
+		display: inline-block;
+		width: 10px;
+		height: 9px;
+		overflow: hidden;
+		background: transparent url(images/token/x.gif) no-repeat 0 0;
+		cursor: pointer;
+	}
+}
+
+
+#nfs_sticky {
+	border-collapse: collapse;
+
+	th {
+		font-weight: bold;
+		text-transform: capitalize;
+	}
+
+	thead {
+		padding-left: 0;
+		padding-right: 0;
+		text-align: center;
+		background-color: #e7e7e7;
+	}
+	
+	thead th
+	{
+		cursor: default;
+		background-color: #f4f4f4;
+		border-bottom: 2px solid #ccc;
+	}
+}
+
+div.nfs_dropdown {
+    position: absolute;
+    margin: 0px;
+    padding: 0px;
+    z-index: 1000;
+    width: 92px;
+    box-shadow: #666 0px 1px 5px;
+    filter: progid:DXImageTransform.Microsoft.Shadow (Color=#000000, Direction=135, Strength=2);
+
+    a {
+        background-color: #FFF;
+        color: #000;
+        display: block;
+        text-decoration: none;
+        padding: 4px;
+    }
+}
+div.nfs_dropdown a:hover {
+	filter: none;
+	background-color: #7498E0;
+	color: #fff;
+	text-decoration: none;
+}

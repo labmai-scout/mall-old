@@ -1,0 +1,23 @@
+<?php
+	$me = L('ME');
+	$no_error = ($form->no_error !== FALSE);
+	$require = (string) V('form_require');
+?>
+<div class="form padding_2 toggle:type show_on:biologic_reagent">
+<h4><?php echo HT('生物试剂') ?></h4>
+<div class="hr_1">&#160;</div>
+<table class="form">
+<tr>
+	<td class="label right middle nowrap"><?php echo HT('运输条件'); ?></td>
+	<td class="middle nowrap" colspan="3">
+		<input name="transport_cond" class="text" size="20" value="<?php echo H($no_error ? $product->transport_cond : $form['transport_cond']); ?>" />
+	</td>
+</tr>
+<tr>
+	<td class="label right middle nowrap"><?php echo HT('保存条件'); ?></td>
+	<td class="middle nowrap" colspan="3">
+		<input name="storage_cond" class="text" size="20" value="<?php echo H($no_error ? $product->storage_cond : $form['storage_cond']); ?>" />
+	</td>
+</tr>
+</table>
+</div>

@@ -1,0 +1,7 @@
+<?php
+$tags = Q("{$this->product} tag[root={$this->root}]");
+foreach ($tags as $tag):
+?>
+	<span class="product_tag"><?php echo H($tag->name); ?></span>
+<?php
+endforeach;

@@ -1,0 +1,67 @@
+<div class="hr_1">&#160;</div>
+<div class="padding_2 form clearfix approve-vendor-scope-form-container">
+	<form method="post" 
+	autocomplete="off"
+	q-object="approve"
+	q-event="submit"
+	q-static="<?php echo H(array('id'=>$id))?>">
+    <?php $errors = $form->errors;?>
+    <?php foreach ($types as $key=>$value) {?>
+        <h3><?=$value?></h3>
+        <div class="form padding_2 nowrap approve-vendor-scope-line">
+            <?php $tmp = isset($form['type'][$key]) ? (int)$form['type'][$key] : 1;?>
+            <div>
+                <label>
+                    <input class="approve-vendor-scope-radio" type="radio" name="type[<?=$key?>]" value="1"<?=$tmp==1 ? ' checked="checked"' : ''?> />
+                    <?=H('通过')?>
+                </label>
+                <label>
+                    <input class="approve-vendor-scope-radio" type="radio" name="type[<?=$key?>]" value="2"<?=$tmp==2 ? ' checked="checked"' : ''?> />
+                    <?=H('拒绝')?>
+                </label>
+                <label>
+                    <input class="approve-vendor-scope-radio" type="radio" name="type[<?=$key?>]" value="0"<?=$tmp==0 ? ' checked="checked"' : ''?> />
+                    <?=H('暂不处理')?>
+                </label>
+            </div>
+            <tr><td>
+            <div class="extinfo approve-vendor-scope-from-to"<?=$tmp!=1 ? ' style="display:none;"' : ''?>>
+                <?=H('生效')?>: <input class="date" type="text" name="from[<?=$key?>]" placeholder="<?=T('生效时间')?>" value="<?=$form['from'][$key]?:''?>" />
+                ~
+                <?=H('失效')?>: <input class="date" type="text" name="to[<?=$key?>]" placeholder="<?=T('失效时间')?>" value="<?=$form['to'][$key]?:''?>" />
+                <?php if (isset($errors["fromto[$key]"][0])) { ?>
+                    <div class="hr_1">&#160;</div>
+                    <div><span class="status_tag status_tag_error"><?=$errors["fromto[$key]"][0]?></span></div>
+                <?php }?>
+            </div>
+            <div class="extinfo approve-vendor-scope-reject"<?=$tmp!=2 ? ' style="display:none;"' : ''?>>
+                <input type="text" name="reason[<?=$key?>]" placeholder="<?=H('拒绝理由')?>" style="width:100%;" value="<?=$form['reason'][$key]?:''?>" />
+                <?php if (isset($errors["reason[$key]"][0])) { ?>
+                    <div class="hr_1">&#160;</div>
+                    <div><span class="status_tag status_tag_error"><?=$errors["reason[$key]"][0]?></span></div>
+                <?php }?>
+            </div>
+        </div>
+    <?php }?>
+        <div class="hr_2">&#160;</div>
+        <div class="right">
+            <input type="submit" name="submit" class="button button_save" value="<?php echo T('提交')?>" />
+        </div?
+    </form>
+</div>
+<script>
+jQuery(function() {
+    $('.approve-vendor-scope-form-container input:radio').change(function() {
+        var $that = $(this);
+        var $parent = $that.parents('.approve-vendor-scope-line');
+        $parent.find('.extinfo').hide();
+        var value = $that.val();
+        if (value==2) {
+            $parent.find('.approve-vendor-scope-reject').show();
+        }
+        else if (value==1) {
+            $parent.find('.approve-vendor-scope-from-to').show();
+        }
+    })
+});
+</script>

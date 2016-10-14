@@ -1,0 +1,57 @@
+<div class="hr_1">&#160;</div>
+<div class="product_detail clearfix">
+	<table class="form flexible">
+		<tbody>
+			<tr>
+				<td class="top icon">
+					<?php echo $snapshot->icon('128'); ?>
+				</td>
+				<td class="top flexible">
+					<div class="hgroup">
+						<h2>
+						<?php echo URI::anchor($snapshot->url(), H($snapshot->name)) ?>
+						</h2>
+						<h3>
+							<?php
+							echo HT('%manufacture #%catalog_no', array(
+								'%manufacture' => $snapshot->manufacturer,
+								'%catalog_no' => $snapshot->catalog_no
+							));
+							?>
+						</h3>
+						<div>
+						<?php
+							 if ($snapshot->publish_date) {
+								 if ($snapshot->approve_date) {
+									 $status = T('已审核');
+								 }
+								 else {
+									 $status = T('待审核');
+								 }
+							 }
+							 else {
+								 $status = T('未发布');
+							 }
+						?>
+						<span class="status"><?php echo HT($status) ?></span>
+
+						<span class="type">
+						<?php
+							$types = Product_Model::get_types();
+							echo $types[$snapshot->type];
+						?>
+						</span>
+						<?php
+						echo V('application:tag/path', array('tag' => $snapshot->category));
+						?>
+						</div>
+					</div>
+					<div class="hr_2"></div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="hr_2"></div>
+	<?php echo $secondary_tabs ?>
+	<?php echo $secondary_tabs->content ?>
+</div>

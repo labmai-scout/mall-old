@@ -1,0 +1,49 @@
+<div class="vendor_profile">
+	<div class="hr_3">&#160;</div>
+	<table class="normal_info">
+		<tr>
+			<td class="nowrap top icon">
+				<?php echo $vendor->icon(128); ?>
+				<div class="center">
+				<?php if (!$vendor->approve_date): ?>
+					<span class="status_tag"><?php echo HT('未上架'); ?></span>
+				<?php endif; ?>
+				</div>
+			</td>
+			<td class="vendor_info">
+				<h3 class="vendor_title"><?php echo H($vendor->name); ?></h3>
+				<div class="hr_2"></div>
+				<table>
+					<tr>
+						<th class="right rpadding_2 nowrap"><?php echo HT('简称:') ?></th>
+						<td><?php echo H($vendor->short_name); ?></td>
+					</tr>
+					<tr>
+						<th class="right rpadding_2 nowrap"><?php echo HT('电话:') ?></th>
+						<td><?php echo H($vendor->phone); ?></td>
+					</tr>
+					<tr>
+						<th class="right rpadding_2 nowrap"><?php echo HT('传真:') ?></th>
+						<td><?php echo H($vendor->fax); ?></td>
+					</tr>
+					<tr>
+						<th class="right rpadding_2 nowrap"><?php echo HT('电子邮箱:') ?></th>
+						<td><?php echo H($vendor->email); ?></td>
+					</tr>
+					<tr>
+						<th class="right rpadding_2 top nowrap"><?php echo HT('简介:') ?></th>
+						<td class="top">
+                        <div class="brief_info">
+							<?php echo H($vendor->description, TRUE); ?>
+                        </div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	<?php
+		echo $vendor_tabs;
+		echo $vendor_tabs->content;
+	?>
+</div>

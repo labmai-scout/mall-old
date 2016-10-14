@@ -1,0 +1,24 @@
+<?php
+	$me = L('ME');
+	$no_error = ($form->no_error !== FALSE);
+	$require = (string) V('form_require');
+	$gapper_app_product = O('gapper_app_product', ['product'=>$product]);
+?>
+<div class="form padding_2 toggle:type show_on:service">
+<h4><?php echo HT('服务') ?></h4>
+<div class="hr_1">&#160;</div>
+<table class="form">
+<tr>
+	<td class="label right middle nowrap"><?php echo HT('client_id'); ?></td>
+	<td class="middle nowrap" colspan="3">
+		<input name="client_id" class="text" size="20" value="<?php echo H($no_error ? $gapper_app_product->client_id : $form['client_id']); ?>" /><?php echo $require?>
+	</td>
+</tr>
+<tr>
+	<td class="label right middle nowrap"><?php echo HT('模板链接'); ?></td>
+	<td class="middle nowrap" colspan="3">
+		<input name="template_link" class="text" size="20" value="<?php echo H($no_error ? $product->template_link : $form['template_link']); ?>" /><?php echo $require?>
+	</td>
+</tr>
+</table>
+</div>

@@ -1,0 +1,42 @@
+<div class="sidebar_item">
+	<div class="title">
+		<div class="float_right"><?php echo URI::anchor(URI::url('!mall/search/', array('order_by'=>'rating')), T('更多 &#187;'), 'class="blue"'); ?></div>
+		<?php echo T('畅销产品')?>
+	</div>
+	<div class="content product_content">
+		<?php
+			$now = time();
+			$days = Config::get('mall.best_product_days_ago') ?: 30;
+			$from_time = $now - $days*24*3600;
+			//查询购买次数最多的前四个商品
+			//待付款，付款中，已付款，待结算，已结算
+			$order_array =implode(',',array(Order_Model::STATUS_APPROVED,
+						Order_Model::STATUS_PENDING_TRANSFER,
+						Order_Model::STATUS_TRANSFERRED,
+						Order_Model::STATUS_PENDING_PAYMENT,
+						Order_Model::STATUS_PAID));
+
+			$db = Database::factory();
+			$best_query = "SELECT product_id,count(*)
+				FROM `order_item` LEFT JOIN `order`
+				ON `order_item`.order_id = `order`.id
+				WHERE `order`.status IN ({$order_array}) and `order`.ctime>={$from_time}
+				group by product_id
+				ORDER BY count( * ) DESC
+				limit 4";
+
+
+			$best_products = $db->query($best_query)->rows();
+
+			foreach ($best_products as $b) :
+				$bvp = O('product', $b->product_id);
+				if(!$bvp->id) continue;
+				$bp = $bvp->product;
+
+		?>
+			<a href="<?php echo $bp->url(null,null,null,'view')?>" title="<?php echo $bp->name?>">
+			<?php echo $bp->icon('128');?>
+			</a>
+		<?php endforeach; ?>
+	</div>
+</div>

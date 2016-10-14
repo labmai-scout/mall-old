@@ -1,0 +1,25 @@
+<h3>代购</h3>
+<form action="<?php echo URI::url('!mall/order/submit');?>">
+	<table class="form">
+		<tr>
+			<td class="label right nowrap middle bold"><strong>产品名称</strong></td>
+			<td><input type="text" class="text" size="40" /></td>
+		</tr>
+		<tr>
+			<td class="label right nowrap middle"><strong>型号</strong></td>
+			<td><input type="text" size="20" class="text" />
+		</tr>
+		<tr>
+			<td class="label right nowrap middle"><strong>数量</strong></td>
+			<td><input type="text" size="10" class="text"/>
+		</tr>
+		<tr>
+			<td class="label right nowrap middle top"><strong>描述</strong></td>
+			<td><textarea cols="60" rows="5"></textarea></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><input type="submit" class="button button_tick" value="提交"/></td>
+		</tr>
+	</table>
+</form>

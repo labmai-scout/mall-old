@@ -1,0 +1,21 @@
+<?php
+$me = L('ME');
+
+$vendors = Q("$me<member vendor");
+if($vendors->total_count()):?>
+<h4 class="description"><?php echo HT('供应商'); ?></h4>
+<ul>
+<?php
+	foreach ($vendors as $vendor):
+
+	if(!($me->id == $vendor->owner->id || $me->is_allowed_to('查看供应商', $vendor))) continue;
+	?>
+
+	<li>
+	<a href="<?php echo $vendor->url(NULL, NULL, NULL, 'vendor_view'); ?>"><?php echo H($vendor->get_display_name('short')); ?></a>
+	</li>
+
+
+<?php endforeach;?>
+	</ul>
+<?php endif;?>

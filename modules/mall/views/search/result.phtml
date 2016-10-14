@@ -1,0 +1,136 @@
+<?php
+// TODO 显示商品的报价时, 要考虑对当前 customer 的特殊报价(xiaopei.li@2012-03-09)
+// TODO 若一个商家对某 product 有多 vendor_product, 则名字可能在供应商多次显示(xiaopei.li@2012-04-16)
+$me = L('ME');
+
+?>
+<li class="data clearfix">
+	<table class="list">
+		<tr>
+			<td class="nowrap middle icon">
+				<?php echo URI::anchor($product->url(), $product->icon(64)); ?>
+			</td>
+			<td class="left top">
+				<h4><a href="<?php echo $product->url(); ?>" class="data_title" target="_blank"><?php echo H($product->name); ?></a></h4>
+				<table class="product_info">
+					<?php
+					// 商城 product 搜索结果按配置显示内容, 其他 prod_{$type} 模块也应该这样写!!!(xiaopei.li@2012-08-27)
+					$product_list_fileds = Product_Model::get_options($product->type, 'product_list_fields');
+
+					if ($product_list_fileds) {
+
+						$is_first = TRUE;
+
+						foreach ($product_list_fileds as $field => $title) {
+							if ($is_first) {
+								echo '<tr>';
+							}
+
+							echo '<td class="nowrap half">';
+							echo HT($title);
+
+							echo '&#160;&#160;';
+
+							echo H($product->{$field});
+
+							echo '</td>';
+
+							if (!$is_first) {
+								echo '</tr>';
+							}
+
+							$is_first = !$is_first;
+						}
+
+						if (!$is_first) {
+							echo '<td></td>';
+							echo '</tr>';
+						}
+					}
+					?>
+					<tr>
+						<td class="nowrap" colspan="2">
+							<?php echo HT('价格: '); ?>
+							<?php if ($me->is_allowed_to('查看价格', $product)): ?>
+								&#160;&#160;<?php echo V('application:product/price_range', array('product' => $product)) ?>
+							<?php else: ?>
+								<span class="hidden_normal">
+									&#160;&#160;<?php echo T('授权用户可见'); ?>
+								</span>
+							<?php endif; ?>
+						</td>
+					</tr>
+					<tr>
+						<td class="nowrap"  colspan="2">
+							<?php echo HT('供应商:'); ?>
+								<span class="hidden_normal">
+									&#160;&#160;<?php echo $product->vendor->name;?>
+								</span>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+
+	<?php /* ?>
+	<div class="logo"><?php echo URI::anchor($product->url(), $product->icon(64)); ?></div>
+	<div class="info">
+		<h4>
+			<a href="<?php echo $product->url(); ?>"><?php echo H($product->name); ?></a>
+		</h4>
+		<div>
+			<span><?php echo HT('生产商:'); ?></span>
+			<?php
+			echo HT($product->manufacturer);
+			?>
+			&#160;&#160;&#160;&#160;&#160;&#160;
+			<span><?php echo HT('目录号:'); ?></span>
+			<?php
+			echo HT($product->catalog_no);
+			?>
+		</div>
+		<div>
+			<span><?php echo HT('规格:'); ?></span>
+			<?php
+			echo HT($product->spec);
+			?>
+			&#160;&#160;&#160;&#160;&#160;&#160;
+			<span><?php echo HT('包装:'); ?></span>
+			<?php
+			echo HT($product->package);
+			?>
+		</div>
+		<div>
+			<span><?php echo HT('价格:'); ?></span>
+			<?php if ($me->is_allowed_to('查看价格', $product)): ?>
+				<?php echo V('application:product/price_range', array('product' => $product)) ?>
+			<?php else: ?>
+			<span class="hidden_price">
+				<?php echo HT('授权用户可见'); ?>
+			</span>
+			<?php endif; ?>
+		</div>
+		<div>
+			<span><?php echo HT('供应商:'); ?></span>
+			<?php
+			if ($n_vendors) {
+				foreach ($products as $product) {
+					$vendor = $product->vendor;
+					$vendor_names[] = URI::anchor($vendor->url(), H($vendor->short_name ? : $vendor->name), 'class="blue"');
+				}
+
+				if ($n_vendors > $products->count()) {
+					$vendor_names[] = URI::anchor($product->url(), T('等 %n 家', array('%n' => $n_vendors)), 'class="blue"');
+				}
+
+				echo join(', ', $vendor_names);
+			}
+			else {
+				echo HT('暂无商家供货');
+			}
+
+			?>
+		</div>
+	</div><?php */?>
+</li>

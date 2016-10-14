@@ -1,0 +1,282 @@
+body {
+	background-color: #eee;
+	height: 100%;
+}
+
+html {
+	height: 100%;
+}
+body, .normal {
+	font-size:12px;
+}
+
+a {
+	color: #000;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a.blue {
+	color: #7D1E62;
+}
+
+strong {
+	font-weight: bold;
+}
+
+h1 { font-size: 130% }
+h2 { font-size: 120% }
+h3 { font-size: 110% }
+h4 { font-size: 105% }
+h5, h6 { font-size: 100%; }
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: bold;
+}
+
+.description {
+	color: #999;
+}
+
+.num_notif {
+	position: absolute;
+	display: block;
+	z-index: 10;
+	right: -6px; top: -6px;
+	width: auto;
+	font-size: 10px;
+	line-height: 11px;
+	color: #fff;
+	padding: 2px 6px;
+	overflow: hidden;
+	text-align: center;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.85);
+	background-color: #f00;
+	background: -moz-linear-gradient(270deg, #f00, #c00);
+	background: -webkit-gradient(linear, left top, left bottom, from(#f00), to(#c00));
+	text-shadow: 0 -1px 1px #c00;
+	border-radius: 24px;
+	border:1px solid #c33;
+	filter: progid:DXImageTransform.Microsoft.Shadow (Color=#000000, Direction=135, Strength=1); 
+	*padding: 0 4px;
+	*line-height: 16px;
+	padding: 0 4px\9;
+	line-height: 16px\9;
+}
+
+.num_reminder {
+	right: 2px;
+    top: -2px;
+    z-index: 10;
+    background-color: #FA6351;
+    background: -moz-radial-gradient(270deg, #ED1F28, #FA6351) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -webkit-gradient(linear, left top, left bottom, from(#ED1F28), to(#FA6351));
+    border: 1px solid #CC3333;
+    border-radius: 24px;
+    box-shadow: 0 1px 1px #B7B7B7;
+    color: #FFFFFF;
+    display: block;
+    font-size: 11px;
+    text-align: center;
+    width: auto;
+    line-height: 4px;
+    overflow: hidden;
+    padding: 1px;
+    position: absolute;
+}
+
+div.pagination {
+	background-color:#d7d7d7;
+	color:#666;
+	padding: 2px 4px;
+	line-height: 1.231;
+	text-align: right;
+}
+
+div.pagination a, div.pagination span {
+	color:#666;
+	padding: 1px 6px;	
+	display: inline-block;
+}
+
+div.pagination a {
+	text-decoration: none;
+	cursor: pointer;
+	color: #000;
+}
+
+div.pagination .current {
+	font-weight: bold;
+	color: #666;
+	text-decoration: underline;
+}
+
+div.pagination a:hover {
+	color: #fff;
+	background-color: #666;
+}
+
+p {
+	white-space: normal;
+}
+
+ul.files li {
+	margin-left: 0;
+}
+
+
+.message {
+	margin-bottom: 5px;
+	padding: 5px;
+}
+
+.message_normal {
+	background-color:#fff9d7;
+	border:2px solid #ffcc66;
+	border-radius: 3px;
+}
+
+.message_error {
+	background-color:#ffebe8;
+	border:2px solid #ff9999;
+	border-radius: 3px;
+}
+
+.status_tag {
+	display: inline-block;
+	padding: 2px 6px;
+	line-height: 1.231;
+	border-radius: 2px;
+	color: #fff;
+	vertical-align: middle;
+	text-decoration: none;
+	text-align: center;
+	font-size:12px;
+	font-weight: normal;
+	text-transform:capitalize;
+	background-color: #666;
+}
+
+.status_tag:hover {
+	text-decoration: none;
+}
+
+.status_tag_label {
+	background-color: #666;
+}
+
+.status_tag_normal {
+	background-color: rgb(140, 191, 64);
+}
+
+.status_tag_error {
+	background-color: #c33;
+}
+
+.status_tag_warning {
+	background-color: rgb(242, 166, 64);
+}
+
+.status_tag_disable {
+	background-color: #999;
+}
+
+span.status_tag{
+	cursor:default;
+}
+
+/*
+参考:
+http://css-patcher.geneegroup.com/
+http://en.wikipedia.org/wiki/Web_safe_color
+(xiaopei.li@2012-09-20)
+*/
+
+@css-define statuses:["draft", "pending_approval", "approved", "returning", "pending_transfer", "transferred", "pending_payment", "paid", "canceled", "pending_customer_approval", "returning_approval"];
+
+@css-foreach (status in statuses) {
+    .status_$status {
+		@css-switch ($status) {
+			@css-case 'draft' {
+				background-color: #bdb76b;
+			}
+			@css-case 'pending_approval' {
+				background-color: #ff7f50;
+			}
+			@css-case 'approved' {
+				background-color: #ff6347;
+			}
+			@css-case 'returning' {
+				background-color: #b22222;
+			}
+			@css-case 'pending_transfer' {
+				background-color: #3cb371;
+			}
+			@css-case 'transferred' {
+				background-color: #228b22;
+			}
+			@css-case 'pending_payment' {
+				background-color: #4682b4;
+			}
+			@css-case 'paid' {
+				background-color: #00008b;
+			}
+			@css-case 'pending_customer_approval' {
+				background-color: #ba55d3;
+			}
+			@css-case 'returning_approval' {
+				background-color: #dc143c;
+			}
+			@css-case 'canceled' {
+				background-color: #888;
+			}
+			@css-default {
+				background-color: #555555;
+			}
+		}
+    }
+}
+
+.price {
+	font-weight: bold;
+	/* color: #000; */
+}
+
+.price_inquiry {
+	font-weight: normal;
+	/* color: #000; */
+}
+
+.hidden_submit {
+	position: relative;
+	left: -30000px;
+	top: -30000px;
+}
+
+.red {
+	color: red;
+}
+
+#top_menu a.link_mail .mail_notif {
+	box-shadow: none;
+	background: #fff;
+	color: #7D1E62;
+	text-shadow: none;
+	padding: 1px 5px;
+	font-weight: bold;
+	font-size: 12px;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.85);
+	border-radius: 24px;
+	*padding: 0 4px;
+	*line-height: 16px;
+	padding: 0 4px\9;
+	line-height: 16px\9;
+}
+
+.break-word {
+    word-wrap: break-word;
+    word-break: break-all;
+}

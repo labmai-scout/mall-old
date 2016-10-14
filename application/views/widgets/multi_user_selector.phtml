@@ -1,0 +1,10 @@
+<input 
+    type="text" 
+    name="<?php echo $name; ?>"
+    class="text token <?php echo $extra;?> token_autocomplete:<?php echo $autocomplete; ?>" 
+    <?php if ($tooltip) : ?>
+    q-tooltip="<?php echo $tooltip?>"
+    <?php endif;?>
+    size="<?php echo $size ?: '40'?>" 
+    value="<?php echo H($value); ?>"
+/>

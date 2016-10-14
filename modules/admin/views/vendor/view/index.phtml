@@ -1,0 +1,42 @@
+<div class="hr_1">&#160;</div>
+<div class="clearfix">
+<table class="user_grid form flexible">
+<tr>
+	<td class="top icon tight">
+		<div class="padding_1 short_container">
+			<div><?php echo $vendor->icon('128');?></div>
+		</div>
+	</td>
+	<td class="top nowrap info flexible">
+		<h2>
+			<a href="<?php echo $vendor->url(NULL, NULL, NULL, 'admin_view')?>"><?php echo H($vendor->name) ?></a>
+		</h2>
+		<?php if ($vendor->product_uploading) :?>
+			<span class="status_tag" href="#"><?php echo HT('商品上传中')?></span>
+		<?php endif;?>
+		<?php if ($vendor->is_publishing) :?>
+			<span class="status_tag status_tag_error" href="#"><?php echo HT('商品上架中')?></span>
+		<?php endif;?>
+		<?php if ($vendor->is_unpublishing) :?>
+			<span class="status_tag status_tag_error" href="#"><?php echo HT('商品下架中')?></span>
+		<?php endif;?>
+		<div class="hr_1">&#160;</div>
+		<span class="description">
+		<?php echo HT('业务员') ?>:
+			<?php echo URI::anchor($vendor->owner->url(NULL, NULL, NULL, 'admin_view'), $vendor->owner->name) ?>
+		</span>
+		<div class="hr_1">&#160;</div>
+		<p class="description" style="white-space: normal; width: 600px"><?php echo H($vendor->description)?></p>
+        <div class="hr_3">&#160;</div>
+		<?php
+			$links = $vendor->links('admin_view');
+		?>
+		<?php echo Widget::factory('application:links', array('links'=>$links, 'separator'=>' ')); ?>
+            <div class="hr_1">&#160;</div>
+	</td>
+</tr>
+</table>
+</div>
+<div class="hr_3">&#160;</div>
+<?php echo $secondary_tabs; ?>
+<?php echo $secondary_tabs->content; ?>

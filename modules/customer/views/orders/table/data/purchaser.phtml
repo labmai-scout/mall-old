@@ -1,0 +1,6 @@
+<?php $user = $order->purchaser; ?>
+<p style="font-size:14px;"><?php echo HT($user->name); ?></p>
+<div class="quote user_grid rpadding_3">
+	<p><span class="email"><?php echo URI::mailto($user->email, NULL, 'class="description"') ?></span></p>
+	<p><span class="phone description"><?php echo H($user->phone) ?></span></p>
+</div>

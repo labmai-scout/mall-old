@@ -1,0 +1,9 @@
+<?php if ($statement->status == Billing_Statement_Model::STATUS_PAID): ?>
+<span class="status_tag status_tag_normal"><?php echo HT('已完成'); ?></span>
+<?php elseif($statement->status == Billing_Statement_Model::STATUS_REJECTED): ?>
+<span class="status_tag status_tag_canceled"><?php echo HT('已驳回'); ?></span>
+<?php elseif($statement->status == Billing_Statement_Model::STATUS_PENDING_CHECK): ?>
+<span class="status_tag status_tag_warning"><?php echo HT('结算中'); ?></span>
+<?php else: ?>
+<span class="status_tag status_tag_warning"><?php echo HT('待审核'); ?></span>
+<?php endif; ?>

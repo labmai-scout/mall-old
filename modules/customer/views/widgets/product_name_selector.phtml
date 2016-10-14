@@ -1,0 +1,9 @@
+<?php
+$uniqid = 'product_name'.uniqid();
+
+$autocomplete = $this->autocomplete ?: URI::url('autocomplete/product_name');
+
+$size = $this->size ?: 40;
+
+?>
+<input id="<?php echo $uniqid?>_name" name="<?php echo $this->name ?>" class="text middle select_on_focus autocomplete:<?php echo H($autocomplete) ?>"  size="<?php echo $size?>" value="<?php echo H($value) ?>" />

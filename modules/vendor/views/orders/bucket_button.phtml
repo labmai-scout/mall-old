@@ -1,0 +1,10 @@
+<?php
+$bucket = Billing_Bucket_Model::vendor_bucket($vendor);
+$bucket_num = $bucket->item_count();
+?>
+<div id="bucket_button" class="inline_block" style="position:relative; padding-right: 5px">
+	<a class="button button_bucket" href="<?php echo URI::url('!vendor/order/billing/bucket.'.$vendor->id); ?>"><?php echo HT('结算夹'); ?></a>
+	<?php if ($bucket_num > 0): ?>
+	<span class="num_notif"><?php echo H($bucket_num); ?></span>
+	<?php endif; ?>
+</div>  

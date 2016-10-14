@@ -1,0 +1,27 @@
+<?php echo CSS::load_async('prod_reagent:view_scope')?>
+<table class="form">
+<?php
+$me = L('ME');
+foreach ($properties as $property => $label):
+	$scope_name = 'rgt_type.' . $property;
+	$scope = O('vendor_scope', array('vendor' => $vendor, 'name' => $scope_name));
+	if ($scope->id && $scope->expire_date > 0):
+?>
+	<tr>
+		<td class="nowrap left"><?php echo HT($label); ?></td>
+		<td class="">
+			&#160;&#160;&#160;
+			<span><?php echo HT('%from_date 至 %expire_date', array(
+				'%expire_date' => Date::format($scope->expire_date, 'Y/m/d'),
+				'%from_date' => Date::format($scope->expire_date_from, 'Y/m/d')
+			)); ?></span>
+	        <?php if ($me->is_allowed_to('查看证书', $scope->vendor)) :?>
+	        <span><a herf="#" q-object="show_pic"  q-static="<?php echo H(array('sid'=>$scope->id))?>" q-src="<?php echo URI::url('cert')?>" q-event="click" class="button button_view" /><?php echo HT('查看')?></a></span>
+	        <?php endif;?>
+        </td>
+	</tr>
+<?php
+	endif;
+endforeach;
+?>
+</table>

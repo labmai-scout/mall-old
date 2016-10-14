@@ -1,0 +1,16 @@
+<?php
+$auth_backends = Config::get('auth.backends');
+$default_backend = $this->default_backend ?: Config::get('auth.default_backend');
+if (count ($auth_backends) > 1) {
+	$selects = array();
+	foreach ($auth_backends as $key => $values) {
+		$selects[$key] = I18N::HT('people', $values['title']);
+	}
+	echo Form::dropdown($this->name ?: 'backend', $selects, $this->select ?: $default_backend,'class="middle dropdown '.$this->extra_class.'"');
+}
+else {
+	$backend = key($auth_backends);
+	$config = current($auth_backends);
+	echo I18N::HT('people', (string) $config['title']);
+	echo Form::hidden($this->name ?: 'backend', $backend);
+}

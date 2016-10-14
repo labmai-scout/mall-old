@@ -1,0 +1,87 @@
+<div class="hr_1">&#160;</div>
+<div id="statement_view" class="clearfix">
+<h1><?php echo HT('生成付款单'); ?></h1>
+<div class="hr_2">&#160;</div>
+<div class="step_form">
+    <h4><?php echo HT('付款人'); ?></h4>
+    <div class="step_form_content">
+        <strong><big><?php echo H($customer->name); ?></big></strong>
+    </div>
+</div>
+<div class="step_form">
+    <h4><?php echo HT('付款金额'); ?></h4>
+    <div class="step_form_content">
+        <strong><big><?php echo Number::currency($bucket->get_balance()); ?></big></strong>
+    </div>
+</div>
+<div class="step_form">
+    <h4><?php echo HT('订单列表'); ?></h4>
+    <div class="step_form_content orders_content">
+<?php
+
+$table = Widget::factory('table');
+$table->name = 'customer_bucket';
+
+$table->empty_message = HT('付款夹内没有订单!');
+
+$table->add_columns(array(
+
+    'ref_no'=>array(
+        'title'=>T('订单编号'),
+        'nowrap'=>TRUE
+    ),    
+    'items'=>array(
+        'title'=>T('订单商品'),
+        'nowrap'=>TRUE
+    ),    
+	'vendor'=>array(
+		'title'=>T('供应商'),
+        'nowrap' => TRUE,
+        'extra_class'=>'tight',
+    ),
+   'description'=>array(
+        'title'=>T('备注'),
+        'extra_class'=>'flexible'
+    ),
+    'price'=> array(
+        'title'=>T('金额'),
+        'align' => 'right',
+        'nowrap' => TRUE,
+    ),   
+    'rest'=>array(
+        'align'=>'right',
+        'nowrap'=>TRUE,
+    )
+));
+
+foreach($orders as $order) {
+    $links = array();
+
+    $links['remove'] = array(
+        'url' => URI::url('!customer/transfer/remove_order.'. $order->id),
+        'text' => T('移出付款夹'),
+        'extra' =>'class="blue"',
+    );
+
+    $table->add_row(array(
+        'ref_no'=> V('customer:orders/table/data/ref_no', array('order'=>$order)),
+        'items'=> V('customer:orders/table/data/items', array('order'=>$order)),
+		'vendor'=>V('customer:orders/table/data/vendor', array('order'=>$order)), 
+        'price'=> V('customer:orders/table/data/price', array('order'=>$order)),
+        'description' => V('customer:orders/table/data/description', array('order'=>$order)), 
+        'rest' => Widget::factory('application:links', array('links'=>$links))
+    ));
+}
+
+echo $table;
+?>
+    </div>
+</div>
+
+<?php if ($orders->total_count() > 0): ?>
+<div class="clearfix">
+    <a class="button button_export" href="<?php echo URI::url('!customer/transfer/to_statement.' . $customer->id); ?>"><?php echo HT('生成付款单'); ?></a>
+    <a class="button button_delete" href="<?php echo URI::url('!customer/transfer/empty_bucket.' . $customer->id); ?>"><?php echo HT('清空付款夹'); ?></a>
+</div>
+<?php endif; ?>
+</div>

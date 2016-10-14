@@ -1,0 +1,127 @@
+<div class="hr_1">&#160;</div>
+<?php echo $status_tabs; ?>
+<div class="hr_1">&#160;</div>
+<div class="panel padding_1 clearfix">
+    <div class="float_left">
+        <form action="<?php echo URI::url(''); ?>" method="GET" target="_blank" style="display:inline-block">
+            <input class="date" type="text" name="from" value="<?=strtotime('-90 days')?>" />
+            ~
+            <input class="date" type="text" name="to" value="<?=time()?>" />
+            <input type="hidden" name="type" value="print" />
+            <input type="hidden" name="form_token" value="<?=$form_token?>" />
+            <input type="submit" class="button button_print" value="<?php echo HT('打印'); ?>" />
+        </form>
+		<?php
+		if ($status_tabs->selected == 'transferred') {
+			echo V('vendor:orders/bucket_button', array('vendor'=>$vendor));
+		}
+		?>
+    </div>
+
+    <div class="float_right">
+        <form method="post" action="<?php echo URI::url(''); ?>">
+           <input type="text" name="keyword" class="text" q-hint="<?php echo HT('输入订单编号搜索'); ?>" size="40" value="<?php echo H($form['keyword']); ?>" />
+           <input type="submit" class="hidden_submit button button_search" name="submit" value="<?php echo HT('搜索'); ?>" />
+        </form>
+    </div>
+</div>
+<?php
+
+echo $pagination;
+
+$me = L('ME');
+$table = Widget::factory('table');
+
+$table->name = 'vendor_orders';
+$table->form = $form;
+
+$table->add_columns(array(
+	'@' => array(
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE,
+	),
+    'ref_no'=>array(
+        'title'=>T('订单编号'),
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE,
+    ),
+    'ctime'=> array(
+        'title'=>T('时间'),
+        'align'=>'left',
+        'nowrap'=>TRUE,
+		'extra_class'=>'tight',
+    ),
+    'items'=>array(
+        'title'=>T('商品'),
+    ),
+    'customer'=>array(
+        'title'=>T('买方'),
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE,
+        'filter' => array(
+            'form' => V('vendor:order_table/filters/customer', array(
+                'name'=>'customer', 'value'=>$form['customer'],
+            )),
+            'value' => $form['customer'] ? H($form['customer']) : NULL,
+            'field' => 'customer'
+        )
+    ),
+    'customer_owner'=>array(
+        'weight'=>30,
+        'title'=>T('买方负责人'),
+        'invisible'=>TRUE,
+        'filter'=>array(
+            'form' => V('vendor:order_table/filters/customer_owner', array(
+                    'name'=>'customer_owner', 'value'=>$form['customer_owner']
+                    )),
+            'value'=> $form['customer_owner'] ? H($form['customer_owner']) : NULL
+        )
+    ),
+    'price'=> array(
+        'title'=>T('金额'),
+        'align'=>'right',
+        'extra_class'=>'tight',
+        'nowrap' => TRUE,
+    ),
+    'status'=> array(
+        'title'=>T('状态'),
+        'align'=>'left',
+        'nowrap' => TRUE,
+    ),
+    'rest'=>array(
+   		'align'=>'right',
+    	'nowrap'=>TRUE,
+    )
+));
+
+$table->empty_message = T('没有相关条件的订单信息!');
+
+foreach ($orders as $order) {
+    $order = O('order', $order->id);
+    $ret = FALSE;
+	$links = $order->links('vendor_index');
+    if ($order->has_news_to($me)) {
+        $ret = TRUE;
+    }
+
+    $items = Q("order_item[order={$order}]");
+    foreach ($items as $item) {
+        if ($item->connected_with($me, 'has_news')) {
+            $ret = TRUE;
+            break;
+        }
+    }
+
+	$table->add_row(array(
+		'@' => V('application:common/flag', array('flag' => $ret)),
+        'ref_no'=> V('vendor:orders/table/data/ref_no', array('order'=>$order)),
+        'ctime'=> Date::format($order->ctime, 'Y/m/d H:i:s'),
+        'customer'=> V('vendor:orders/table/data/customer', array('order'=>$order)),
+        'items'=> V('vendor:orders/table/data/items', array('order'=>$order)),
+        'status'=> V('vendor:orders/table/data/status', array('order'=>$order)),
+        'price'=> V('vendor:order/price', array('order'=>$order)),
+		'rest' => Widget::factory('application:links', array('links'=>$links))
+	));
+}
+
+echo $table;

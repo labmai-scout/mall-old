@@ -1,0 +1,11 @@
+<?php
+foreach ($types as $type):
+?>
+<div class="nav_tab <?php echo $type == $current_type ? 'current' : ''?>">
+<?php
+	echo V('mall:type/tab', array('type' => $type));
+?>
+</div>
+<?php
+endforeach;
+?>

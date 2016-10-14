@@ -1,0 +1,22 @@
+<?php $require = V('form_require');?>
+<?php if (!$address->id)  $address = O('deliver_address', array('customer'=>$customer));?>
+<div id="<?php echo $address_id?>">
+    <table class="form">
+        <tr>
+            <th class="label nowrap right"><?php echo HT('地址'); ?></th>
+            <td><input name="address" class="text" size="40" value="<?php echo H($form['address'] ? : $address->address);?>" /><?php echo $require;?></td>
+        </tr>
+        <tr>
+            <th class="label nowrap right"><?php echo HT('邮政编码'); ?></th>
+            <td><input name="postcode" class="text" size="40" value="<?php echo H($form['postcode'] ? : $address->postcode);?>" /><?php echo $require;?></td>
+        </tr>
+        <tr>
+            <th class="label nowrap right"><?php echo HT('电话'); ?></th>
+            <td><input name="phone" class="text" size="40" value="<?php echo H($form['phone'] ? : $address->phone);?>" /><?php echo $require;?></td>
+        </tr>
+        <tr>
+            <th class="label nowrap right"><?php echo HT('电子邮箱'); ?></th>
+            <td><input name="email" class="text" size="40" value="<?php echo H($form['email'] ? : $address->email);?>" /><?php echo $require;?></td>
+        </tr>
+    </table>
+</div>

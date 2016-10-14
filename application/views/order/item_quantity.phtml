@@ -1,0 +1,4 @@
+<?php
+$old_quantity = $order_item->origin_quantity?:$order_item->quantity;
+$current_quantity = $order_item->quantity;
+echo V('application:common/two_quantity', array('old_quantity' => $old_quantity, 'current_quantity' => $current_quantity));

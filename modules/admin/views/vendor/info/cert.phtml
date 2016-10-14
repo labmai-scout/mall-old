@@ -1,0 +1,112 @@
+<div class="padding_2">
+<h2>资质信息</h2>
+<table class="form vendor_info">
+    <tr><td colspan="3">
+        <?=H('营业执照')?>
+        <?php $license = (array) $vendor->scanned_copies['license'];?>
+    </td></tr>
+    <tr class="tight nowrap top">
+        <td>
+            <span class="status_tag status_tag_label"><?=H('注册号')?></span>
+            <?=H($license['serial_no'])?>
+        </td>
+        <td>
+            <span class="status_tag status_tag_label"><?=H('证照年检日期')?></span>
+            <?=H(date('Y-m-d', strtotime($license['yearly_inspect_date'])))?>
+        </td>
+        <td>
+            <span class="status_tag status_tag_label"><?=H('公司经营期限至')?></span>
+            <?=H(date('Y-m-d', strtotime($license['expiry_date'])))?>
+        </td>
+    </tr>
+    <?php if (isset($license['image'])) {?>
+    <tr><td colspan="3">
+        <a class="view" href="<?=$license['image']?>" target="_blank">
+            <img src="<?=$license['image']?>" width="256" />
+        </a>
+    </td></tr>
+    <?php }?>
+    <tr><td colspan="3">
+        <?=H('组织机构代码证')?>
+        <?php $org = (array) $vendor->scanned_copies['org_code_cert'];?>
+    </td></tr>
+    <tr class="tight nowrap top">
+        <td>
+            <span class="status_tag status_tag_label"><?=H('组织机构代码')?></span>
+            <?=H($org['serial_no'])?>
+        </td>
+        <td>
+            <span class="status_tag status_tag_label"><?=H('证照年检日期')?></span>
+            <?=H(date('Y-m-d', strtotime($org['yearly_inspect_date'])))?>
+        </td>
+        <td>
+            <span class="status_tag status_tag_label"><?=H('证照有效截止日期')?></span>
+            <?=H(date('Y-m-d', strtotime($org['expiry_date'])))?>
+        </td>
+    </tr>
+    <?php if (isset($org['image'])) {?>
+    <tr><td colspan="3">
+        <a class="view" href="<?=$org['image']?>" target="_blank">
+            <img src="<?=$org['image']?>" width="256" />
+        </a>
+    </td></tr>
+    <?php }?>
+    <tr><td colspan="3">
+        <?=H('国税证')?>
+        <?php $national = (array) $vendor->scanned_copies['national_tax_reg_cert'];?>
+    </td></tr>
+    <tr>
+        <td>
+            <span class="status_tag status_tag_label"><?=H('税字')?></span>
+        </td>
+        <td colspan="2">
+            <?=H($national['tax_word'])?>
+        </td>
+    </tr>
+    <?php if (isset($national['image'])) {?>
+    <tr><td colspan="3">
+        <a class="view" href="<?=$national['image']?>" target="_blank">
+            <img src="<?=$national['image']?>" width="256" />
+        </a>
+    </td></tr>
+    <?php }?>
+    <tr><td colspan="3">
+        <?=H('地税证')?>
+        <?php $regional = (array) $vendor->scanned_copies['regional_tax_reg_cert'];?>
+    </td></tr>
+    <tr>
+        <td>
+            <span class="status_tag status_tag_label"><?=H('税字')?></span>
+        </td>
+        <td colspan="2">
+            <?=H($regional['tax_word'])?>
+        </td>
+    </tr>
+    <?php if (isset($regional['image'])) {?>
+    <tr><td colspan="3">
+        <a class="view" href="<?=$regional['image']?>" target="_blank">
+            <img src="<?=$regional['image']?>" width="256" />
+        </a>
+    </td></tr>
+    <?php }?>
+</table>
+</div>
+<?php
+$extra = (array)$vendor->scanned_copies['misc'];
+if (count($extra)) { ?>
+<div class="padding_2">
+<h2>其他资质信息</h2>
+<ul class="vendor_info nowrap">
+<?php foreach ($extra as $index=>$cert) { ?>
+<?php if ($cert['image']) {?>
+<li>
+    <p><?=H($cert['note']?:'--')?></p>
+    <p><a class="view" href="<?=$cert['image']?>" target="_blank">
+        <img src="<?=$cert['image']?>" width="256" />
+    </a></p>
+</li>
+<?php }?>
+<?php } ?>
+</ul>
+</div>
+<?php } ?>

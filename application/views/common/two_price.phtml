@@ -1,0 +1,9 @@
+<?php if ($old_price < 0 && $current_price < 0): ?>
+	<?php echo V('application:common/price', array('price' => $current_price)); ?>
+<?php elseif (round($old_price, 2) != round($current_price, 2)): ?>
+	<span class="red"><?php echo V('application:common/price', array('price' => $current_price)); ?></span>
+	<br/>
+	<span class="description"><del>(<?php echo V('application:common/price', array('price' => $old_price)); ?>)</del></span>
+<?php else:?>
+	<?php echo V('application:common/price', array('price' => $current_price)); ?>
+<?php endif;

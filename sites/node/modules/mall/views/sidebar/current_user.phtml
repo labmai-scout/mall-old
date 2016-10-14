@@ -1,0 +1,57 @@
+<?php
+$me = L('ME');
+if ($me->id):
+?>
+    <div class="sidebar_item current_user_item 1111">
+    <div class="title">
+        <?php echo $me->icon('32'); ?>
+        <span class="title_info">
+            <a href="<?php echo $me->url(NULL, NULL, NULL, 'view')?>" class="blue">
+                <?php echo H($me->name)?>
+            </a>
+        </span>
+        <a class="small logout blue" href="<?php echo URI::url('logout')?>"><?php echo T('登出')?></a>
+    </div>
+    <?php if ($me->access('查看管理面板')): ?>
+        <div class="item sidebar_admin">
+            <?php $me->render('mall:objects/user/card.admin'); ?>
+        </div>
+    <?php endif; ?>
+
+    <?php
+    $vendors = Q("$me<member vendor");
+    if($vendors->total_count()):?>
+        <?php foreach ($vendors as $vendor) :?>
+            <?php if($me->is_allowed_to('管理', $vendor)):?>
+                <div class="item sidebar_vendor">
+                    <?php $vendor->render('mall:objects/user/card.vendor'); ?>
+                </div>
+            <?php endif;?>
+        <?php endforeach;?>
+    <?php endif;?>
+
+    <?php
+    $customers = Q("$me<member customer");
+    if ($customers->count() > 0) :
+    ?>
+        <?php foreach($customers as $customer): ?>
+            <div class="item sidebar_customer">
+                <?php $customer->render('mall:objects/user/card.customer'); ?>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    </div>
+<?php endif; ?>
+<script>
+jQuery(function(){
+    $('.current_user_item .logout').click(function(){
+        var new_mall_logout = "<?= Config::get('mall.new_url').'/logout'?>";
+        //触发一下新商城的登出
+        $.ajax({
+            url: new_mall_logout,
+            dataType:'jsonp',
+            jsonp: 'jsonp_callback'
+        });
+    });
+});
+</script>

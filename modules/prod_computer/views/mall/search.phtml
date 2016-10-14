@@ -1,0 +1,13 @@
+<?php echo $sub_header; ?> 
+<div class="hr_3">&#160;</div>
+<div class="content">
+	<div class="content_body">
+		<?php 	
+			echo $pagination;
+			echo V("mall:search/results", array('products' => $products,  'form' => $form, 'category' => $category));
+			echo $pagination;
+		?>
+	</div>
+</div>
+
+

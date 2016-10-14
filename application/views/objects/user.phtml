@@ -1,0 +1,9 @@
+<?php if ($object->id): ?>
+	<a class="name" href="<?php echo $object->url() ?>">
+		<?php echo H($object->name) ?>
+	</a>
+<?php else: ?>
+	<span class="description">
+		<?php echo HT('未知用户') ?>
+	</span>
+<?php endif;

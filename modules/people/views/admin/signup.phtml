@@ -1,0 +1,8 @@
+<div class="form padding_2">
+<form method="post" autocomplete="off">
+<?php echo V('form_error', array('form'=>$form));?>
+	<textarea name="signup_doc" class="textarea autogrow" cols="80" rows="20"><?php echo H(($form->no_error!==FALSE)?$signup_doc:$form['signup_doc']); ?></textarea> <div class="hr_1">&#160;</div>
+	<input class="button button_save middle" name="submit" type="submit" value="<?php echo I18N::T('people', '保存')?>" />
+	<input class="button button_cancel middle" type="reset" value="<?php echo I18N::T('people', '取消')?>" />
+</form>
+</div>

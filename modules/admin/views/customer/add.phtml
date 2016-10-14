@@ -1,0 +1,65 @@
+<div class="hr_1">&#160;</div>
+<div class="form padding_1">
+<?php
+	$no_error = $form->no_error;
+?>
+	<form method="post" action="<?php echo URI::url() ?>" autocomplete="off">
+	<?php echo V('form_error', array('form'=>$form));?>
+	<?php $require = (string) V('form_require'); ?>
+		<table class="form flexible">
+			<tr>
+				<td class="label right nowrap"><?php echo HT('名称')?></td>
+				<td class="left"><input name="name" class="text" size="40" value="<?php echo H($form['name']) ?>" /><?php echo $require; ?></td>
+			</tr>
+			<tr>
+				<td class="label right nowrap middle"><?php echo T('组织机构')?></td>
+				<td class="top">
+				<div class="gray_tag_container">
+		        <?php
+
+		        echo Widget::factory('application:tag_selector', array(
+					'tag'=>O('tag', $form['group_id']),
+		        	'root'=>$group_root,
+		        	'name'=>'group_id',
+		        	'ajax'=>true,
+		        ));
+		        ?><?php echo $require; ?>
+		        </div></td>
+			</tr>
+			<tr>
+				<td class="label right nowrap"><?php echo HT('负责人')?></td>
+				<td class="left">
+				<?php
+				echo Widget::factory('application:user_selector', array(
+						'name' => 'owner',
+						'user' => $form['owner'],
+					));
+				?><?php echo $require; ?>
+				</td>
+			</tr>
+			<tr>
+				<td class="label right nowrap"><?php echo HT('工资号') ?></td>
+				<td class="left"><input name="account_no" class="text" size="40" style="font-size:11px" value="<?php echo H($form['account_no'])?>" /><?php echo $require; ?></td>
+			</tr>
+			<tr>
+				<td class="label right nowrap"><?php echo HT('联系邮箱') ?></td>
+				<td class="left"><input name="email" class="text" size="20" value="<?php echo H($form['email'])?>" /><?php echo $require; ?><span class="description"><?php echo HT('订单状态更新等消息会发至此邮箱'); ?></span></td>
+			</tr>
+			<tr>
+				<td class="label right nowrap top"><?php echo T('描述信息')?></td>
+				<td class="left">
+					<textarea name="description" class="text autogrow" cols="40" rows="5"><?php echo H($form['description'])?></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" class="hr_1">&#160;</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					<input type="submit" name="submit" class="button button_add" value="<?php echo T('添加')?>" />
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>

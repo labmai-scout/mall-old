@@ -1,0 +1,29 @@
+.news_item {
+
+    .title {
+        padding: 0 1em;
+        font-weight: bold;
+        font-size: 14px;
+        background-color: #fff;
+    }
+
+    .breadcrumb {
+        margin-left: 10px;
+    }
+
+    .news {
+        .title {
+            padding: 0 1em;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .content {
+            margin: 10px 10px 30px 10px;
+        }
+    }
+}
+
+#content .home_item div.none {
+    margin-left: 40px;
+}

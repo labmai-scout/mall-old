@@ -1,0 +1,43 @@
+<h2 class="section_title">
+		<span class="middle"><?php echo HT('电脑整机') ?></span>
+</h2>
+<div class="padding_2" style="padding-top:5px">
+	<table class="form product_info_form" style="min-width:400px">
+		<tr>
+			<td class="nowrap tight">
+				<span class="status_tag status_tag_label"><?php echo HT('机型')?></span>
+			</td>
+			<td style="padding-right:12em"><?php echo H($product->computer_type) ?></td>
+			<td class="nowrap tight">
+				<span class="status_tag status_tag_label"><?php echo HT('CPU')?></span>
+			</td>
+			<td style="padding-right:12em"><?php echo H($product->cpu) ?></td>
+		</tr>
+		<tr>
+			<td class="nowrap tight">
+				<span class="status_tag status_tag_label"><?php echo HT('内存')?></span>
+			</td>
+			<td style="padding-right:12em"><?php echo H($product->memory) ?></td>
+			<td class="nowrap tight">
+				<span class="status_tag status_tag_label"><?php echo HT('硬盘')?></span>
+			</td>
+			<td style="padding-right:12em"><?php echo H($product->disk) ?></td>
+		</tr>
+		<tr>
+			<td class="nowrap tight">
+				<span class="status_tag status_tag_label"><?php echo HT('显存')?></span>
+			</td>
+			<td style="padding-right:12em"><?php echo H($product->video_memory) ?></td>
+			<td class="nowrap tight">
+				<span class="status_tag status_tag_label"><?php echo HT('显示器')?></span>
+			</td>
+			<td style="padding-right:12em"><?php echo H($product->display) ?></td>
+		</tr>
+		<tr>
+			<td class="nowrap tight">
+				<span class="status_tag status_tag_label"><?php echo HT('服务电话')?></span>
+			</td>
+			<td style="padding-right:12em" colspan="3"><?php echo H($product->service_call) ?></td>
+		</tr>
+	</table>
+</div>

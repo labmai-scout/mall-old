@@ -1,0 +1,20 @@
+<?php
+	$class = 'status_'.Order_Model::$customer_status_label[$order->status];
+?>
+<div style="padding:.3em 0">
+<span class="status_tag <?php echo $class?>">
+	<?php
+	if ($order->status==Order_Model::STATUS_APPROVED && $order->is_transfer_failed()) {
+		echo HT('支付失败');
+	}
+	else {
+		echo Order_Model::$customer_status[$order->status];
+	}
+	?>
+</span>
+</div>
+<?php if ($order->customer_note): ?>
+<div class="description content_wrap" style="max-width:500px">
+<?php echo H($order->customer_note, TRUE); ?>
+</div>
+<?php endif; ?>

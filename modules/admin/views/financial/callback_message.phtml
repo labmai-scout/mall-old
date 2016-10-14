@@ -1,0 +1,30 @@
+<div class="hr_3">&#160;</div>
+<div class="hr_3">&#160;</div>
+<h1 style="vertical-align:center;text-align:left;color:#EF89EF;font-weight:bold;font-size:10pt;margin:0 auto;width:600px;">
+	您的支付申请已经成功提交.
+	<div class="hr_3">&#160;</div>
+	<span class="close" style="color:#3F3F3F">
+		请<a href="#" onclick="javascript:window.close(); return false;" class="blue"><?php echo T('关闭'); ?></a>该页面进行后续操作.
+		<p>自动关闭页面剩余 <span>5</span> 秒</p>
+	</span>
+</h1>
+<script>
+jQuery(function($){
+	var $span = $("span.close").find('span');
+	var num = 5;
+	function closewin() {
+		window.opener=null;
+		window.open('','_self');
+		window.close();
+	}
+
+	function clock() {
+		$span.text(num);
+		if( num > 0 )	setTimeout(clock, 1000);
+		else closewin();
+		num = num - 1;
+	}
+
+	clock();
+});
+</script>

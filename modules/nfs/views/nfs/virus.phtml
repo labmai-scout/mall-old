@@ -1,0 +1,12 @@
+<tr class="virus">
+	<td class="center nowrap" colspan="5">
+		<div class="message message_error"><?php echo $this->msg ?: I18N::T('nfs', '您上传的文件经检测存在病毒，上传失败'); ?></div>
+	</td>
+</tr>
+<script type="text/javascript">
+(function ($) {
+	setTimeout(function() {
+        $('.virus').hide('slow');
+    }, 5000);
+})(jQuery);
+</script>

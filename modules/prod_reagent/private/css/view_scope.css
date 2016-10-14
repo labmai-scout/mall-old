@@ -1,0 +1,9 @@
+ul.subscope {
+    margin-top: 2px;
+    li {
+        height: 28px;     
+        a {
+            float: right;     
+        }
+    }
+}

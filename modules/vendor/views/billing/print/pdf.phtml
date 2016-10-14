@@ -1,0 +1,97 @@
+<?php
+$vendor = $statement->vendor;
+?>
+<div>
+    <h3>
+        <?php echo HT('结算单  #%ref_no', array('%ref_no'=>Number::fill($statement->id, 6))); ?>&#160;&#160;
+        <span style="border-radius:20px;background-color:#000000;color:#FFFFFF;"><?php echo Billing_Statement_Model::$status[$statement->status]?></span>
+    </h3>
+    <hr />
+</div>
+<div>
+    <table style="padding:3px;">
+        <tr>
+            <td><h3><?php echo HT('结算单位'); ?></h3></td>
+            <td><h3><?php echo HT('结算时间'); ?></h3></td>
+        </tr>
+        <tr>
+            <td><?php echo H($vendor->name); ?></td>
+            <td><?php echo Date::format($statement->ctime); ?></td>
+        </tr>
+        <tr>
+            <td><?= HT('开户行: ') ?> <?php echo $vendor->bank_name; ?></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><?= HT('开户行账号: ') ?> <?php echo $vendor->bank_account; ?></td>
+            <td></td>
+        </tr>
+    </table>
+    <hr />
+</div>
+<div>
+    <table style="padding:3px;">
+        <tr>
+            <td><h3><?php echo HT('结算金额'); ?></h3></td>
+            <td><h3><?php echo HT('凭证单号'); ?></h3></td>
+        </tr>
+        <tr>
+            <td><?php echo Number::currency($statement->balance); ?></td>
+            <td><?php echo $statement->voucher_no; ?></td>
+        </tr>
+    </table>
+    <hr />
+</div>
+
+<?php
+    $voucher = $statement->payment_voucher;
+    $transfer_statement = O('transfer_statement', ['voucher'=>$voucher]);
+?>
+
+<div>
+    <table style="padding:3px;">
+        <tr>
+            <td><h3><?php echo HT('备注'); ?></h3></td>
+            <td><h3><?php echo HT('相关经费'); ?></h3></td>
+        </tr>
+        <tr>
+            <td><?php echo HT('相关付款单: '); ?><?php echo $voucher; ?></td>
+            <td><?php echo $transfer_statement->grant_no; ?></td>
+        </tr>
+    </table>
+    <hr />
+</div>
+<div>
+    <h4><?php echo HT('订单列表'); ?></h4>
+    <table>
+        <thead>
+            <tr style="height:20px;line-height:20px;background-color:#E7E7E7;">
+                <th width="20%"><?php echo HT('订单编号'); ?></th>
+                <th width="15%"><?php echo HT('买方');?></th>
+                <th width="20%"><?php echo HT('订单商品');?></th>
+                <th width="35%"><?php echo HT('付款信息');?></th>
+                <th width="10%"><?php echo HT('金额');?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach(Q("$statement order") as $order) {?>
+                <tr style="font-size:10px;">
+                    <td width="20%"><?php echo H($order->order_no); ?></td>
+                    <?php $customer = $order->customer; ?>
+                    <td width="15%"><?php echo HT($customer->name); ?>(<?php echo H($customer->owner->name) ?>)</td>
+                    <td width="20%">
+                        <?php $items = Q("order_item[order=$order]");?>
+                        <?php foreach ($items as $item) { ?>
+                        <?php $product = $item->product(); ?>
+                        <?php echo H($product->name); ?>
+                        <span class="middle">×</span>
+                        <?php echo intval($item->quantity); ?>
+                        <?php }?>
+                    </td>
+                    <td width="35%"><?php echo H($order->description, TRUE);?></td>
+                    <td width="10%"><?php echo Number::currency($order->price); ?></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>

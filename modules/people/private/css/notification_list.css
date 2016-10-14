@@ -1,0 +1,46 @@
+div.notification_list {
+	position: relative;
+
+	.notification_types {
+		position: absolute;
+		top:0px;
+		left:0px;
+		width:130px;
+		min-height:300px;
+
+		.notification_type {
+			cursor:default;
+			padding:2px 4px;
+			background-color:#eff2f7;
+			border: 1px solid #ccd5e4;
+			margin-bottom:2px;
+			height: 17px;
+			*height: 18px;
+
+			.type_name {
+				display: block;
+				float:left;
+				height: 16px;
+				width:85px;
+				overflow:hidden;
+				input {
+					border:0px;
+					vertical-align:middle;
+				}
+			}
+
+		}
+
+		.active {
+			background-color:#5670a6;
+			border-color:#3b5998;
+			color: #fff;
+		}
+	}
+
+	.relate_view {
+		margin-left:135px;
+		overflow: auto;
+		_display: inline-block;
+	}
+}

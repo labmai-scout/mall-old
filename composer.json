@@ -1,0 +1,24 @@
+{
+    "name": "iamfat/mall",
+    "require": {
+		"ikimea/browser": "*",
+        "tecnick.com/tcpdf": "6.0.051",
+        "michelf/php-markdown":"@stable"
+    },
+    "license": "proprietary",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://satis.genee.cn"
+        },
+        {
+            "packagist": false
+        }
+    ],
+    "authors": [
+        {
+            "name": "Jia Huang",
+            "email": "jia.huang@geneegroup.com"
+        }
+    ]
+}

@@ -1,0 +1,50 @@
+<div class="hr_1">&#160;</div>
+<?php
+echo $pagination;
+
+$table = Widget::factory('table');
+$table->name = 'snapshots'; // 可根据 $table->name 绑定事件
+
+$columns = array(
+	'name'=>array(
+		'title'=>T('商品名称'),
+		'align'=>'left',
+		'nowrap'=>TRUE
+    ),
+	'last_approve_date' => array(
+    	'title'=>T('上架时间'),
+    	'align'=>'left',
+    	'nowrap'=>TRUE
+		),
+	'unapprove_date' => array(
+    	'title'=>T('下架时间'),
+    	'align'=>'left',
+    	'nowrap'=>TRUE
+		),
+    'unit_price' => array(
+    	'title'=>T('价格'),
+    	'align'=>'left',
+    	'nowrap'=>TRUE
+    ),
+    'vendor_note'=>array(
+        'title'=>T('备注'),
+        'align'=>'left',
+    ));
+
+$table->add_columns($columns);
+
+$table->empty_message = HT('此商品无历史快照');
+
+foreach ($snapshots as $snapshot) {
+
+	$table->add_row( array(
+		'name' => URI::anchor($snapshot->url($snapshot->product->id, ['version'=>$snapshot->version], NULL, 'vendor_snapshot'), $snapshot->name, 'class="blue"'),
+		'last_approve_date' => $snapshot->last_approve_date ? Date::format($snapshot->last_approve_date) : '--',
+		'unapprove_date' => $snapshot->unapprove_date ? Date::format($snapshot->unapprove_date) : '--',
+		'unit_price' => V('application:common/price', array('price'=>$snapshot->unit_price)),
+		'vendor_note' => H($snapshot->vendor_note, TRUE),
+	));
+
+}
+
+echo $table;

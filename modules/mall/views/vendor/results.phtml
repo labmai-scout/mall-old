@@ -1,0 +1,11 @@
+<div class="vendors_list">
+<?php if ($vendors->total_count()) :?>
+<?php foreach ($vendors as $vendor): ?>
+	<div class="item">
+		<?php echo V('mall:vendor/result', array('vendor'=> $vendor) );?>
+	</div>
+<?php endforeach; ?>
+<?php else :?>
+    <div class="no_result center"><?php echo HT('暂无匹配的经销商，请重新查询')?></div>
+<?php endif;?>
+</div>

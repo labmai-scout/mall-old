@@ -1,0 +1,22 @@
+<?php $cart_number_id = 'cart_number_'. uniqid();?>
+<input type="text"
+	name="<?php echo 'item_' . $item->id; ?>"
+	value="<?php echo $item->quantity; ?>"
+    id="<?php echo $cart_number_id;?>"
+	class="text number" size="5" />
+
+<script type="text/javascript">
+jQuery(function() {
+    $('#<?php echo $cart_number_id?>').bind('blur', function() {
+        Q.trigger({
+            object: 'cart_number',
+            event: 'blur',
+            data: {
+                id: <?php echo $item->id?>,
+                quantity: $(this).val()
+            }
+        });
+        return false;
+    });
+});
+</script>

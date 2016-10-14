@@ -1,0 +1,33 @@
+<?php $tip = V('tip');
+if ((string) $tip):
+	$tip_id = 'tips_'.uniqid();
+?>
+<span class="separator">&#160;</span>
+<div class="top_menu_item">
+	<a class="link link_help <?php echo $tip->is_hidden ?'':'link_fade'?>" href="#" onclick="(function($,t){$(t).toggle();$(this).toggleClass('link_fade');}).apply(this, [jQuery, '#<?php echo $tip_id?>']); return false;"><?php echo HT('提示')?></a>
+	<div id="<?php echo H($tip_id)?>" class="tip <?php echo $tip->is_hidden ?'hidden':''?>">
+		<?php echo $tip ?>
+	</div>
+</div>
+<?php endif; ?>
+<span class="separator">&#160;</span>
+<div class="top_menu_item">
+<?php
+$me = L('ME');
+$token = Auth::token();
+if ($me->id || $token): ?>
+    <a class="link link_mail relative" href="<?php echo URI::url('!messages'); ?>">
+        <span><?php echo HT('消息中心')?></span>
+        <?php
+        $unread_message_count = (int) Q("message[receiver={$me}][!is_read]")->total_count();
+        if ($unread_message_count) :
+        ?>
+            <span class="mail_notif"><?php echo (int) Q("message[receiver={$me}][!is_read]")->total_count();?></span>
+        <?php endif;?>
+    </a>&#160;
+    <a class="link link_edit" href="<?php echo $me->url(NULL, NULL, NULL, 'edit'); ?>"><?php echo HT('我的档案')?></a>&#160;
+    <a class="link link_logout" href="<?php echo URI::url('logout') ?>"><?php echo HT('登出')?></a>&#160;
+<?php else: ?>
+    <a class="link link_login" href="<?php echo URI::url('login')?>"><?php echo HT('登录')?></a>&#160;
+<?php endif; ?>
+</div>

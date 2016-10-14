@@ -1,0 +1,12 @@
+<form method="post" q-object="change_grant" q-event="submit">
+<?php
+echo Widget::factory(
+	'customer_grant_selector', array(
+	'name'=>'grant',
+	'grant'=>$order->grant,
+	'customer' => $customer,
+	'extra' => 'class="middle"',
+)); 
+?>
+<input type="submit" class="button button_edit middle" name="submit" value="<?php echo HT('更新付费账号'); ?>" />
+</form>

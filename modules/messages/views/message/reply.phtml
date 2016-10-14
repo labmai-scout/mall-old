@@ -1,0 +1,46 @@
+<?php
+$require = (string) V('form_require');
+?>
+<div class="hr_1">&#160;</div>
+<div class="form padding_2">
+	<form method="post" action="<?php echo $message->url('','','','reply') ?>">
+		<?php echo V('form_error', array('form'=>$form));?>
+		<table class="form message_form">
+			<tbody>
+				<tr>
+					<td class="top" colspan="2">
+						<input type="hidden" name="receiver" class="text" size="60" value="<?php echo $message->sender->id ?>"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="label right nowrap middle"><?php echo I18N::T('messages', '收件人'); ?></td>
+                    <td>
+                        <input name="receiver_name" class="text" size="60" disabled="disabled" value="<?php echo H($message->sender->name)?>" />
+						<input type="hidden" name="receiver" class="text" value="<?php echo $message->sender->id ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td class="label right nowrap middle"><?php echo I18N::T('messages', '标题'); ?></td>
+					<td class="middle">
+						<input name="title" class="text" size="60" value="<?php echo H($form['title'])?>" />
+					</td>
+				</tr>
+				<tr>
+					<td class="label right nowrap top"><?php echo I18N::T('messages', '内容'); ?></td>
+					<td class="top">
+						<textarea name="body" class="text autogrow" rows="5" cols="60"><?php echo H($form['body'])?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="hr_1">&#160;</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<input name="submit" type="submit" class="button button_add" value="<?php echo I18N::T('messages', '回复'); ?>" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>

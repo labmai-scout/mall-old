@@ -1,0 +1,47 @@
+<div class="clearfix">
+<table class="user_grid form flexible">
+<tr>
+	<td class="top icon tight">
+		<div class="padding_1 short_container">
+			<div><?php echo $vendor->icon('128');?></div>
+		</div>
+	</td>
+	<td class="top nowrap info flexible">
+		<h2>
+			<a href="<?php echo $vendor->url(NULL, NULL, NULL, 'vendor_view')?>"><?php echo H($vendor->name) ?></a>
+		</h2>
+		<?php if (!$vendor->approve_date): ?>
+			<span class="status_tag status_tag_error"><?php echo HT('未激活')?></span>
+		<?php endif; ?>
+		<?php if ($vendor->is_publishing) :?>
+			<span class="status_tag status_tag_error" href="#"><?php echo HT('商品上架中')?></span>
+		<?php endif;?>
+		<?php if ($vendor->is_unpublishing) :?>
+			<span class="status_tag status_tag_error" href="#"><?php echo HT('商品下架中')?></span>
+		<?php endif;?>
+		<div class="hr_1">&#160;</div>
+		<p class="description" style="white-space: normal; width: 600px"><?php echo H($vendor->description, TRUE)?></p>
+        <div class="hr_3">&#160;</div>
+<?php
+/* 禁止供应商在mall-old修改自己的基本信息
+		<?php if (L('ME')->is_allowed_to('以供应商修改', $vendor) && $vendor->can_edit()) :?>
+			<a class="button button_edit" href="<?php echo $vendor->url(NULL, NULL, NULL, 'vendor_edit')?>"><?php echo HT('修改')?></a>
+        <?php endif;?>
+ */?>
+
+        <?php if ($has_agreement) {?>
+		<div class="hr_2">&#160;</div>
+        <div>
+            <a class="file file_pdf" href="<?php echo $vendor->url('service', NULL, NULL, 'vendor_view')?>"><?php echo HT('服务协议')?></a>
+            <a class="file file_pdf" href="<?php echo $vendor->url('confidentiality', NULL, NULL, 'vendor_view')?>"><?php echo HT('保密协议')?></a>
+        </div>
+        <?php }?>
+		
+		<div class="hr_1">&#160;</div>
+	</td>
+</tr>
+</table>
+</div>
+<?php
+echo $secondary_tabs;
+echo $secondary_tabs->content;

@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<title><?php echo H(T('正在生成'));?></title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<base href="<?php echo Config::get('system.base_url') ?>" />
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<link rel="apple-touch-icon" href="<?php echo _C('images/icon_touch.png') ?>" />
+<style>
+	.container{
+		padding-top:250px;
+		width:100%;
+		color:#999999;
+		font-size: 36px;
+	}
+	.container .waiting{
+		width:620px;
+		margin:0 auto;
+	}
+	.container .success{
+		width:545px;
+		margin:0 auto;
+		display: none
+	}
+	
+</style>
+<?php echo $this->controller->load_js(TRUE); ?>
+</head>
+<body>
+<div class="container">
+<div class="waiting">
+	<?php echo H(T('正在生成付款单PDF文件, 请耐心等待...'))?>
+</div>
+<div class="success">
+	<?php echo H(T('生成付款单PDF文件成功'))?>, <a href="<?php echo URI::url('!admin/transfer/pdf/download?file='.rawurlencode($file))?>" class="download_pdf" ><?php echo H(T('请下载'))?></a>
+</div>
+</div>
+
+<script>
+	jQuery(function($){
+		var file = "<?php echo $file;?>";
+
+		var keep_alive = setInterval(function(){
+			Q.trigger({
+                object: 'statement_pdf',
+                event: 'keepalive',
+                global: false,
+                data: {
+                    file: file
+                },
+                success: function(data) {
+                	if(data.success){
+	                    clearInterval(keep_alive);
+	                    $('.waiting').hide();
+	                    $('.success').show();
+	                    //jquery 无法触发click
+	                    $('.download_pdf')[0].click();
+	                }
+                }
+            });
+		}, 2000);
+	});
+</script>
+<?php echo $this->controller->load_js(FALSE); ?>
+</body>
+</html>

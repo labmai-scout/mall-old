@@ -1,0 +1,99 @@
+<div class="hr_1">&#160;</div>
+<?php echo $status_tabs; ?>
+<div class="hr_1">&#160;</div>
+<div class="panel padding_1">
+    <div class="float_left">
+        <a class="button button_print"  target="_blank" href="<?php echo URI::url('',array('type'=>'print', 'form_token'=>$form_token)); ?>"><?php echo HT('打印'); ?></a>
+		<?php
+		if ($status_tabs->selected == 'approved') {
+			echo V('customer:orders/bucket_button', array('customer' => $customer));
+		}
+		?>
+    </div>
+    <div class="float_right">
+        <form method="post" action="<?php echo URI::url(); ?>">
+           <input type="text" style="font-size:11px;height:14px" name="keyword" class="text" q-hint="<?php echo HT('输入商品名或订单编号搜索'); ?>" size="40" value="<?php echo H($form['keyword']); ?>" />
+           <input type="submit" class="hidden_submit button button_search" name="submit" value="<?php echo HT('搜索'); ?>" />
+        </form>
+    </div>
+</div>
+<?php
+
+echo $pagination;
+
+$me = L('ME');
+$table = Widget::factory('table');
+
+$table->name = 'customer_orders';
+$table->form = $form;
+
+$table->add_columns(array(
+	'flag' => array(
+        'extra_class'=>'tight',
+        'nowrap'=>TRUE,
+	),
+    'ref_no'=>array(
+        'title'=>T('订单编号'),
+        'nowrap'=>TRUE,
+        'extra_class'=>'tight',
+		'align' => 'center',
+    ),
+    'items'=>array(
+        'title'=>T('订单商品'),
+    ),
+	'vendor'=>array(
+		'title'=>T('供应商'),
+        'nowrap'=>TRUE,
+        'extra_class'=>'tight',
+    ),
+    'price'=> array(
+        'title'=>T('金额'),
+        'align'=>'right',
+        'nowrap'=>TRUE,
+        'extra_class'=>'tight',
+    ),
+    'status'=> array(
+        'title'=>T('状态'),
+        'align'=>'left',
+		'nowrap'=>TRUE,
+    ),
+	/*
+    'description'=>array(
+        'title'=>T('备注'),
+    ),
+	*/
+   'rest'=>array(
+   		'align'=>'right',
+    	'nowrap'=>TRUE,
+    )
+));
+
+$table->empty_message = T('没有相关条件的订单信息!');
+
+foreach ($orders as $order) {
+	$links = $order->links('customer_index');
+
+    $ret = FALSE;
+    if ($order->has_news_to($me)) {
+        $ret = TRUE;
+    }
+    $items = Q("order_item[order={$order}]");
+    foreach ($items as $item) {
+        if ($item->connected_with($me, 'has_news')) {
+            $ret = TRUE;
+            break;
+        }
+    }
+	$table->add_row(array(
+		'flag' => V('application:common/flag', array('flag' => $ret)),
+        'ref_no'=> V('customer:orders/table/data/ref_no', array('order'=>$order)),
+        'items'=> V('customer:orders/table/data/items', array('order'=>$order)),
+        'vendor'=> V('customer:orders/table/data/vendor', array('order'=>$order)),
+        'status'=> V('customer:orders/table/data/status', array('order'=>$order)),
+        'price'=> V('application:order/price', array('order'=>$order)),
+		// 'description' => V('customer:orders/table/data/description', array('order'=>$order)),
+		'rest' => Widget::factory('application:links', array('links'=>$links))
+	));
+}
+
+echo $table;

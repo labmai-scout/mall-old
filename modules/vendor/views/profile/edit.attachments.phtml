@@ -1,0 +1,14 @@
+<div class="padding_2">
+	<div class="description">
+		<?php echo HT('* 请上传营业执照扫描件, 以供审核. 扫描件文件名应为"营业执照".') ?>
+	</div>
+	<div class="hr_1"></div>
+	<div class="text_like relative" style="display:block">
+		<?php
+		echo V('nfs:nfs_lite/view', array(
+			'object'=> $vendor->id ? $vendor : O('vendor'),
+			'path_type'=>'attachments'
+		));
+	?>
+	</div>
+</div>

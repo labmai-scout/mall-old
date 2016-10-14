@@ -1,0 +1,10 @@
+<?php 
+$comments = Q("comment[object=$object]:sort(ctime D):limit(5)");
+foreach($comments as $comment) {
+	echo V('application:widgets/comments/item', array('comment'=>$comment, 'list_id'=>$list_id, 'object'=>$object));
+}
+
+if ($comments->total_count() > 5) {
+	echo V('application:widgets/comments/more', array('object'=>$object, 'list_id'=>$list_id, 'start'=>5));
+}
+?>

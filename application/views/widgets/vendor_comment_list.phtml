@@ -1,0 +1,40 @@
+最近 5 条
+<?php
+
+$comments = Q("$vendor order order_item order_item_comment:limit(5)");
+
+$table = Widget::factory('table');
+$table->name = 'product_comment_list';
+
+$table->add_columns(
+	array(
+		'author' => array(
+			'title' => HT('发布者'),
+			),
+		'product' => array(
+			'title' => HT('商品'),
+			),
+		'ratings' => array(
+			'title' => HT('评价'),
+			'nowrap' => TRUE,
+			),
+		'content' => array(
+			'title' => HT('评论内容'),
+			),
+		)
+	);
+
+foreach ($comments as $comment) {
+	$product = $comment->order_item->product;
+	
+	$table->add_row( array(
+		'author' => V('application:widgets/order_item_comment/author', array('comment'=>$comment)),
+		'product' => URI::anchor($product->url(), H($product->name)),
+		'ratings' => Widget::factory('comment_ratings', array(
+						   'comment' => $comment,
+						   )),
+		'content' => V('application:widgets/order_item_comment/content', array('comment'=>$comment)),
+	));
+}
+
+echo $table;

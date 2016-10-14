@@ -1,0 +1,39 @@
+<div class="role_title check_hover form padding_1 clearfix item:<?php echo $role->id ?>">
+	 <div class="float_left rpadding_2">
+	 <?php if ($role->id <= 0) : ?>
+		<div class="not_role_drag_handle">&#160;</div>
+		<div class="hidden">
+		<div class="role_drag_handle center"><?php echo HT($role->name);?></div>
+		</div>
+	 <?php else : ?>
+		<div class="role_drag_handle middle role_id:<?php echo $role->id?>">&#160;</div>
+		<div class="hidden">
+			<div class="role_drag_handle center"><?php echo HT($role->name);?></div>
+		</div>
+	<?php endif ?>
+	<?php if ($role->id < 0) : ?>
+		<strong>
+			<?php echo HT($role->name);?>
+		</strong>
+	<?php else : ?>
+		<input class="text autoselect" name="roles[<?php echo $role->id ?>]" value="<?php echo H($role->name); ?>" />
+	<?php endif ?>
+	</div>
+	<?php if($role->id == 0): ?>
+		<div class="padding_1">
+			<span class="description"><?php echo T('新建角色') ?></span>
+		</div>
+	<?php else: ?>
+	<div class="float_left show_on_hover">
+		<div class="show_on_hover">
+			<a class="button button_edit" href="<?php echo URI::url('!roles/perms.'.$role->id)?>"><?php echo T('修改权限') ?></a>
+			<?php if($role->id > 0): ?>
+			<a confirm="<?php echo T('你确定要删除吗？请谨慎操作！'); ?>" 
+				class="button button_delete" 
+				href="<?php echo $role->url($role->id, NULL, NULL, 'delete'); ?>">
+				<?php echo T('删除') ?></a>
+			<?php endif; ?>
+		</div>
+		<?php endif; ?>
+	 </div>
+</div>

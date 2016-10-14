@@ -1,0 +1,15 @@
+<?php
+	echo Widget::factory('comment_ratings', array(
+		'comment' => $comment,
+	));
+    echo CSS::load_async('application:widgets/rateit_container');
+?>
+<div class="rateit_container"><?php echo H($comment->content); ?></div>
+<?php
+$reply = Q("$comment order_item_comment_reply")->current();
+if ($reply->id):
+?>
+	<div class="form padding_2">
+		 <?php echo HT('商家回复: ') . H($reply->content); ?>
+	</div>
+<?php endif; ?>

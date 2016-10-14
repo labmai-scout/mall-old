@@ -1,0 +1,7 @@
+<div class="form padding_1">
+	<form q-event="submit" q-object="import_reagent" q-src="<?php echo URI::url('!prod_reagent/index');?>" 
+q-static="vendor=<?php echo $vendor_id;?>" method="post" encoding="multipart/form-data" enctype="multipart/form-data">
+		<input name="file" type="file" class="file" />
+		<input type="submit" class="button button_import"  value="<?php echo HT('CSV批量导入')?>"/>
+	</form>
+</div>

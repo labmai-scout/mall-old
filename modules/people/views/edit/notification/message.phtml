@@ -1,0 +1,13 @@
+<?php $uniqid = 'message_'.uniqid(); ?>
+<div id="<?php echo $uniqid?>" class="message message_normal">
+	<p><?php echo T('消息提醒设置成功！')?></p>
+	<script>
+	jQuery(function($){
+		setTimeout(function(){
+			$("#<?php echo $uniqid?>").fadeOut('slow', function(){
+				$(this).remove();
+			})
+		}, 500);
+	});
+	</script>
+</div>

@@ -1,0 +1,4 @@
+<?php 
+$class = $row_odd ? ' row_odd':' row_even';
+?>
+<div class="left nowrap <?php echo $class?>"><?php echo $file['file'] ? File::bytes($file['size']) : '&#160;'; ?></div>

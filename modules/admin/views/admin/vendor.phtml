@@ -1,0 +1,15 @@
+<div class="form padding_2">
+	<form method="post" action="<?php echo URI::url() ?>" autocomplete="off">
+		<?php
+	 	echo V('form_error', array('form'=>$form));
+		echo HT('默认代购商');
+		echo '&#160;&#160;';
+		echo Widget::factory('vendor_selector', array(
+				'name' => 'vendor',
+				'vendor' => $form['vendor'],
+				));
+		?>
+		<div class="hr_1"></div>
+		<input type="submit" name="submit" class="button button_save" style="margin-left:5px;" value="<?php echo T('保存')?>" />
+	</form>
+</div>

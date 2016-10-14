@@ -1,0 +1,7 @@
+<?php if ($show_price): ?>
+	<?php echo V('application:common/price', array('price' => $product->unit_price, 'market_price' => $product->market_price)); ?>
+<?php else: ?>
+	<span class="hidden_price">
+		<?php echo HT('未授权'); ?>
+	</span>
+<?php endif; ?>

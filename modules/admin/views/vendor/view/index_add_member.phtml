@@ -1,0 +1,33 @@
+<div class="hr_1">&#160;</div>
+<div class="form padding_1 clearfix">
+<?php
+	$no_error = $form->no_error;  
+?>
+	<form method="post" 
+	autocomplete="off"
+	q-object="add_vendor_member"
+	q-event="submit"
+	q-static="<?php echo H(array('vid'=>$vendor->id))?>">
+	<?php echo V('form_error', array('form'=>$form));?>
+	<?php $require = (string) V('form_require'); ?>
+		<table class="form flexible">
+			<tr>
+				<td class="label right nowrap"><?php echo HT('姓名')?></td>
+				<td class="left">
+					<?php echo Widget::factory('user_selector', array(
+						'name' => 'user',
+						'user' => $form['user'],
+						'autocomplete' => URI::url('!admin/vendor/autocomplete/user.'. $vendor->id),
+					));
+					?>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					<input type="submit" name="submit" class="button button_add" value="<?php echo T('添加')?>" />
+				</td>
+			</tr>
+		</table>	
+	</form>
+</div>

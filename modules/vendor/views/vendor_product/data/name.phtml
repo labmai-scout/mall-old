@@ -1,0 +1,6 @@
+<?php echo URI::anchor($product->url(NULL, NULL, NULL, 'vendor_view'), H($product->name))?>
+<div class="clearfix">
+	<?php if ($product->freeze_reasons): ?>
+		<span class="status_tag"><?php echo HT('已冻结')?></span>
+	<?php endif; ?>
+</div>

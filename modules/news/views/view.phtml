@@ -1,0 +1,19 @@
+<div class="hr_3">&#160;</div>
+<div class="news_item">
+	<div class="title"><?php echo T('新闻公告')?></div>
+    <div class="hr_2">&#160;</div>
+	<div class="content">
+        <div class="breadcrumb"><?php echo V('news:breadcrumb', array('news'=> $news));?></div>
+		<div class="hr_1">&#160;</div>
+        <div class="news clearfix">
+            <div class="center title"><?php echo H($news->title)?></div>
+            <div class="content break-word">
+            	<?php echo new Markup(stripslashes($news->content), TRUE); ?>
+            </div>
+        </div>
+        <?php if (Module::is_installed('nfs')) : ?>
+            <?php echo V('news:admin/attachments', array('news'=> $news))?>
+        <?php endif;?>
+	</div>
+</div>
+

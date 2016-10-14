@@ -1,0 +1,9 @@
+<div class="hr_1">&#160;</div>
+<div class="text_like clearfix">
+<?php
+echo V('nfs:nfs_lite/view', array(
+	'object'=> $vendor->id ? $vendor : O('vendor'),
+	'path_type'=>'attachments'
+));
+?>
+</div>

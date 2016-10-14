@@ -1,0 +1,40 @@
+<?php
+$me = L('ME');
+if ($me->is_allowed_to('添加', 'news')) :
+?>
+<div class="panel padding_1 clearfix">
+	<a class="button button_add" href="<?= URI::url('!admin/admin/news_add')?>"><?php echo T('添加公告')?></a>
+</div>
+<?php 
+endif;
+
+$table = Widget::factory('table');
+$table->name = 'newss';
+$table->add_columns(array(
+	'mtime'=>array(
+		'title'=>T('日期'),
+		'nowrap'=>TRUE,
+	),
+	'title'=>array(
+		'title'=>T('公告'),
+		'nowrap'=>TRUE,
+		'extra_class' => 'flexible',
+	),
+	'rest'=>array(
+		'align' => 'right',
+		'nowrap' => TRUE,
+	),
+));
+$table->empty_message = T('暂无公告！');
+foreach ($news as $n) {
+
+	$links = $n->links('index');
+	$table->add_row(array(
+		'mtime' => Date::format($news->ctime),
+		'title' => V('news:admin/table/data/title', array('news'=>$n)),
+		'rest' => Widget::factory('application:links', array('links' => $links)),
+	));
+}
+
+echo $table;
+?>

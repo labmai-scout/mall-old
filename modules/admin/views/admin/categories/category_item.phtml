@@ -1,0 +1,8 @@
+<?php $uniqid = 'category_'.uniqid(); ?>
+<div id="<?php echo $uniqid;?>" class="category_item">
+	<?php echo V('admin:admin/categories/category_title', array('collapsed'=> $categories ? FALSE : TRUE, 'category'=>$category, 'uniqid'=>$uniqid, 'parent_uniqid'=>$parent_uniqid)); ?>
+	<div class="category_container">
+	<?php echo V('admin:admin/categories/category_list', array('categories'=>$categories, 'parent_uniqid'=>$uniqid)); ?>
+	</div>
+</div>
+

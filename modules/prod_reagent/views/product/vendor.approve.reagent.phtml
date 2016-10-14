@@ -1,0 +1,111 @@
+<?php
+//TODO: 这里希望能改成AJAX的模式 (jia.huang@2012.03.14)
+	$me = L('ME');
+	$no_error = ($form->no_error !== FALSE);
+	$require = (string) V('form_require');
+?>
+<div class="form padding_2 toggle:
+type show_on:reagent">
+<h4><?php echo HT('化学试剂') ?></h4>
+<div class="hr_1">&#160;</div>
+<table class="form">
+<tr>
+	<td class="label right top nowrap"><?php echo HT('英文名'); ?></td>
+	<td class="middle nowrap" colspan="3">
+		<?php echo Form::radio('n_rgt_en_name', 0, $form['n_rgt_en_name'], H($template_product->rgt_en_name), 'class="monitor"') ?>
+		<br/>
+		<?php echo Form::radio('n_rgt_en_name', 1, $form['n_rgt_en_name'], NULL, 'class="monitor"') ?>
+		<input name="rgt_en_name" class="text" size="60" value="<?php echo H($form['rgt_en_name']); ?>" />
+		<?php echo $require; ?>
+	</td>
+</tr>
+<tr>
+	<td class="label right top nowrap"><?php echo HT('别名'); ?></td>
+	<td class="middle nowrap" colspan="3">
+		<?php
+		$current_aliases = join(', ', (array)json_decode($template_product->rgt_aliases, TRUE));
+		?>
+		<?php echo Form::radio('n_rgt_aliases', 0, $form['n_rgt_aliases'], $current_aliases ? H($current_aliases) : HT('暂无'), 'class="monitor"') ?>
+		<br/>
+		<?php echo Form::radio('n_rgt_aliases', 1, $form['n_rgt_aliases'], NULL, 'class="monitor"') ?>
+		<?php
+			echo Widget::factory('application:multi_tag_selector',
+								 array(
+									 // TODO 'autocomplete'=> URI::url("autocomplete/tags.$root->id"),
+									 'name'=>'rgt_aliases',
+									 'value'=> H($form['rgt_aliases']),
+									 'size'=>'60',
+									 'allow_creating'=>TRUE,
+									 'token_tip' => T('输入每个别名后请按回车键')
+									 ));
+
+			echo $require;
+		?>
+	</td>
+</tr>
+<tr>
+	<td class="label right top nowrap"><?php echo HT('试剂性质'); ?></td>
+	<td class="middle nowrap">
+		<?php
+		$rgt_types = Config::get('reagent.types');
+		$translated_types = array();
+		foreach ($rgt_types as $k => $v) {
+			$translated_types[$k] = T($v);
+		}
+		echo Form::radio('n_rgt_type', 0, $form['n_rgt_type'], H($translated_types[$template_product->rgt_type]), 'class="monitor"') ?>
+		<br/>
+		<?php echo Form::radio('n_rgt_type', 1, $form['n_rgt_type'], NULL, 'class="monitor"') ?>
+		<?php 
+		echo Widget::factory('prod_reagent:rgt_type_selector', array(
+								 'name' => 'rgt_type',
+								 'value' => $form['rgt_type'] ));
+		echo $require;
+		?>
+	</td>
+	<td class="label right top nowrap"><?php echo HT('CAS号'); ?></td>
+	<td class="middle nowrap">
+		<?php echo Form::radio('n_cas_no', 0, $form['n_cas_no'], H($template_product->cas_no), 'class="monitor"') ?>
+		<br/>
+		<?php echo Form::radio('n_cas_no', 1, $form['n_cas_no'], NULL, 'class="monitor"') ?>
+		<input name="cas_no" class="text" size="20" value="<?php echo H($form['cas_no']); ?>" />
+	</td>
+</tr>
+<tr>
+	<td class="label right top nowrap"><?php echo HT('危险品分类'); ?></td>
+	<td class="middle nowrap" colspan="3">
+		<?php
+		$danger_classes = Config::get('reagent.danger_classes');
+		foreach ($danger_classes as $d_classes) {
+			if (isset($d_classes[$template_product->rgt_danger_class])) {
+				$current_rgt_danger_class = $d_classes[$template_product->rgt_danger_class];
+			}
+		}
+		?>
+		<?php echo Form::radio('n_rgt_danger_class', 0, $form['n_rgt_danger_class'], H($current_rgt_danger_class), 'class="monitor"') ?>
+		<br/>
+		<?php echo Form::radio('n_rgt_danger_class', 1, $form['n_rgt_danger_class'], NULL, 'class="monitor"') ?>
+		<?php
+		echo Form::dropdown('rgt_danger_class', $danger_classes, H($form['rgt_danger_class']));
+		echo $require;
+		?>
+	</td>
+</tr>
+<tr>
+	<td class="label right top nowrap"><?php echo HT('分子式'); ?></td>
+	<td class="middle nowrap">
+		<?php echo Form::radio('n_reagent_formula', 0, $form['n_reagent_formula'], H($template_product->reagent_formula), 'class="monitor"') ?>
+		<br/>
+		<?php echo Form::radio('n_reagent_formula', 1, $form['n_reagent_formula'], NULL, 'class="monitor"') ?>
+		<input name="reagent_formula" class="text" size="20" value="<?php echo H($form['reagent_formula']); ?>" />
+		<?php echo $require; ?>
+	</td>
+	<td class="label right top nowrap"><?php echo HT('分子量'); ?></td>
+	<td class="middle nowrap">
+		<?php echo Form::radio('n_reagent_mw', 0, $form['n_reagent_mw'], H($template_product->reagent_mw), 'class="monitor"') ?>
+		<br/>
+		<?php echo Form::radio('n_reagent_mw', 1, $form['n_reagent_mw'], NULL, 'class="monitor"') ?>
+		<input name="reagent_mw" class="text" size="20" value="<?php echo H($form['reagent_mw']); ?>" />
+	</td>
+</tr>
+</table>
+</div>

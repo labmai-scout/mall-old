@@ -1,0 +1,51 @@
+<?php
+if ($to->id) $receiver_users[$to->id] = $to->name.'('.$to->lab->name.')';
+$require = (string) V('form_require');
+?>
+<div class="hr_1">&#160;</div>
+<div class="form padding_2">
+	<form method="post" action="">
+		<?php echo V('form_error', array('form'=>$form));?>
+		<table class="form message_form">
+			<tbody>
+				<tr>
+					<td class="label right nowrap top"><?php echo I18N::T('messages', '收件人'); ?></td>
+					<td class="left top">
+						<?php
+							echo Widget::factory('multi_user_selector',
+											array(
+												'name'=>'receiver_users',
+												'autocomplete'=>URI::url('autocomplete/user'),
+												'value'=> $receiver_users ? json_encode($receiver_users) :$form['receiver_users'],
+												'extra'=>'token_verify middle',
+												'size'=>'40'
+										));
+						?>
+					</td>
+				</tr>
+
+				<tr>
+					<td class="label right nowrap top"><?php echo I18N::T('messages', '标题'); ?></td>
+					<td class="label left nowrap top">
+					<input name="title" class="text" size="65" value="<?php echo H($form['title'])?>" /><?php // echo $require;?>
+					</td>
+				</tr>
+
+				<tr>
+					<td class="label right nowrap top"><?php echo I18N::T('messages', '内容'); ?></td>
+					<td class="label left top">
+					<textarea name="body" class="text autogrow" rows="5" cols="65"><?php echo H($form['body']);?></textarea><?php // echo $require;?>
+					</td>
+				</tr>
+
+				<tr>
+					<td></td>
+					<td>
+						<input name="submit" type="submit" class="button button_add" value="<?php echo I18N::T('messages', '发送'); ?>" />
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+	</form>
+</div>

@@ -1,0 +1,35 @@
+<?php
+$vendor = O('vendor', ['gapper_group'=>$product->vendor_id]);
+?>
+<h2 class="section_title">
+		<span class="middle"><?php echo HT('销售信息') ?></span>
+</h2>
+<div class="padding_2" style="padding-top:5px">
+<table class="form product_info_form" style="min-width:400px">
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('供应商')?></span></td>
+		<td><?php echo URI::anchor(URI::url('!admin/vendor/iview.'.$vendor->id), $vendor->name,'class="blue"') ?></td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('价格')?></span></td>
+		<td><?php echo V('application:common/price', array('price' => $product->unit_price)) ?></td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('库存状态')?></span></td>
+		<td>
+			<?php
+				$options = Product_Model::$stock_status;
+				echo HT($options[$product->stock_status]);
+			?>
+		</td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('商家备注')?></span></td>
+		<td><?php echo H($product->vendor_note) ?></td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('备注')?></span></td>
+		<td colspan="3"><?php echo H($product->note) ?></td>
+	</tr>
+</table>
+</div>

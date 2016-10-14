@@ -1,0 +1,15 @@
+<h4>
+  <a href="<?php echo $message->url()?>">
+	<?php
+	   /* NO.BUG#154 (xiaopei.li@2010.11.12) */
+	   /* body之前未做转义输出，存在XSS漏洞； */
+	   /* 且之前title和body输出皆为全文，现做截取，以取得较好的UI；*/
+	   echo H(mb_substr($message->title, 0, 128));
+	?>
+  </a>
+</h4>
+<p class="description">
+  <?php 
+  		echo mb_substr((string) new Markup(strip_tags($message->body, FALSE), FALSE), 0, 128); 
+  ?>
+</p>

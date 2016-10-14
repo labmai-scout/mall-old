@@ -1,0 +1,54 @@
+<div class="hr_1">&#160;</div>
+<div class="form padding_1">
+<?php
+	$no_error = $form->no_error;
+?>
+<table class="user_grid form">
+	<tbody>
+	<tr>
+		<td class="top icon">
+			<?php echo $customer->icon('64');?>
+		</td>
+		<td class="top info">
+			<form method="post" action="<?php echo URI::url() ?>" autocomplete="off">
+			<?php echo V('form_error', array('form'=>$form));?>
+				<table class="form flexible">
+				<?php
+	 			foreach ($perms as $perm_name => $default):
+					$escaped_perm_name = HT($perm_name);
+				?>
+				<tr>
+					<th class="label nowrap right"><?php echo $escaped_perm_name; ?></th>
+					<td>
+					<?php
+					echo Widget::factory('multi_user_selector', array(
+							'name' => 'perms[' . $escaped_perm_name . ']',
+							'autocomplete' => URI::url('!admin/customer/autocomplete/user.' . $customer->id),
+							'value' => $form['perms'][$escaped_perm_name],
+							'extra'=>'token_verify'
+					));
+					?>
+					</td>
+				</tr>
+				<?php endforeach; ?>
+				<tr>
+					<td></td>
+					<td>
+						<span class="description">
+						<?php echo HT('* 请对各权限设置用户, 负责人拥有所有权限'); ?>
+						</span>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<input type="submit" name="submit" class="button button_save" value="<?php echo T('保存')?>" />
+					</td>
+				</tr>	
+				</table>
+			</form>
+		</td>
+	</tr>
+	</tbody>
+</table>
+</div>

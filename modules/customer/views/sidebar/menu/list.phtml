@@ -1,0 +1,14 @@
+<div class="item list_item <?php echo $class?>">
+	<a class="item_content clearfix" target="<?= $item['target'] ?: '_self' ?>"  href="<?php echo URI::url($item['url']) ?>">
+		<img src="<?php echo $item['icon'] ?>" width="16px" height="16px" class="pngfix middle"/>
+		<span class="middle"><?php echo HT($item['title']); ?></span>
+<?php 
+if ($item['notif_callback']) :
+	$number = call_user_func($item['notif_callback'], $item);
+	if ($number > 0): $len = strlen($number); ?>
+	<span class="num_notif num_notif_<?php echo $len;?> middle"><?php echo $number; ?></span>
+<?php endif;
+endif;
+?>
+	</a>
+</div>

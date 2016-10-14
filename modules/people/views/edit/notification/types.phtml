@@ -1,0 +1,22 @@
+<?php
+echo CSS::load_async('people:notification_list');
+$container_id = 'container_'.uniqid();
+?>
+<div class="hr_1">&#160;</div>
+<div class="notification_list clearfix">
+	<div class="notification_types">
+		<?php
+			foreach($types as $key => $value) {
+				if (call_user_func($value['#callback'], L('ME'))) {
+					if (!isset($selected_key)) {
+						$selected_key = $key;
+					}
+					echo V('edit/notification/type', array('key'=>$key, 'value'=>$value, 'container_id'=>$container_id, 'selected_key'=>$selected_key));
+				}
+			}
+		?>
+	</div>
+	<div class="types_container" id="<?php echo $container_id;?>">
+		<?php echo V('edit/notification/relate_view', array('key'=>$selected_key));?>
+	</div>
+</div>

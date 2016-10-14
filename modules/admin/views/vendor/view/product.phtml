@@ -1,0 +1,79 @@
+<div class="hr_1">&#160;</div>
+<?php
+if ($secondary_tabs):
+	echo $secondary_tabs;
+?>
+	<div class="hr_1">&#160;</div>
+<?php
+endif;
+?>
+<div class="panel padding_1">
+	<div class="float_right">
+		<form method="post" action="<?php echo URI::url(''); ?>">
+			<input type="text" name="phrase" class="text" q-hint="<?php echo HT('输入关键字搜索'); ?>" size="40" value="<?php echo H($form['phrase']); ?>" />
+			<input type="submit" class="hidden_submit button button_search middle" name="submit" value="<?php echo HT('搜索'); ?>" />
+		</form>
+	</div>
+</div>
+<?php
+echo $pagination;
+$table = Widget::factory('table');
+$table->name = 'admin_products';
+$table->add_columns(array(
+  //   'icon' => array(
+  //       'nowrap'=>TRUE,
+		// 'extra_class' => 'tight',
+  //   ),
+    'name'=>array(
+        'title'=>T('名称'),
+        'nowrap'=>TRUE,
+        'align'=>'left'
+    ),
+    'manufacturer'=>array(
+        'title'=>T('生产商'),
+        'nowrap'=>TRUE,
+        'align'=>'left'
+    ),
+    'catalog_no'=>array(
+        'title'=>T('目录号'),
+        'nowrap'=>TRUE,
+        'align'=>'left'
+    ),
+    'model'=>array(
+        'title'=>T('型号'),
+        'nowrap'=>TRUE,
+        'align'=>'left'
+    ),
+    'spec'=>array(
+        'title'=>T('规格'),
+        'nowrap'=>TRUE,
+        'align'=>'left'
+    ),
+    'description'=>array(
+        'title'=>T('描述'),
+        'align'=>'left',
+    ),
+    'rest'=>array(
+        'align'=>'right',
+        'nowrap'=>TRUE
+    )
+));
+
+$table->empty_message = T('没有符合条件的商品');
+foreach($products as $product)  {
+    $table->add_row(array(
+        // 'icon'=>array(
+        //     'view'=>$product->icon('32', 'style="display:block"'),
+        //     'extra'=>'style="padding:4px" align="right"'
+        // ),
+        'name'=>V('product_table/data/name', array('product'=>$product)),
+        'manufacturer'=>V('product_table/data/manufacturer', array('product'=>$product)),
+        'catalog_no'=>V('product_table/data/catalog_no', array('product'=>$product)),
+        'model'=>V('product_table/data/model', array('product'=>$product)),
+        'spec'=>V('product_table/data/spec', array('product'=>$product)),
+        'description'=>H($product->description)
+    ));
+}
+
+echo $table;
+?>

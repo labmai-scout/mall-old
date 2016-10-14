@@ -1,0 +1,16 @@
+<p><?php echo T('评价概况');?></p>
+<?php
+$rating_subjects = Order_Item_Rating_Model::get_rating_subjects();
+
+foreach ($rating_subjects as $subject => $label):
+?>
+	<?php echo HT($label); ?>
+	<?php echo Widget::factory('rateit_show', array(
+				'value' => $rating_summary[$subject]['value'],
+				'readonly' => TRUE,
+				));
+	?>
+	<br/>
+<?php
+endforeach;
+?>

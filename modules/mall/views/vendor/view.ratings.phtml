@@ -1,0 +1,16 @@
+<div class="hr_1">&#160;</div>
+<?php if (L('ME')->id): ?>
+	<?php
+	$rating_summary = Order_Item_Rating_Model::get_rating_summary($vendor);
+	echo Widget::factory('rating_summary', array(
+		'rating_summary' => $rating_summary,
+	));
+	echo Widget::factory('vendor_comment_list', array(
+		'vendor' => $vendor,
+	));
+	?>
+<?php else: ?>
+	<div class="padding_2">
+		<span class="red"><?php echo HT('登录后方可查看评价!'); ?></span>
+	</div>
+<?php endif; ?>

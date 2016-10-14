@@ -1,0 +1,69 @@
+<?php
+//TODO: 这里希望能改成AJAX的模式 (jia.huang@2012.03.14)
+	$me = L('ME');
+	$no_error = ($form->no_error !== FALSE);
+	$require = (string) V('form_require');
+?>
+<div class="form padding_2 toggle:type show_on:reagent">
+<h4><?php echo HT('化学试剂') ?></h4>
+<div class="hr_1">&#160;</div>
+<table class="form">
+<tr>
+	<td class="label right middle nowrap"><?php echo HT('英文名'); ?></td>
+	<td class="middle nowrap" colspan="3">
+		<input name="rgt_en_name" class="text" size="60" value="<?php echo H($no_error ? $product->rgt_en_name : $form['rgt_en_name']); ?>" />
+	</td>
+</tr>
+<tr>
+	<td class="label right middle nowrap"><?php echo HT('别名'); ?></td>
+	<td class="middle nowrap" colspan="3">
+		<?php
+			echo Widget::factory('application:multi_tag_selector',
+								 array(
+									 // TODO 'autocomplete'=> URI::url("autocomplete/tags.$root->id"),
+									 'name'=>'rgt_aliases',
+									 'value'=> $no_error ? $product->rgt_aliases : $form['rgt_aliases'],
+									 'size'=>'60',
+									 'allow_creating'=>TRUE,
+									 'token_tip' => T('输入每个别名后请按回车键')
+									 ));
+		?>
+	</td>
+</tr>
+<tr>
+	<td class="label right middle nowrap"><?php echo HT('试剂性质'); ?></td>
+	<td class="middle nowrap">
+		<?php
+		echo Widget::factory('prod_reagent:rgt_type_selector', array(
+								 'name' => 'rgt_type',
+								 'value' => $no_error ? $product->rgt_type : $form['rgt_type'] ));
+		echo $require;
+		?>
+	</td>
+	<td class="label right middle nowrap"><?php echo HT('CAS号'); ?></td>
+	<td class="middle nowrap">
+		<input name="cas_no" class="text" size="20" value="<?php echo H($no_error ? $product->cas_no : $form['cas_no']); ?>" />
+	</td>
+</tr>
+<tr>
+	<td class="label right middle nowrap"><?php echo HT('危险品分类'); ?></td>
+	<td class="middle nowrap" colspan="3">
+		<?php
+		$danger_classes = Config::get('reagent.danger_classes');
+		echo Form::dropdown('rgt_danger_class', $danger_classes, H($no_error ? $product->rgt_danger_class : $form['rgt_danger_class']));
+		echo $require;
+		?>
+	</td>
+</tr>
+<tr>
+	<td class="label right middle nowrap"><?php echo HT('分子式'); ?></td>
+	<td class="middle nowrap">
+		<input name="reagent_formula" class="text" size="20" value="<?php echo H($no_error ? $product->reagent_formula : $form['reagent_formula']); ?>" />
+	</td>
+	<td class="label right middle nowrap"><?php echo HT('分子量'); ?></td>
+	<td class="middle nowrap">
+		<input name="reagent_mw" class="text" size="20" value="<?php echo H($no_error ? $product->reagent_mw : $form['reagent_mw']); ?>" />
+	</td>
+</tr>
+</table>
+</div>

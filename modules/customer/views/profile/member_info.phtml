@@ -1,0 +1,60 @@
+<div class="member_content">
+	<div class="hr_1">&#160;</div>
+	<div class="form padding_1">
+		<form method="post" action="<?php echo URI::url("!customer/profile/index.{$customer->id}.add_member") ?>" autocomplete="off">
+		<?php echo V('form_error', array('form'=>$form));?>
+		<?php $require = (string) V('form_require'); ?>
+		<table class="form">
+			<tbody class="content">
+				<tr>
+					<td class="label right nowrap"><?php echo T('登录帐号')?></td>
+					<td class="middle">
+					<?php list($name, $backend) = Auth::parse_token($user->token);
+					$auth_backends = Config::get('auth.backends');
+					?>
+					<input class="text middle" disabled="disabled" value="<?= $name?>" size="40" name="token">
+		            @ <input class="text middle" disabled="disabled" value="<?= $auth_backends[$backend]['title']?>" size="10" name="backend">
+					<?php echo $require; ?>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td class="middle description"><?php echo T('登录账号必须超过2个字符长, 可使用字符: 字母, 数字, "-", "_", "." 和 "@", 开头必须是数字或字母'); ?></td>
+				</tr>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('姓名')?></td>
+					<td class="middle">
+					<input class="text middle" disabled="disabled" value="<?= H($user->name)?>" size="40" name="name">
+	                <?php echo $require; ?>
+	                </td>
+				</tr>
+				<tr>
+					<td class="label right nowrap"><?php echo HT('电子邮箱')?></td>
+					<td class="middle"><input name="email" class="text" disabled="disabled" size="40" value="<?php echo H($user->email) ?>" /><?php echo $require; ?></td>
+				</tr>
+				<tr>
+					<td class="label right nowrap middle"><?php echo T('联系电话')?></td>
+					<td class="middle"><input name="phone" class="text" disabled="disabled" size="40" value="<?= H($user->phone)?>" /><?php echo $require; ?></td>
+				</tr>
+				<tr>
+					<td class="label right nowrap middle"><?php echo T('地址')?></td>
+					<td class="middle"><input name="address" class="text" disabled="disabled" size="40" value="<?php echo H($user->address) ?>" /></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="hr_1">&#160;</td>
+				</tr>
+			</tbody>
+			<tbody>
+				<tr>
+					<td></td>
+					<td>
+						<input type="hidden" name="user_id" value="<?= $user->id?>" />
+						<input type="submit" name="submit" class="button button_save" value="<?php echo T('提交')?>" />
+						<input q-event="click" q-object="cancel_select_member" q-src="<?php URI::url('!customer/profile')?>" q-static="<?= H(['cid' => $customer->id])?>" type="button" name="cancel" class="button button_cancel" value="<?php echo T('重置')?>" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		</form>
+	</div>
+</div>

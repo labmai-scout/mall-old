@@ -1,0 +1,11 @@
+Package: mall
+Version: %VERSION%
+Architecture: all
+Maintainer: Genee Developers
+Installed-Size: 134217728
+Depends: mysql-server, memcached, php5-fpm, php5-cli, php5-memcache, php5-mysql, php5-gd, php5-xcache, php5-curl, sphinxsearch, clamav
+Recommends: phpmyadmin
+Section: web
+Priority: optional
+Homepage: http://www.geneegroup.com
+Description: LabScout Mall

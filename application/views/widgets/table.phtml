@@ -1,0 +1,197 @@
+<?php
+$columns = (array) $this->columns;
+$this->columns = (array) $this->columns;
+$order = array();
+$weight = array();
+$i = 0;
+foreach($columns as $k=>$v) {
+	$order[$k] = $i++;
+	$weight[$k] = $columns[$k]['weight'];
+}
+
+uksort($columns, function($ak, $bk) use($weight, $order) {
+	$aw = $weight[$ak];
+	$bw = $weight[$bk];
+
+	if ($aw != $bw) {
+		return $aw - $bw;
+	}
+
+	return $order[$ak] - $order[$bk];
+});
+
+$this->extra_class = (string) $this->extra_class;
+$this->rows = (array) $this->rows;
+$this->form_url = $this->form_url ?: URI::url('');
+$this->visible_count = $this->count_visible_columns();
+$this->filters_count = $this->count_filters();
+?>
+<table id="table_<?php echo H($this->name)?>" class="<?php echo $this->extra_class ?> sticky flexible">
+<thead>
+<!-- Header -->
+<?php if ($this->filters_count > 0): ?>
+	<tr><th colspan="<?php echo $this->visible_count + 1 ?>" class="tabs">
+	<span class="tab_wrapper"><a href="<?php echo URI::url($this->form_url, 'reset_search=1')?>"><?php echo HT('全部') ?></a></span><span class="tab_wrapper"><a class="selected" href="<?php echo URI::url($this->form_url)?>"><?php echo HT('搜索结果')?></a><?php echo $this->total_count > 0 ? '<span class="num_notif">'.$this->total_count.'</span>':'';?></span>
+	</th></tr>
+<?php endif; ?>
+<tr>
+<?php $col_count = 0; foreach ($this->columns as $key => $column):  
+		$class = array();
+		if ($column['invisible']) :
+			continue;
+		elseif ($key == '@'):
+			$col_count ++;
+			if ($column['align']) $class['align'] = $column['align'];
+			if ($column['extra_class']) $class['extra_class'] = $column['extra_class'];
+			$uniqid = 'search_'.uniqid();
+	?>
+	<th class="<?php echo implode(' ', $class) ?> filter filter_search tight" >
+        <div class="filter_container clearfix" style="overflow:hidden;">
+		<span class="header header_search unselectable" q-tooltip="<?php echo HT('点击搜索')?>">
+            <?php echo HT('搜索'); ?>
+        </span>
+			<div id="<?php echo $uniqid?>" class="left filter_panel padding_1 hidden">
+				<form method="post" action="<?php echo $this->form_url ?>">
+				<div class="form padding_1">
+					<table class="form">
+					<?php foreach ($columns as $key => $column): if ($key == '@' || !$column['title'] || (!$column['suppressible'] && !$column['filter']['form']) ) continue;?>
+					<tr>
+						<td class="label nowrap top">
+							<?php 
+								if ($this->toggle_suppressible) {
+									echo Form::checkbox("table_col_visible[{$this->name}][$key]", !$column['invisible'], $column['title'], ($column['suppressible'] ? '':'disabled="disabled"').' class="middle"', 'class="label middle"');
+								}
+								else {
+									echo '<span class="label">'.$column['title'].'</span>';
+								}
+							?>
+						</td>
+						<td class="nowrap top table_key_<?php echo $key?>">
+							<?php
+								if ($column['filter']) echo $column['filter']['form']; 
+							?>
+						</td>
+					</tr>
+					<?php endforeach; ?>
+					</table>
+					<div class="hr_1">&#160;</div>
+					<p class="right">
+						<input name="search" class="button button_search" type="submit" value="<?php echo HT('查询')?>" />
+					</p>
+					<?php if ($this->filter_footer): ?>
+					<div class="hr_1">&#160;</div>
+					<hr/>
+					<div class="hr_1">&#160;</div>
+					<?php foreach ($this->filter_footer as $ff): ?>
+						<?php if ($ff['title']) echo '<h4>'.$ff['title'].'</h4>'; ?>
+						<?php echo $ff['form']; ?>
+					<?php endforeach; ?>
+					<?php endif; ?>
+				</div>
+				</form>
+			</div>
+		</div>
+	</th>
+	<?php
+		else : 
+			$col_count ++; 
+			if ($col_count == $this->visible_count) $class['last'] = 'last';
+			if ($column['hr_filter'] || $column['sortable']) $class['filter'] = 'filter';
+			if ($column['hr_filter']) $class['check_hover'] = 'check_hover';
+			if ($column['align']) $class['align'] = $column['align'];
+			if ($column['nowrap']) $class['nowrap'] = 'nowrap';
+			if ($column['extra_class']) $class['extra_class'] = $column['extra_class'];
+			if ($this->sort_by == $key) $class['sort_by'] = 'sort_by';
+	?>		
+		<th class="<?php echo implode(' ', $class) ?>">
+		<?php if ($column['title']): ?>
+			<?php if ($column['hr_filter'] || $column['sortable']): ?>
+				<div class="filter_container clearfix">
+				<?php 
+				if ($column['sortable']) {
+					$title = $column['title'];
+					$header_class = 'header';
+					if ($this->sort_by == $key) {
+						$header_class .= $this->sort_asc ? ' header_sort_asc':' header_sort_desc';
+					}
+					
+					echo URI::anchor(URI::url($column['url'], array('sort'=>$key)), $title, 'class="'.$header_class.'"');
+				}
+				else {
+					echo  '<span class="header">'.$column['title'].'</span>'; 
+				}
+				?>
+				<?php if ($column['hr_filter']): ?>
+					<div class="show_on_hover filter_panel padding_1">
+						<?php echo $column['hr_filter']; ?>
+					</div>
+				<?php endif; ?>
+				</div>
+			<?php else: ?>
+				<span class="header"><?php echo  $column['title']; ?></span>
+			<?php endif; ?>
+		<?php else: ?>
+			&#160;
+		<?php endif; ?>
+		</th>
+	<?php endif; ?>
+<?php endforeach; ?>
+</tr>
+<!-- Current Filters -->
+<?php if ($this->count_filters() > 0): ?>
+<tr>
+<td colspan="<?php echo H($this->visible_count)?>" class="search_filters">
+	<?php 
+		foreach ($this->columns as $key => $column): 
+			if ($key == '@' || !$column['title'] || !(string)$column['filter']['value'] || (!$column['suppressible'] && !$column['filter']) ) continue;
+			$field = $column['filter']['field'] ?: $key;
+	?>
+	<span class="tag">
+		<span class="description nowrap"><?php echo $column['title']?></span>
+		<span class="nowrap"><?php echo $column['filter']['value']?></span>
+		<a class="remove" href="<?php echo URI::url($this->form_url, 'reset_field='.$field); ?>">&#160;</a>
+	</span>
+	<?php endforeach ?>
+</td>
+</tr>
+<?php endif; ?>
+</thead>
+<tbody>
+<?php 
+if (count($this->rows)>0) {
+		foreach ($this->rows as $row) {
+			echo V('widgets/table/row', array(
+				'row' => $row, 
+				'table' => $this,
+			));
+		}
+}
+else {
+	echo '<tr><td colspan="'.H($this->visible_count)
+		. '" class="description center">'
+		. ($this->empty_message ?: '&#160;')
+		. '</td></tr>'
+		;
+}
+?>
+</tbody>
+</table>
+<script>
+jQuery(function($){
+	var $panel = $("#<?php echo $uniqid?>");
+	var $span = $panel.prev('span');
+	var $container = $panel.parents('.filter_container');
+	var $th = $panel.parents('th:eq(0)');
+	$span.bind('click', function(e){
+		$th.toggleClass('active');
+		if ($th.hasClass('active')) {
+			$container.css({'overflow':'visible'});
+			$panel.show();
+		}
+		else {
+			$container.css({'overflow':'hidden'});
+			$panel.hide();
+		}	
+	});
+});
+</script>

@@ -1,0 +1,62 @@
+<?php
+
+$tr_class = array();
+$tr_class['extra'] = $row['#extra_class'];
+$tr_extra = $row['#extra'];
+$form = $table->form;
+
+if ($row['#special_view']) {
+	$tr_class['type'] = 'special';
+}
+else {
+	$tr_class['type'] = 'row';
+}
+
+$sort_by = (string) $table->sort_by;
+
+if ($row['#special_view']) {
+	echo '</tbody><tbody><tr '.$tr_extra . ' class="'. implode(' ', $tr_class) . '">';
+	echo '<td colspan="'.H($table->visible_count).'">'.$row['#special_view'].'</td>';
+	echo '</tr></tbody><tbody>';
+}
+else {	
+	echo '<tr '.$tr_extra . ' class="'. implode(' ', $tr_class) . '">';
+
+	foreach ($table->columns as $key => $column) {
+		if ($column['invisible']) continue; 
+
+		if (is_array($row[$key])) {
+			$extra = $row[$key]['extra']?:'';
+			$view = $row[$key]['view'];
+			unset($row[$key]['view']);
+			$column = $row[$key] + $column;
+			
+			/*
+			if ($form[$key] && $row[$key]['light']) {
+				$pattern = preg_quote(H($form[$key]));
+				$view = preg_replace_callback('/>(.+?)</', function($matches) use ($pattern)  {
+					return preg_replace('/'.$pattern.'/', '<span class="filter_match">'.$pattern.'</span>', $matches[0]);
+				}, (string) $view);
+			}
+			*/
+		}
+		else {
+			$extra = '';
+			$view = $row[$key];
+		}
+
+		$class = array();
+		if ($column['align']) $class['align'] = $column['align'];
+		if ($column['nowrap']) $class['nowrap'] = 'nowrap';
+		if ($column['sortable'] && $sort_by == $key) {
+			$class['sort_column'] = 'sort_column';
+		}
+
+		echo '<td class="'.implode(' ', $class).'" '.$extra.'>'
+			. ((string)$view ?: '&#160;')
+			. '</td>';
+	}
+
+	echo '</tr>';
+}
+

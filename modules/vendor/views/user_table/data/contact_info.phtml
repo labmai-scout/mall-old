@@ -1,0 +1,8 @@
+<div class="quote clearfix user_grid">
+	<?php if ($user->email) :?>
+	    <p><span class="email"><a href="mailto:<?php echo H($user->email)?>" class="description"><?php echo H($user->email) ?></a></span></p>
+	<?php endif;?>
+	<?php if ($user->phone) :?>
+	    <p><span class="phone description"><?php echo H($user->phone)?></span></p>
+	<?php endif;?>
+</div>

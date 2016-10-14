@@ -1,0 +1,48 @@
+<?php
+//TODO: 这里希望能改成AJAX的模式 (jia.huang@2012.03.14)
+	$me = L('ME');
+	$no_error = ($form->no_error !== FALSE);
+	$require = (string) V('form_require');
+?>
+<div class="form padding_2 toggle:type show_on:computer">
+<h4><?php echo HT('电脑整机') ?></h4>
+<div class="hr_1">&#160;</div>
+	<table class="form">
+		<tr>
+			<td class="label right middle nowrap"><?php echo HT('机型'); ?></td>
+			<td class="middle nowrap">
+				<input name="computer_type" class="text" size="20" value="<?php echo H($no_error ? $product->computer_type : $form['computer_type']); ?>" />
+			</td>
+			<td class="label right middle nowrap"><?php echo HT('CPU'); ?></td>
+			<td class="middle nowrap">
+				<input name="cpu" class="text" size="20" value="<?php echo H($no_error ? $product->cpu : $form['cpu']); ?>" />
+			</td>
+		</tr>
+		<tr>
+			<td class="label right middle nowrap"><?php echo HT('内存'); ?></td>
+			<td class="middle nowrap">
+				<input name="memory" class="text" size="20" value="<?php echo H($no_error ? $product->memory : $form['memory']); ?>" />
+			</td>
+			<td class="label right middle nowrap"><?php echo HT('硬盘'); ?></td>
+			<td class="middle nowrap">
+				<input name="disk" class="text" size="20" value="<?php echo H($no_error ? $product->disk : $form['disk']); ?>" />
+			</td>
+		</tr>
+		<tr>
+			<td class="label right middle nowrap"><?php echo HT('显存'); ?></td>
+			<td class="middle nowrap">
+				<input name="video_memory" class="text" size="20" value="<?php echo H($no_error ? $product->video_memory : $form['video_memory']); ?>" />
+			</td>
+			<td class="label right middle nowrap"><?php echo HT('显示器'); ?></td>
+			<td class="middle nowrap">
+				<input name="display" class="text" size="20" value="<?php echo H($no_error ? $product->display : $form['display']); ?>" />
+			</td>
+		</tr>
+		<tr>
+			<td class="label right middle nowrap"><?php echo HT('服务电话'); ?></td>
+			<td class="middle nowrap" colspan="3">
+				<input name="service_call" class="text" size="20" value="<?php echo H($no_error ? $product->service_call : $form['service_call']); ?>" />
+			</td>
+		</tr>
+	</table>
+</div>

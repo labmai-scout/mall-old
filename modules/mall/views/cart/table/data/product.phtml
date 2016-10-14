@@ -1,0 +1,32 @@
+<?php
+if (!$product->can_buy() || $product->version != $version) {
+?>
+	<del>
+		<?php echo URI::anchor($product->url(), H($product->name), 'class="product_name"'); ?>
+	</del>
+	<span class="description">
+<?php
+	if ($version != $product->version) {
+	       if ($product->approve_date) {
+	               echo T('此商品信息已修改, 请删除, %alt_link', array(
+	                                  '%alt_link' => URI::anchor($product->url(), HT('查看最新版本'), 'class="blue"')
+	                                  ));
+	       }
+	       else {
+	               echo T('此商品已下架, 请删除, %alt_link', array(
+	                                  '%alt_link' => URI::anchor($product->url(), HT('查看同类商品'), 'class="blue"')
+	                                  ));
+	       }
+	}
+	else {
+		echo T('此商品现无法购买, 请删除, %alt_link', array(
+				   '%alt_link' => URI::anchor($product->url(), HT('查看同类商品'), 'class="blue"')
+				));
+	}
+?>
+	  </span>
+<?php
+}
+else {
+	echo URI::anchor($product->url(), H($product->name), 'class="product_name"');
+}

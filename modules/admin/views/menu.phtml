@@ -1,0 +1,39 @@
+<div class="menu clearfix">
+<?php
+
+$view_name = 'admin:sidebar/menu/desktop';
+
+$ct_items = SBMenu_Widget::categorized_items(L('ME'));
+foreach ((array) $ct_items as $name=>$items){
+	$content = '';
+	foreach ((array) $items as $id=>$item) {
+		$mid = $item['#module'] ?: $id;
+		$item = $item['desktop'];
+		$class = '';
+		if (!Module::is_installed($mid)) continue;
+		if (!Module::is_accessible($mid)) {
+			$class = 'icon_item_disabled';
+			$item['url'] = '#';
+		}
+		if (!$item['i18n']) $item['i18n'] = $mid;
+		$content .= trim((string) V($view_name, array('item'=>$item, 'class' => $class)));	
+	}
+
+	$is_others = ($name == '@others');
+
+	if ($content) {
+
+		if ($is_others && count($ct_items)==1) {	
+		}
+		else {	
+			if ($is_others) $name = '其他';
+			echo '<h1 class="menu_category">'.HT($name).'</h1>';
+		}
+
+		echo '<div class="padding_1 clearfix">'.$content.'</div>';
+
+	}
+
+}
+?>
+</div>

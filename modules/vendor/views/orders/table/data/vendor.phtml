@@ -1,0 +1,13 @@
+<?php
+$vendor = $order->vendor;
+?>
+<a href="<?php echo $vendor->url(); ?>"><strong><?php echo HT($vendor->name); ?></strong></a>
+<?php $user = $vendor->owner; ?>
+<div class="user_grid lpadding_2">
+<?php if ($user->email): ?>
+	<p><span class="email"><?php echo URI::mailto($user->email, NULL, 'class="description"') ?></span></p>
+<?php endif; ?>
+<?php if ($user->phone): ?>
+	<p><span class="phone"><?php echo H($user->phone) ?></span></p>
+<?php endif; ?>
+</div>

@@ -1,0 +1,27 @@
+<?php 
+$me = L('ME');
+if ($me->id && $me->is_active()) :
+	$uniqid = 'sbmenu_'.uniqid(); 
+?>
+<h4><?php echo HT('管理方'); ?></h4>
+<div class="lpadding_2">
+	<div id="<?php echo $uniqid;?>" class="menu clearfix">
+		<?php
+		$ct_items = (array) Config::get('layout.admin.sidebar.menu');
+		$ct_items += (array) Event::trigger('layout.admin.sidebar_menu');
+		$view_name = 'admin:sidebar/menu/list';
+		$content = '';
+
+		foreach ((array) $ct_items as $id => $item) {
+			$mid = $item['#module'] ?: $id;	
+			if (!$item['i18n']) $item['i18n'] = $mid;
+
+			$content .= trim((string) V($view_name, array('item'=>$item, 'class'=>$class)));
+		}
+
+		echo V('admin:sidebar/menu/category', array('content'=>$content));
+
+		?>
+	</div>
+</div>
+<?php endif; ?>

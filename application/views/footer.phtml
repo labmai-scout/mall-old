@@ -1,0 +1,34 @@
+<div class="clearfix">
+	<div class="float_left">
+		<span class="description middle"><small><?php echo H(Config::get('system.version')); ?></small></span>
+		<span class="separator middle">&#160;</span>	
+	</div>
+<?php if (Config::get('debug.statistics')): ?>
+	<div class="float_left">
+		<span class="description small middle"><?php echo T('脚本时间%time', array('%time' => round(microtime(TRUE) - $GLOBALS['SCRIPT_START_AT'], 4).'s')); ?></span>
+		<span class="separator middle">&#160;</span>
+	</div>
+<?php endif; ?>
+<?php if ($footer_msg = Config::get('mall.footer_msg')): ?>
+	<div class="float_left">
+		<span class="description small middle"><?php echo H($footer_msg); ?></span>
+		<span class="separator middle">&#160;</span>
+	</div>
+<?php endif; ?>
+	<div class="float_right">
+		<span class="separator middle">&#160;</span>
+		<span class="copyright middle">
+		<?php echo T('%company &#169; %date 版权所有. 保留所有权利.', array('%date'=>date('Y'), '%company'=>'<a href="http://www.geneegroup.com" target="_blank"><strong>'.T('基理科技').'</strong></a>'))?>
+		</span>
+		<span class="separator middle">&#160;</span>
+		<?php 
+		/*
+		if (!Browser::supported()) {
+		    echo V('footer_browser_suggestion');
+		    echo '<span class="separator middle">&#160;</span>';
+	    }
+	    */
+		?>
+		<span class="description middle"><small><strong><?php echo H(Date::format()); ?></strong></small></span>
+	</div>
+</div>

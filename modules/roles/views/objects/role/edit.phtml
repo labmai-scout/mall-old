@@ -1,0 +1,31 @@
+<div class="role form item:<?php echo $object->id ?> check_hover clearfix">
+	<table>
+		<tr>
+			<td class="middle padding_1">
+				
+				<?php if($object->id >= 0): ?>
+			
+				<input class="text autoselect" name="roles[<?php echo $object->id ?>]" value="<?php echo $object->name; ?>" />
+				<?php else: ?>
+				<strong><?php echo T($object->name)?></strong>
+				<?php endif; ?>
+			</td>
+			<td class="middle padding_1 nowrap" style="padding-left:0">
+				<?php if($object->id == 0): ?>
+				<span class="description"><?php echo T('新建角色') ?></span>
+				<?php else: ?>
+				<div class="show_on_hover">
+					<a class="button button_edit" href="<?php echo URI::url('!roles/perms.'.$object->id)?>"><?php echo T('修改权限') ?></a>
+					<?php if($object->id > 0): ?>
+					<a 
+						confirm="<?php echo T('你确定要删除吗？请谨慎操作！'); ?>" 
+						class="button button_delete" 
+						href="<?php echo $object->url($object->id, NULL, NULL, 'delete'); ?>"
+					><?php echo T('删除') ?></a>
+					<?php endif; ?>
+				</div>
+				<?php endif; ?>
+			</td>
+		</tr>
+	</table>
+</div>

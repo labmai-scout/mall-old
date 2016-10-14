@@ -1,0 +1,92 @@
+<div class="hr_1">&#160;</div>
+<div id="statement_view" class="clearfix">
+<h1><?php echo HT('生成结算单'); ?></h1>
+<div class="hr_2">&#160;</div>
+<div class="step_form">
+    <h4><?php echo HT('结算单位'); ?></h4>
+    <div class="step_form_content">
+        <strong><big><?php echo H($vendor->name); ?></big></strong>
+    </div>
+</div>
+<div class="step_form">
+    <h4><?php echo HT('结算时间'); ?></h4>
+    <div class="step_form_content">
+        <strong><big><?php echo Date::format(); ?></big></strong>
+    </div>
+</div>
+<div class="step_form">
+    <h4><?php echo HT('结算金额'); ?></h4>
+    <div class="step_form_content">
+        <strong><big><?php echo Number::currency($bucket->get_balance()); ?></big></strong>
+    </div>
+</div>
+<div class="step_form">
+    <h4><?php echo HT('订单列表'); ?></h4>
+    <div class="step_form_content orders_content">
+<?php
+
+$table = Widget::factory('table');
+$table->name = 'billing_bucket';
+
+$table->add_columns(array(
+
+    'ref_no'=>array(
+        'title'=>T('订单编号'),
+        'nowrap'=>TRUE
+    ),    
+    'items'=>array(
+        'title'=>T('订单商品'),
+        'nowrap'=>TRUE
+    ),    
+	'customer'=>array(
+		'title'=>T('买方'),
+        'nowrap' => TRUE,
+        'extra_class'=>'tight',
+    ),
+    'description'=>array(
+        'title'=>T('备注'),
+        'extra_class'=>'flexible'
+    ),
+    'price'=> array(
+        'title'=>T('金额'),
+        'align' => 'right',
+        'nowrap' => TRUE,
+    ),   
+    'rest'=>array(
+        'align'=>'right',
+        'nowrap'=>TRUE,
+    )
+));
+
+$table->empty_message = HT('结算夹中无订单!');
+
+foreach($orders as $order) {
+    $links = array();
+
+    $links['remove'] = array(
+        'url' => URI::url('!vendor/order/billing/remove_order.'.$order->id),
+        'text' => T('移出结算夹'),
+        'extra' =>'class="blue"',
+    );
+
+    $table->add_row(array(
+        'ref_no'=> V('vendor:orders/table/data/ref_no', array('order'=>$order)),
+        'items'=> V('vendor:orders/table/data/items', array('order'=>$order)),
+		'customer'=>V('vendor:orders/table/data/customer', array('order'=>$order)),
+        'price'=> V('vendor:orders/table/data/price', array('order'=>$order)),
+        'description' => V('vendor:orders/table/data/description', array('order'=>$order)), 
+        'rest' => Widget::factory('application:links', array('links'=>$links))
+    ));
+}
+
+echo $table;
+?>
+    </div>
+</div>
+<?php if ($orders->total_count() > 0): ?>
+<div class="clearfix">
+    <a class="button button_export" href="<?php echo URI::url('!vendor/order/billing/to_statement.'.$vendor->id); ?>"><?php echo HT('生成结算单'); ?></a>
+   <a class="button button_delete" href="<?php echo URI::url('!vendor/order/billing/empty_bucket.'.$vendor->id); ?>"><?php echo HT('清空结算夹'); ?></a>
+</div>
+<?php endif; ?>
+</div>

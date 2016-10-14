@@ -1,0 +1,64 @@
+<?php
+if ($file['type']) {
+	$file_class = 'file_'.$file['type'];
+}
+$user = L("ME");
+/* NO.BUG#163 (xiaopei.li@2010.11.13) 
+ * path在controller中已做过rawurlencode() 
+ *	 此处应做rawurldecode()处理 */
+/* NO.BUG#163 (jia.huang@2010.11.13) 
+ * path在controller和view中都不应该做rawurldecode处理 */
+$class = $row_odd ? ' row_odd':' row_even';
+?>
+<tr>
+	<td class="left nowrap <?php echo $class?> lpadding_1">
+		<span class="file <?php echo $file_class?>">
+			<?php if($file['dir']): ?>
+				<a href="<?php echo URI::url('', ['path'=>$file['path'], 'form_token'=>$form_token])?>">
+			<?php endif;?>
+			<?php if($file['file'] && NFS::user_access($user, '下载文件', $object, ['type'=>$path_type,'path'=>$file['path']])):?>
+			<a href="<?php echo URI::url('!nfs/nfs_lite/index.'.$object->name().'.'.$object->id.'.'.$path_type, ['path'=>$file['path'], 'form_token'=>$form_token])?>" class='prevent_default'>
+				<?php echo H($file['name']); ?>	
+			</a>
+			<?php else: ?>
+				<?php echo H($file['name']); ?>	
+			<?php endif;?>
+		</span>
+	</td>
+	<td class="right nowrap description <?php echo $class?>">
+		<?php echo Date::relative($file['mtime']); ?>
+	</td>
+	<td class="right nowrap description <?php echo $class?>"><?php echo $file['file'] ? File::bytes($file['size']) : '&#160;'; ?></td>
+	<td class="right nowrap <?php echo $class?> lpadding_1 rpadding_1">
+		<?php 
+			$links = [];
+/*
+			if ($file['file'] && NFS::user_access($user, '下载文件', $object, array('path'=>$file['path'], 'type'=>$path_type))) {
+				$links['download'] = array(
+					'text' => I18N::HT('nfs', '下载'),
+					'url' => URI::url('!nfs/nfs_lite/index.'.$object->name().'.'.$object->id.'.'.$path_type, array('path'=>$file['path'], 'form_token'=>$form_token)),
+					'extra' => 'class="blue middle prevent_default"',
+				);
+			}
+*/
+
+			if (NFS::user_access($user, '修改文件', $object, ['path'=>$file['path'], 'type'=>$path_type,'extra'=>$extra])) {
+				$links['rename'] = [
+					'text' => I18N::HT('nfs', '更名'),
+					'url' => '#',
+					// 'extra' => ' class="blue middle view object:rename event:click static:'.H(array('path'=>$path,'form_token'=>$form_token, 'old_name'=>$file['name'])).'"',
+					'extra' => ' class="blue prevent_default rename"',
+				];
+			}
+			if (NFS::user_access($user, '删除文件', $object, ['path'=>$file['path'], 'type'=>$path_type,'extra'=>$extra])) {
+				$links['delete'] = [
+					'text' => I18N::HT('nfs', '删除'),
+					'url' => '#',
+					'extra' => 'class="blue" q-object="delete" q-event="click" q-static="'.H(['form_token'=>$form_token, 'delete_path'=>rawurlencode($file['path']),'extra'=>$extra]).'"',
+				];
+			}
+
+			echo V('application:widgets/links', ['links'=>$links]);
+		?>
+	</td>
+</tr>

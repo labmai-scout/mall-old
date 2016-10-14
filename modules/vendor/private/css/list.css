@@ -1,0 +1,49 @@
+.vendor_list{
+
+	h2 {
+		color:#336699;
+		font-size:20px;
+		border-bottom:1px dotted #6699CC;
+		.vendor_count{
+			margin-top:10px;
+			float:right;
+			color:#6699CC;
+			font-size:12px;
+		}
+	}
+	ul{
+		li {
+			.product_block{
+				width:270px;
+				height:130px;
+				margin:10px;
+				padding:5px;
+				float:left;
+				text-decoration:none;
+				color:#999999;
+				a{
+					color:#999999;
+				}
+				img {
+					margin:5px;
+					width:64px;
+					float:left;
+				}
+				.vendor_cate{
+					margin-top:5px;
+				}
+			}
+			.product_block:hover {
+				background-color:#EBEFFC;
+				color:#006699;
+				a{
+					color:#006699;
+				}
+				a:hover {
+					text-decoration:underline;
+				}
+			}
+		}
+	}
+
+}

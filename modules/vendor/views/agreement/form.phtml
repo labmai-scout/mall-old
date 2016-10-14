@@ -1,0 +1,16 @@
+<form method="POST" autocomplete="off" q-event="submit" q-object="agree" q-static="vid=<?php echo(H($vendor->id))?>"><div class="form padding_3 agreement">
+    <input type="hidden" name="version" value="<?php echo H($version)?>" />
+    <div>
+        <div class="padding_3" style="border: 2px solid #eee; background-color: #fff;"><?php echo $agreement?></div>
+    </div>
+    <div class="padding_1">
+        <label><input type="checkbox" name="accept" /> <?php echo HT('我已经阅读并同意以上条款')?></label>
+    </div>
+    <div>
+        <input type="submit" name="submit" class="button button_save middle" value="<?php echo HT('同意');?>" />
+        <?php if ($vendor->approve_date) {?>
+        &#160;
+        <input type="button" class="button button_delete middle" q-src="<?php echo URI::url('!vendor/agreement/index')?>" q-object="disagree" q-event="click" q-static="vid=<?php echo(H($vendor->id))?>" value="<?php echo HT('拒绝')?>" />
+        <?php }?>
+    </div>
+</div></form>

@@ -1,0 +1,22 @@
+<ul class="order_items">
+<?php
+
+$items = Q("order_item[order=$order]");
+
+foreach ($items as $item) {
+	$product = $item->product;
+?>
+<li>
+	<?php echo $product->icon(16, 'class="middle"'); ?>
+	<a href="<?php echo $order->url(NULL, NULL, NULL, 'admin_view'); ?>" class="middle"><?php echo H($product->name); ?></a>
+	<span class="middle">×</span>
+	<strong class="middle"><?php echo intval($item->quantity); ?></strong>
+	<?php
+	$extra_content = Event::trigger('order_item.product.table.extra_view', $item);
+	echo $extra_content;
+	?>
+</li>
+<?php
+}
+?>
+</ul>

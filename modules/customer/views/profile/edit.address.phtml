@@ -1,0 +1,46 @@
+<div class="hr_1">&#160;</div>
+<div class="form padding_1">
+<?php
+	$no_error = $form->no_error;
+	$address = O('deliver_address', array('customer'=>$customer));  
+?>
+<table class="user_grid form">
+	<tbody>
+	<tr>
+		<td class="top icon">
+			<?php echo $customer->icon('64');?>
+		</td>
+		<td class="top info">
+			<form method="post" action="<?php echo URI::url() ?>" autocomplete="off">
+			<?php echo V('form_error', array('form'=>$form));?>
+			<?php $require = (string) V('form_require'); ?>
+				<table class="form flexible">
+				<tr>
+					<th class="label nowrap right"><?php echo HT('地址'); ?></th>
+					<td><input name="address" class="text" size="20" value="<?php echo H($form['address']?:$address->address) ?>" /><?php echo $require; ?></td>
+				</tr>
+				<tr>
+					<th class="label nowrap right"><?php echo HT('电话'); ?></th>
+					<td><input name="phone" class="text" size="20" value="<?php echo H($form['phone']?:$address->phone) ?>" /><?php echo $require; ?></td>
+				</tr>
+				<tr>
+					<th class="label nowrap right"><?php echo HT('邮政编码'); ?></th>
+					<td><input name="postcode" class="text" size="20" style="font-size:11px" value="<?php echo H($form['postcode']?:$address->postcode); ?>" /></td>
+				</tr>
+				<tr>
+					<th class="label nowrap right"><?php echo HT('电子邮箱'); ?></th>
+					<td><input name="email" class="text" size="20" style="font-size:11px" value="<?php echo H($form['email']?:$address->email) ?>" /></td>
+				</tr>
+					<tr>
+						<td></td>
+						<td>
+							<input type="submit" name="submit" class="button button_save" value="<?php echo T('保存')?>" />
+						</td>
+					</tr>
+				</table>	
+			</form>
+		</td>
+	</tr>
+	</tbody>
+</table>
+</div>

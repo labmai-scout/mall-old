@@ -1,0 +1,8 @@
+<?php
+
+if ($categories) foreach($categories as $category) {
+	echo V('admin:admin/categories/category_item', array('category'=>$category, 'parent_uniqid'=>$parent_uniqid));
+}
+?>
+
+

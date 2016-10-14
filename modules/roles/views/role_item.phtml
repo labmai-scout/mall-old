@@ -1,0 +1,6 @@
+<?php $uniqid = 'role_' . uniqid();?>
+<div id="<?php echo $uniqid;?>" class="<?php echo $class?> item_weight:<?php echo $role->weight?>">
+	<?php
+		echo V('role_title', array('role' => $role, 'uniqid' => $uniqid));
+	?>
+</div>

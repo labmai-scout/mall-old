@@ -1,0 +1,14 @@
+<div class="user_card clearfix">
+	<div class="icon icon_48"><?php echo $object->icon('48') ?></div>
+	<div class="information">
+		<span class="name">
+			<?php
+				$user_info = (array)Site::get('site.customize_user_info');
+				echo count($user_info) ? $user_info['name'] : $object->name;
+			?>
+		</span>
+		<?php if ($object->title): ?>
+		<span class="title">(<?php echo HT($object->title) ?>)</span>
+		<?php endif ?>
+	</div>
+</div>

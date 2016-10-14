@@ -1,0 +1,63 @@
+<div class="padding_1 clearfix">
+<table class="form">
+<tbody>
+<tr>
+	<td class="top icon">
+		<?php echo $product->icon('64'); ?>
+	</td>
+	<td class="top">
+		<h2>
+		<a href="<?php echo $product->url() ?>"><?php echo H($product->name); ?></a>
+		<small>(<?php echo T($product->vendor->get_display_name('short')); ?>)</small>
+		</h2>
+	</td>
+</tr>
+</tbody>
+</table>
+<table class="form product_info_form" style="min-width:400px">
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('单价')?></span></td>
+		<td class="nowrap"><?php echo V('mall:vendor_product/table/data/unit_price', array('product'=>$product)); ?></td>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('是否现货')?></span></td>
+		<td>
+			<?php
+				$options = Product_Model::$stock_status;
+				echo HT($options[$product->stock_status]);
+			?>
+		</td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('型号')?></span></td>
+		<td class="nowrap"><?php echo H($product->model) ?></td>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('规格')?></span></td>
+		<td><?php echo H($product->spec) ?></td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('包装')?></span></td>
+		<td class="nowrap"><?php echo H($product->package) ?></td>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('品牌')?></span></td>
+		<td class="nowrap"><?php echo H($product->brand) ?></td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('供货时间')?></span></td>
+		<td><?php echo HT('%supply_time 天', array('%supply_time'=>$product->supply_time)); ?></td>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('关键字')?></span></td>
+		<td>
+		<?php
+			$keywords = json_decode($product->keywords, TRUE);
+			if (count($keywords)) {
+				echo H(join(', ', $keywords));
+			}
+		?>
+		</td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('说明')?></span></td>
+		<td><?php echo $product->description; ?></td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo T('商家备注')?></span></td>
+		<td colspan="3"><?php echo $product->vendor_note; ?></td>
+	</tr>
+</table>
+</div>

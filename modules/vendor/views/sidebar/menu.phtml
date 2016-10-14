@@ -1,0 +1,48 @@
+<?php
+$me = L('ME');
+if ($me->id && $me->is_active() && ($me->vendor->id || Q("$me<member vendor")->total_count() || $me->access('管理所有内容'))) :
+
+$vendors = Q("$me<member vendor");
+foreach ($vendors as $vendor):
+	$ct_items = array();
+	$ct_items['profile'] = array(
+		'icon' => array(
+			'title' => '企业信息',
+			'icon' => '!vendor/icons/32/profile.png',
+			'url' => $vendor->url(NULL, NULL, NULL, 'vendor_view'),
+		),
+		'list'=>array(
+			'title' => '企业信息',
+			'icon' => '!vendor/icons/16/profile.png',
+			'url' => $vendor->url(NULL, NULL, NULL, 'vendor_view'),
+		),
+	);
+
+	$ct_items += (array) Event::trigger('layout.vendor.sidebar.menu', $vendor);
+	$uniqid = 'sbmenu_'.uniqid();
+
+	?>
+	<h4><?php echo H($vendor->get_display_name('short')); ?></h4>
+	<div class="lpadding_2">
+	<div id="<?php echo $uniqid;?>" class="menu clearfix">
+	<?php
+		$mode = 'list';
+		$view_name = 'vendor:sidebar/menu/list';
+		$content = '';
+
+		foreach ((array) $ct_items as $id => $item) {
+
+			$mid = $item['#module'] ?: $id;
+			//if (!Module::is_accessible($mid)) continue;
+			$item = $item[$mode];
+			if (!$item['i18n']) $item['i18n'] = $mid;
+			$content .= trim((string) V($view_name, array('item'=>$item, 'class'=>$class)));
+		}
+
+		echo V('vendor:sidebar/menu/category', array('content'=>$content));
+
+	?>
+	</div>
+	</div>
+<?php endforeach;
+endif;?>

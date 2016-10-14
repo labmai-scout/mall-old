@@ -1,0 +1,10 @@
+<?php 
+
+foreach($roots as $root) {
+	if ($root) {
+		echo '<h3 class="padding_1">'. HT($root->name).'</h3>';
+		$categories = Q("product_category[parent=$root]:sort(weight)");
+		echo V('admin:admin/categories/category_root', array('categories'=>$categories, 'root'=>$root));
+		echo '<div class="hr_2">&#160;</div>';
+	}
+}

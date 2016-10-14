@@ -1,0 +1,14 @@
+<?php 
+$show_market_price = Config::get('product.show_market_price');
+if ($price < 0):
+?>
+	<span class="price_inquiry"><?php echo HT('待询价'); ?></span>
+	
+<?php else: ?>
+	<?php if($price != $market_price && $market_price > 0 && $show_market_price):?>
+		<span class="description"><del><?php echo Number::currency($market_price); ?></del></span>
+		<span class="price red"><?php echo Number::currency($price); ?></span>
+	<?php else:?>
+	<span class="price"><?php echo Number::currency($price); ?></span>
+	<?php endif;?>
+<?php endif;

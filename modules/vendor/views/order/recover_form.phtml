@@ -1,0 +1,9 @@
+<div class="form padding_2">
+<form method="post" q-object="recover" q-static="<?php echo H(array('id'=> $order->id));?>">
+	<?php echo V('form_error', array('form'=>$form));?>
+	<label><?php echo HT('拒绝理由') ?></label>
+	<textarea name="reason" class="text autogrow" cols="60" rows="5"></textarea>
+	<div class="hr_1">&#160;</div>
+	<input class="button button_cancel" type="submit" name="return" value="<?php echo HT('拒绝退货'); ?>" />
+</form>
+</div>

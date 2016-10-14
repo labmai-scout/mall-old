@@ -1,0 +1,77 @@
+<div class="hr_1">&#160;</div>
+<?php 
+$me = L('ME');
+if (0 && $me->is_allowed_to('添加', 'customer')): ?>
+<div class="panel padding_1">
+	<a class="button button_add" href="<?php echo URI::url('!admin/customer/add')?>"><?php echo T('添加买方')?></a>
+</div>
+<?php endif; ?>
+<?php 
+echo $pagination;
+
+$table = Widget::factory('table');
+$table->name = 'customers';
+$table->sort_asc = $sort_asc;
+$table->sort_by = $sort_by;
+
+
+$table->add_columns(array(
+
+    '@'=>array(
+        'nowrap'=>TRUE
+    ),
+    'name'=>array(
+        'title'=>T('买方名称'),
+        'filter'=> array(
+        	'form' => Widget::factory('table_input', array('name'=>'name', 'value'=>$form['name'])),
+        	'value' => H($form['name'] ?: NULL)
+        ),
+        'nowrap'=>TRUE,
+        'align'=>'left'
+    ),
+    'owner'=>array(
+        'title'=>T('负责人'),
+        'filter'=> array(
+            'form' => Widget::factory('table_input', array('name'=>'owner', 'value'=>$form['owner'])),
+            'value' => H($form['owner'] ?: NULL)
+        ),
+        'nowrap'=>TRUE,
+        'align'=>'left'
+    ),
+    'ctime'=>array(
+        'title'=>T('注册时间'),
+        'nowrap'=>TRUE,
+        'align'=>'left'
+    ),
+    'description'=>array(
+        'title'=>T('描述信息'),
+        'align'=>'left',
+        'extra_class'=>'flexible'
+    ),
+    'rest'=>array(
+        'align'=>'right',
+        'nowrap'=>TRUE
+    )
+));
+
+$table->empty_message = T('没有符合条件的买方!');
+
+foreach($customers as $customer)  {
+
+    $links = $customer->links('admin_index');
+
+    $table->add_row(array(
+        '@'=>array(
+            'view'=>$customer->icon('32', 'style="display:block"'),
+            'extra'=>'style="padding:4px" align="right"'
+        ),
+        'name'=>V('customer_table/data/name', array('customer'=>$customer)),
+        'owner'=>V('customer_table/data/owner', array('customer'=>$customer)),
+        'ctime'=>V('customer_table/data/ctime', array('customer'=>$customer)),
+        'description'=>V('customer_table/data/description', array('customer'=>$customer)),
+        'rest'=>Widget::factory('application:links', array('links'=>$links))
+    ));
+}
+
+echo $table;
+?>

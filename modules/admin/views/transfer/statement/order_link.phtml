@@ -1,0 +1,2 @@
+<input name="orders[<?php echo $order->id?>]" class="hidden" value="<?php echo $order->id?>" />
+<a href="#" class="blue" q-src="<?php echo URI::url('!admin/transfer/statement')?>" q-object="remove_order" q-event="click" q-static="<?php echo H(array('uid' => $uid, 'oid' => $order->id, 'sid' => $sid))?>"><?php echo T('移除')?></a>

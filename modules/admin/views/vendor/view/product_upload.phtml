@@ -1,0 +1,111 @@
+<div class="hr_1">&#160;</div>
+<h2 class="section_title">
+		<span class="middle">模板下载</span>
+</h2>
+<div class="padding_1">
+<!-- todo  增加文件的icon -->
+<span class="file file_excel" ><a class="blue" href="<?php echo URI::url('!admin/vendor/template/download')?>"><?= T('商品数据导入模板下载') ?></a>
+</span>
+</div>
+<div class="hr_1">
+</div>
+<h2 class="section_title">
+	<span class="middle"><?= T('数据上传') ?></span>
+</h2>
+<div class="padding_1">
+<div class="form padding_1">
+	<table class="form">
+		<tr>
+			<td class="top">
+				<form action="<?php echo URI::url()?>" method="post" enctype="multipart/form-data">
+					<p>
+						<input name="file" type="file" class="file" />
+						<input type="submit" class="button button_import" name="submit" value="<?php echo T('上传商品数据')?>"/>
+						<input type='hidden' value="<?= $vendor->id ?>" name="vendor_id">
+					</p>
+					<div class="hr_1">&#160;</div>
+				</form>
+			</td>
+		</tr>
+	</table>
+</div>
+</div>
+<h2 class="section_title">
+		<span class="middle"><?= T('上传记录') ?></span>
+</h2>
+<div class="hr_1"></div>
+<?php
+if (count($vendor->upload_result)) {
+    $upload_result = $vendor->upload_result;
+    if ($upload_result['result']) {
+        $class= 'message_normal';
+    }
+    else {
+        $class = 'message_error';
+    }
+?>
+<div class="padding_1">
+    <div class="message <?= $class ?>">
+    <?= nl2br($upload_result['summary']); ?>
+    </div>
+</div>
+<?php } ?>
+<div class="panel padding_1">
+	<div class="float_left">
+	</div>
+</div>
+<?php
+echo $pagination;
+$table = Widget::factory('table');
+$table->name = 'admin_upload_records';
+$table->add_columns(array(
+    'sheet_name'=>array(
+        'title'=>T('表名'),
+        'nowrap'=>TRUE,
+        'align'=>'left',
+        'extra_class' => 'tight',
+    ),
+    'file_name'=>array(
+        'title'=>T('文件名'),
+        'nowrap'=>TRUE,
+        'align'=>'left',
+        'extra_class' => 'tight',
+    ),
+    'ctime'=>array(
+        'title'=>T('上传时间'),
+        'nowrap'=>TRUE,
+        'align'=>'center',
+    ),
+    'summary'=>array(
+        'title'=>T('报告'),
+        'nowrap'=>TRUE,
+        'align'=>'left',
+    ),
+    'status'=>array(
+        'title'=>T('状态'),
+        'nowrap'=>TRUE,
+        'align'=>'left',
+        'extra_class' => 'tight',
+    ),
+    'rest'=>array(
+        'align'=>'right',
+        'nowrap'=>TRUE
+    )
+));
+
+$table->empty_message = T('没有上传记录');
+foreach($records as $record)  {
+	$links = $record->links('admin_index');
+    $table->add_row(array(
+        'sheet_name'=> $record->sheet_name,
+        'file_name'=> $record->file_name,
+        'ctime'=> Date::format($record->ctime, 'Y/m/d H:i:s'),
+        'summary' => H($record->summary, TRUE),
+        'status'=>Product_Upload_Record_Model::$record_status[$record->status],
+        'rest'=> Widget::factory('application:links', array('links'=>$links))
+    ));
+}
+
+echo $table;
+echo $pagination;
+?>

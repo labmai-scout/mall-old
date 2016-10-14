@@ -1,0 +1,38 @@
+<?php $me = L('ME'); ?>
+<table class="vendor_view flexible">
+	<tbody>
+		<tr>
+			<td class="icon top">
+				<?php echo URI::anchor($vendor->url(), $vendor->icon(64)); ?>
+			</td>
+			<td class="info top">
+				<h4 class="name"><?php echo URI::anchor($vendor->url(), H($vendor->name)); ?></h4>
+				<table>
+					<tr>
+						<td class="nowrap"><span><?php echo HT('简称:'); ?></span></td>
+						<td class="lpadding_2"><?php echo H($vendor->short_name); ?></td>	
+					</tr>
+					<tr>
+						<td class="nowrap"><span><?php echo HT('商品总数:'); ?></span></td>
+						<td class="lpadding_2"><?php echo Q("product[vendor={$vendor}][approve_date]")->total_count();?></td>
+					</tr>
+					<tr>
+						<td class="nowrap"><span><?php echo HT('公司简介:'); ?></span></td>
+						<td class="lpadding_2">
+							<?php
+								$n_show = 100;
+								echo mb_strlen($vendor->description) > $n_show ?
+								H(mb_substr($vendor->description, 0, $n_show)) .
+								T('... %all_info', array('%all_info' =>
+														URI::anchor($vendor->url(),
+																	HT('(全部信息)')))) :
+								H($vendor->description ?: '暂无信息');
+							?>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</tbody>
+</table>
+

@@ -1,0 +1,20 @@
+<h2>
+	<a href="<?php echo $customer->url()?>"><?php echo H($customer->name) ?></a>
+</h2>
+<div class="hr_1">&#160;</div>
+<p>
+<?php echo T('详细描述')?>: <span class="description"><?php echo H($customer->description)?></span>
+</p>
+<div class="hr_3">&#160;</div>
+<?php
+	$rang = time() - $customer->ctime;
+	$days = Date::format_interval($rang, 'd');
+	$days = "<span class='red'>$days[0]</span>";
+?>
+<span class="register"><?php echo T('注册周期: %day 天', array('%day' => $days))?></span>
+<div class="hr_3">&#160;</div>
+
+<?php $links = $customer->links('customer_view'); ?>
+<?php echo Widget::factory('application:links', array('links'=>$links)); ?>
+
+<div class="hr_1">&#160;</div>

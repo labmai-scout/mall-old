@@ -1,0 +1,18 @@
+<div class="form padding_1">
+<form q-static="<?php echo H(array('order_id' => $order->id));?>" q-object="vendor_note" q-event="submit" autocomplete="off" method="post">
+<table class="form">
+	<tr>
+		<td class="label left nowrap top"><?php echo HT('订单备注信息');?></td>
+		<td class="top">
+			<textarea name="vendor_note" cols="60" rows="3" class="autogrow"><?php echo H($order->vendor_note); ?></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td class="top">
+			<input type="submit" class="button button_save" name="submit_note" value="<?php echo HT('更新'); ?>" />
+		</td>
+	</tr>
+</table>
+</form>
+</div>

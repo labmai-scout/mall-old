@@ -1,0 +1,35 @@
+<h2 class="section_title">
+		<span class="middle"><?php echo HT('试剂信息') ?></span>
+</h2>
+<div class="padding_2" style="padding-top:5px">
+<table class="form product_info_form" style="min-width:400px">
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('试剂性质')?></span></td>
+		<td style="padding-right:4em"><?php
+			$types = Config::get('reagent.labels');
+		 	echo Widget::factory('prod_reagent:rgt_type', array('type' => $types[$product->rgt_type])); ?></td>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('CAS 号')?></span></td>
+		<td><?php echo H($product->cas_no) ?></td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('英文名')?></span></td>
+		<td colspan="3"><?php echo H($product->rgt_en_name) ?></td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('别名')?></span></td>
+		<td colspan="3">
+		<?= $product->rgt_aliases; ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('危险品分类')?></span></td>
+		<td colspan="3"><?php echo Widget::factory('prod_reagent:rgt_danger_class', array('class' => $product->rgt_danger_class)); ?></td>
+	</tr>
+	<tr>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('分子式')?></span></td>
+		<td style="padding-right:4em"><?php echo H($product->reagent_formula) ?></td>
+		<td class="nowrap tight"><span class="status_tag status_tag_label"><?php echo HT('分子量')?></span></td>
+		<td><?php echo H($product->reagent_mw) ?></td>
+	</tr>
+</table>
+</div>

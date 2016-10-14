@@ -1,0 +1,42 @@
+<?php
+
+$links = array();
+
+if ($product->id) {
+	$links[] = array('text' => H($product->name), 'url'=>$product->url(NULL, NULL, NULL, 'mall_list'));
+}
+
+if ($form['keyword']) {
+
+	$separater = ' ';
+	$keywords = explode($separater, $form['keyword']);
+
+	$keywords_links = array();
+	foreach ($keywords as $k) {
+		$keywords_links[] = URI::anchor( URI::url('!mall/search/index.'.$tab,
+								array('keyword' => $k)), H($k));
+	}
+	$links[] = array('text' => join(' ', $keywords_links));
+
+	// $links[] = array('text' => H($form['keyword']));
+}
+
+if ($category->id) {
+	$root = $category->root;
+	$c = $category;
+	while($c->id != $root->id) {
+		$links[] = array('url'=>$c->url(), 'text'=>H($c->name));
+		$c = $c->parent;
+	}
+
+}
+else {
+	$root = Product_Category_Model::root($tab);
+}
+
+
+$links[] = array('url'=>$root->url(NULL, 'reset_search=1'), 'text'=>HT('全部'));
+
+echo Widget::factory('application:links', array('links'=>array_reverse($links), 'separator'=>' &#187; '));
+
+

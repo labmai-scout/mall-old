@@ -1,0 +1,7 @@
+<div class="cart_summary">
+	<?php echo T('金额总计: ') ?>
+	<?php echo V('application:common/price', array('price'=>$cart->get_amount())); ?>
+	<?php if ($has_inquiry): ?>
+		<span class="price_inquiry"><?php echo HT('(待询价商品未计入)'); ?></span>
+	<?php endif; ?>
+</div>

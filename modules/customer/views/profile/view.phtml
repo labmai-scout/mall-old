@@ -1,0 +1,17 @@
+<div class="clearfix">
+<table class="user_grid form flexible">
+<tr>
+	<td class="top icon tight">
+		<?php echo v('customer:profile/short_info', array('customer'=>$customer));?>
+	</td>
+	<td class="top nowrap info flexible">
+		<?php echo V('customer:profile/info', array('customer'=>$customer)); ?>
+	</td>
+</tr>
+</table>
+</div>
+<div class="hr_3">&#160;</div>
+<?php 
+
+echo $secondary_tabs; 
+echo $secondary_tabs->content; 

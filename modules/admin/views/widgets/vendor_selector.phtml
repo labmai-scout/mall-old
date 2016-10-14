@@ -1,0 +1,20 @@
+<?php 
+$uniqid = 'vendor_'.uniqid();
+
+$vendor = is_object($this->vendor) ? $this->vendor : O('vendor', $this->vendor);
+$autocomplete = $this->autocomplete ?: URI::url('autocomplete/vendor');
+	
+
+$size = $this->size ?: 40;
+
+if ($vendor->id) {
+	$name = $vendor->name;
+}
+else {
+	$name = '';
+}
+
+?>
+<input id="<?php echo $uniqid?>_vendor" name="<?php echo $this->name ?>" type="hidden" value="<?php echo $vendor->id?>" />
+<input id="<?php echo $uniqid?>_vendor_name" <?php echo $cardread_str;?> class="text middle select_on_focus autocomplete:<?php echo H($autocomplete) ?> autocomplete_alt:#<?php echo $uniqid?>_vendor" size="<?php echo $size?>"
+ value="<?php echo H($name) ?>" q-tooltip="<?php echo T('请输入关键字并选择') ;?>" />

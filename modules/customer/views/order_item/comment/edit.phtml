@@ -1,0 +1,20 @@
+<div class="form padding_2">
+<form method="post" q-object="post_comment" q-static="id=<?php echo intval($item->id) ?>">
+	<?php echo V('form_error', array('form'=>$form));?>
+<?php
+foreach ($rating_subjects as $key => $label):
+?>
+	<?php echo HT($label); ?>
+	<?php echo Widget::factory('rateit_input', array(
+				'name' => "ratings[$key]",
+			));
+	?>
+	<br/>
+<?php
+endforeach;
+?>
+<textarea name="content" class="text autogrow" q-hint="<?php echo HT('请填写评价内容'); ?>" cols="60" rows="5"></textarea>
+	<div class="hr_1">&#160;</div>
+	<input class="button button_add" type="submit" name="submit" value="<?php echo HT('发布'); ?>" />
+</form>
+</div>

@@ -1,0 +1,31 @@
+<?php
+// $blocks = (array) Config::get('layout.mall.sidebar['.$path.']') + (array) Config::get('layout.sidebar[*]');
+$items = (array) Config::get('layout.mall.inside_sidebar');
+
+uasort($items, function($a, $b) {
+    $aw = (int) $a['weight'];
+    $bw = (int) $b['weight'];
+
+    if ($aw == $bw) {
+        return 0;
+    }
+    elseif ($aw > $bw) {
+        return 1;
+    }
+    else {
+        return -1;
+    }
+});
+
+foreach ($items as $id => $item) {
+    if (isset($item['view'])) {
+        $item_view = $item['view'];
+    }
+    else {
+        $item_view = $item;
+    }
+
+    $view = (string) V($item_view, $params);
+
+    if ($view) echo $view;
+}

@@ -1,0 +1,105 @@
+<table style="width:530px;font-size:12px;border:1px solid #000;">
+    <tr>
+        <td style="width:90px;border:1px solid #000;text-align:center"><?php echo H('单位')?></td>
+        <td style="width:280px;border:1px solid #000;text-align:center"><?php echo H('化学试剂(国产)室')?></td>
+        <td style="width:80px;border:1px solid #000;text-align:center"><?php echo H('部门编号')?></td>
+        <td style="width:80px;border:1px solid #000;text-align:center"><?php echo $statement->bmbh ?></td>
+    </tr>
+    <tr>
+        <td style="border:1px solid #000;text-align:center"><?= H(T('项目编号')) ?></td>
+        <td style="border:1px solid #000;text-align:center"><?= H(T('摘要')) ?></td>
+        <td style="border:1px solid #000;text-align:center"><?= H(T('单据数'))?></td>
+        <td style="border:1px solid #000;text-align:center"><?= H(T('金额'))?></td>
+    </tr>
+    <tr>
+        <td style="border:1px solid #000;"><?= H($statement->bmbh.'-'.$statement->xmbh) ?></td>
+        <td style="border:1px solid #000;"><?= H($statement->vendor->short_name.'/'.str_pad($statement->id, 6, 0, STR_PAD_LEFT)) ?></td>
+        <td style="border:1px solid #000;"></td>
+        <td style="border:1px solid #000;"><?= H(round($statement->balance, 2))?></td>
+    </tr>
+    <tr>
+        <td style="border:1px solid #000;"></td>
+        <td style="border:1px solid #000;"></td>
+        <td style="border:1px solid #000;"></td>
+        <td style="border:1px solid #000;"></td>
+    </tr>
+    <tr>
+        <td style="border:1px solid #000;"></td>
+        <td style="border:1px solid #000;"></td>
+        <td style="border:1px solid #000;"></td>
+        <td style="border:1px solid #000;"></td>
+    </tr>
+    <tr>
+        <td style="border:1px solid #000;"></td>
+        <td style="border:1px solid #000;"></td>
+        <td style="border:1px solid #000;"></td>
+        <td style="border:1px solid #000;"></td>
+    </tr>
+    <tr>
+        <td style="border:1px solid #000;"></td>
+        <td style="border:1px solid #000;"></td>
+        <td style="border:1px solid #000;"></td>
+        <td style="border:1px solid #000;"></td>
+    </tr>
+    <tr>
+        <td style="border:1px solid #000;"><?= H(T('金额(大写)')) ?></td>
+        <td colspan="2" style="border:1px solid #000;"><?= H(T($chinese_balance)); ?></td>
+        <td style="border:1px solid #000;">￥<?= H(round($statement->balance, 2))?></td>
+    </tr>
+    <tr>
+        <td style="border:1px solid #000;"><?= H(T('审核报销金额')) ?></td>
+        <td colspan="2" style="border:1px solid #000;">&#160;仟&#160;佰&#160;拾&#160;万&#160;仟&#160;佰&#160;拾&#160;元&#160;角&#160;分</td>
+        <td style="border:1px solid #000;">￥</td>
+    </tr>
+    <tr>
+        <td style="border:1px solid #000;text-align:center"><?= H(T('备注')) ?></td>
+        <td colspan="3" style="border:1px solid #000;"></td>
+    </tr>
+</table>
+<table style="wdith:530px">
+    <tr>
+        <td colspan="2"  style="border:1px solid #000;width:530px;text-align:center;font-size:10px"><?= H(T('所有信息已核对无误')) ?></td>
+    </tr>
+    <tr>
+        <td style="height:25px;width:265px;border:1px solid #000;"><?= H(T('财务主管(签字):')) ?></td>
+        <td style="width:265px;border:1px solid #000;"><?= H(T('项目负责人(签字):')) ?></td>
+    </tr>
+    <tr>
+        <td style="height:25px;border:1px solid #000;"><?= H(T('校内经办人(签字):')) ?></td>
+        <td style="border:1px solid #000;"><?= H(T('财务经办人(签字):')) ?></td>
+    </tr>
+</table>
+<table style="width:530px;font-size:10px;border:1px solid #000;">
+    <tr>
+        <td style="border-right:1px solid #000">
+
+        </td>
+        <td>
+        <?= H(T('对方单位: ')).H($statement->vendor->name) ?>
+        </td>
+    </tr>
+    <tr>
+        <td style="border-right:1px solid #000;">
+        <?= H(T('支付方式: 网银对公 ')) ?>
+        </td>
+        <td>
+        <?= H(T('对方所在省市: ')).H($statement->vendor->province).'(省) '.H($statement->vendor->city).'(市)' ?>
+        </td>
+    </tr>
+    <tr>
+        <td style="border-right:1px solid #000">
+        <?= H(T('金额为: ')).H(round($statement->balance, 2)).H(T('元')) ?>
+        </td>
+        <td>
+        <?= H(T('对方银行: ')).H($statement->vendor->bank_name) ?>
+        </td>
+    </tr>
+    <tr>
+        <td style="border-right:1px solid #000">
+
+        </td>
+        <td>
+        <?= H(T('对方账号: ')).H($statement->vendor->bank_account) ?>
+        </td>
+    </tr>
+</table>

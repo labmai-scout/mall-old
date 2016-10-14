@@ -1,0 +1,55 @@
+<?php if (!L('ME')->id): ?>
+<div class="sidebar_item form login_box">
+	<form method="post" autocomplete="off" action="<?php echo URI::url('login')?>">
+	<input name="module" value="<?php echo MODULE_ID?>" class="hidden" />
+	<?php echo V('form_error', array('form'=>$form));?>
+	<table class="form">
+		<tbody>
+			<tr>
+				<td class="right nowrap middle"><label><?php echo T('帐号')?></label></td>
+				<td class="middle">
+					<input name="token" type="text" class="text"/>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td class="middle">
+					<?php
+					$backends = Config::get('auth.backends');
+					$backend_titles = array();
+					foreach ($backends as $key=>$values) {
+						$backend_titles[$key] = $values['title'];
+					}
+					$default_backend = Config::get('auth.default_backend');
+					$name = 'token_backend';
+					if (count($backends) > 1):
+					?>
+						<?php echo Form::dropdown($name, $backend_titles, $form[$name] ? : $default_backend, 'class="middle no_dropdown"'); ?>
+					<?php else: ?>
+						<?php echo Form::hidden($name, $form[$name] ? : $default_backend); ?>
+					<?php endif;?>
+				</td>
+			</tr>
+			<tr>
+				<td class="right nowrap middle"><?php echo T('密码')?></td>
+				<td class="middle">
+					<input name="password" type="password" class="text"/>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td class="middle">
+					<a href="<?php echo URI::url('recovery')?>"><?php echo HT('忘记了密码?')?></a>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td class="button">
+					<input type="submit" name="submit" class="button middle" value="<?php echo HT('登 录')?>" />
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	</form>
+</div>
+<?php endif; ?>
